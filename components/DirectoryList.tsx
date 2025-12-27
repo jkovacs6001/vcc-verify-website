@@ -37,7 +37,7 @@ export const DirectoryList: React.FC = () => {
 
       <p className="text-xs text-vampTextMuted mt-1">
         Showing {filtered.length} of {MOCK_PROFESSIONALS.length} professionals.
-        This is an early MVP using demo data.
+        This is a demo using mock data.
       </p>
 
       <div className="grid gap-4 md:grid-cols-2">

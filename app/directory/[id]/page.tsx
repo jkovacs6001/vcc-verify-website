@@ -58,7 +58,7 @@ export default function ProfilePage({ params }: Props) {
                 Verification summary
               </h2>
               <p className="text-[13px] text-textMuted">
-                This profile is part of the VCC Verification MVP. In a live
+                This profile is part of the VCC Verification demo. In a live
                 environment, the VCC team reviews references, on-chain history,
                 and prior collaborations before marking a professional as
                 verified.

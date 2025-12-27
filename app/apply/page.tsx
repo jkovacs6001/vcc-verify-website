@@ -15,7 +15,7 @@ export default function ApplyPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // For MVP demo, just flip a flag. Later: send to API / DB.
+    // For demo, just flip a flag. Later: send to API / DB.
     setSubmitted(true);
   };
 
@@ -26,7 +26,7 @@ export default function ApplyPage() {
         <p className="text-sm text-textMuted">
           If you&apos;re a Web3 professional serving token projects, launchpads
           or communities, you can apply to be listed in the VCC Verification
-          Directory. For this MVP, this form is local only and demonstrates the
+          Directory. For this demo, this form is local only and demonstrates the
           future onboarding flow.
         </p>
       </header>
