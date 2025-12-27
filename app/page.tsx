@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
 import { DirectoryList } from "../components/DirectoryList";
 
 export default function HomePage() {
@@ -26,6 +29,7 @@ export default function HomePage() {
       {/* subtle background glow on the left */}
       <div className="pointer-events-none fixed inset-y-0 left-[-160px] w-[420px] bg-gradient-radial from-vampAccent/15 via-transparent to-transparent blur-3xl opacity-60" />
 
+<<<<<<< HEAD
       {/* VampCat hero accent */}
       <div className="pointer-events-none absolute top-24 right-[-120px] z-0 hidden lg:block">
         <Image
@@ -39,6 +43,10 @@ export default function HomePage() {
       </div>
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 pt-16 space-y-12">
+=======
+
+      <main className="relative max-w-6xl mx-auto px-4 pt-10 space-y-12">
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
         {/* Early preview badge */}
         <div className="inline-flex items-center gap-2 rounded-full bg-vampSurfaceSoft/80 border border-vampBorder px-3 py-1 text-[11px] text-vampTextMuted">
           <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/30 text-[9px]">
@@ -60,11 +68,19 @@ export default function HomePage() {
                 <span className="text-vampAccent">trust</span>
               </span>
               <span className="block text-white">
+<<<<<<< HEAD
                 — verified by the VampCatCoin community.
               </span>
             </h1>
             <p className="text-sm sm:text-base text-vampTextMuted max-w-xl">
               VampCatCoin Verification is building a curated directory of developers,
+=======
+                — verified by the VCC community.
+              </span>
+            </h1>
+            <p className="text-sm sm:text-base text-vampTextMuted max-w-xl">
+              VCC Verification is building a curated directory of developers,
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
               marketers, market makers, moderators and Web3 workers. Every
               profile is reviewed by humans and backed by on-chain history and
               references.
@@ -115,7 +131,11 @@ export default function HomePage() {
                       </div>
                     </div>
                     <span className="px-3 py-1 rounded-full text-[11px] bg-emerald-500/15 text-emerald-300 border border-emerald-400/40">
+<<<<<<< HEAD
                       Verified by VampCatCoin
+=======
+                      Verified by VCC
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
                     </span>
                   </div>
 
@@ -129,7 +149,11 @@ export default function HomePage() {
                       </div>
                     </div>
                     <span className="px-3 py-1 rounded-full text-[11px] bg-emerald-500/15 text-emerald-300 border border-emerald-400/40">
+<<<<<<< HEAD
                       Verified by VampCatCoin
+=======
+                      Verified by VCC
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
                     </span>
                   </div>
 
@@ -149,7 +173,11 @@ export default function HomePage() {
                 </div>
 
                 <p className="text-[11px] text-vampTextMuted pt-1">
+<<<<<<< HEAD
                   This preview shows the type of trusted service directory VampCatCoin
+=======
+                  This preview shows the type of trusted service directory VCC
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
                   can become — a “who to trust” list for new projects.
                 </p>
               </div>

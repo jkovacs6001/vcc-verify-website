@@ -46,6 +46,7 @@ a,
   border-radius: inherit;
 }
 
+<<<<<<< HEAD
 /* Midnight geometric crypto grid */
 .bg-geo-grid {
   position: fixed;
@@ -166,3 +167,5 @@ a,
     0 0;
 }
 
+=======
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd

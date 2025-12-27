@@ -9,12 +9,20 @@
     "lint": "eslint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "next": "^16.0.7",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+=======
+    "next": "16.0.6",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+>>>>>>> af47a14e4f777a0db58a7c03dec0e44b038d35cd
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
