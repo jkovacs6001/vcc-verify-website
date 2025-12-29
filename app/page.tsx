@@ -27,7 +27,7 @@ export default function HomePage() {
       <div className="pointer-events-none fixed inset-y-0 left-[-160px] w-[420px] bg-gradient-radial from-vampAccent/15 via-transparent to-transparent blur-3xl opacity-60" />
 
       {/* VampCat hero accent */}
-      <div className="pointer-events-none absolute top-24 right-[-120px] z-0 hidden lg:block">
+      {/* <div className="pointer-events-none absolute top-24 right-[-120px] z-0 hidden lg:block">
         <Image
           src="/vampcat_avatar.png"
           alt="VampCat mascot"
@@ -36,7 +36,7 @@ export default function HomePage() {
           priority
           className="opacity-90 drop-shadow-[0_0_40px_rgba(239,68,68,0.25)] mask-image-radial"
         />
-      </div>
+      </div> */}
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 pt-16 space-y-12">
         {/* Early preview badge */}
