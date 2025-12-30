@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 async function requireAdmin() {
   const cookieStore = await cookies();
@@ -35,6 +36,9 @@ export async function approveProfile(id: string, note?: string) {
       reviewerNote: note?.slice(0, 500) || null,
     },
   });
+  
+  revalidatePath("/admin");
+  revalidatePath("/directory");
 }
 
 export async function rejectProfile(id: string, note?: string) {
@@ -47,4 +51,7 @@ export async function rejectProfile(id: string, note?: string) {
       reviewerNote: note?.slice(0, 500) || null,
     },
   });
+  
+  revalidatePath("/admin");
+  revalidatePath("/directory");
 }

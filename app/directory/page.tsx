@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DirectoryPage() {
   const profiles = await prisma.profile.findMany({
     where: { status: "APPROVED" },
