@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Profile {
+  id           String       @id @default(cuid())
+  displayName  String
+  handle       String?
+  role         String
+  location     String?
+  bio          String?
+  skills       String[]     @default([])
+  tags         String[]     @default([])
+
+  // Identity / contact
+  email        String
+  telegram     String?
+  xHandle      String?
+  website      String?
+  github       String?
+  linkedin     String?
+
+  // Web3
+  chain        String       @default("solana")
+  wallet       String
+
+  status       ReviewStatus @default(PENDING)
+  reviewedAt   DateTime?
+  reviewerNote String?
+
+  references   Reference[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([status])
+  @@index([wallet])
+}
+
+model Reference {
+  id          String   @id @default(cuid())
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  name        String
+  relationship String?
+  contact     String? // email/telegram/etc
+  link        String? // project link, tweet, github, etc
+  notes       String?
+
+  createdAt   DateTime @default(now())
+}
