@@ -34,7 +34,7 @@ export default function RootLayout({
               © {new Date().getFullYear()} VampCatCoin · VampCatCoin Verification
             </span>
             <span className="text-[10px]">
-              Early demo · Not financial or hiring advice
+              Not financial or hiring advice
             </span>
           </div>
         </footer>
