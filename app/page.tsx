@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DirectoryList } from "../components/DirectoryList";
+import { FeaturedProfiles } from "../components/FeaturedProfiles";
 
 export default function HomePage() {
   return (
@@ -162,7 +162,7 @@ export default function HomePage() {
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
               <h2 className="text-lg font-semibold text-white">
-                Live demo directory
+                Recently approved profiles.
               </h2>
               <p className="text-[12px] text-vampTextMuted">
                 Search by name, wallet, role, or tags. This is early demo data
@@ -171,7 +171,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <DirectoryList />
+          <FeaturedProfiles />
         </section>
       </main>
     </div>
