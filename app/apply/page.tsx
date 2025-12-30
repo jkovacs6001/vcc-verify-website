@@ -1,167 +1,105 @@
 "use client";
 
-import { useState } from "react";
-
-const roles = [
-  "Developer",
-  "Marketer",
-  "Market Maker",
-  "Moderator",
-  "Web3 Worker",
-];
+import React, { useActionState } from "react";
+import { submitApplication } from "./actions";
 
 export default function ApplyPage() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // For demo, just flip a flag. Later: send to API / DB.
-    setSubmitted(true);
-  };
+  const [state, formAction] = useActionState(submitApplication, { ok: false } as any);
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">Apply for Verification</h1>
-        <p className="text-sm text-textMuted">
-          If you&apos;re a Web3 professional serving token projects, launchpads
-          or communities, you can apply to be listed in the VCC Verification
-          Directory. For this demo, this form is local only and demonstrates the
-          future onboarding flow.
+    <div className="max-w-3xl space-y-6">
+      <div>
+        <h1 className="text-3xl font-semibold text-white">Apply to get verified</h1>
+        <p className="mt-2 text-vampTextMuted">
+          Submit your info and references. Applications are manually reviewed.
         </p>
-      </header>
-
-      <div className="rounded-2xl bg-surface border border-white/10 p-5">
-        {submitted ? (
-          <div className="space-y-3 text-sm">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-400/50 text-xs">
-              <span>✅</span>
-              Application captured (demo)
-            </div>
-            <p className="text-textMuted">
-              In the live system, your information would now be reviewed by the
-              VCC verification team. You&apos;d receive a confirmation message
-              and a payment request in VCC tokens to finalize your listing.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4 text-sm">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs text-textMuted">Name / studio</label>
-                <input
-                  required
-                  className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60"
-                  placeholder="e.g., Astra Labs"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs text-textMuted">
-                  Public alias / handle
-                </label>
-                <input
-                  className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60"
-                  placeholder="@astra_dev"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs text-textMuted">Role</label>
-                <select
-                  required
-                  className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 cursor-paw-pointer outline-none focus:ring-2 focus:ring-accent/60"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Select your primary role
-                  </option>
-                  {roles.map((r) => (
-                    <option key={r} value={r}>
-                      {r}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs text-textMuted">Region (optional)</label>
-                <input
-                  className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60"
-                  placeholder="e.g., EU, US, Asia"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs text-textMuted">Twitter / X</label>
-                <input
-                  className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60"
-                  placeholder="https://twitter.com/..."
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs text-textMuted">Telegram</label>
-                <input
-                  className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60"
-                  placeholder="https://t.me/..."
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs text-textMuted">
-                Primary wallet for payments and on-chain history
-              </label>
-              <input
-                required
-                className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60 font-mono text-xs"
-                placeholder="Enter your public wallet address"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs text-textMuted">
-                Briefly list 2–3 projects you&apos;ve worked on
-              </label>
-              <textarea
-                required
-                rows={3}
-                className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60 text-sm"
-                placeholder="- Project A: role & link
-- Project B: role & link"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs text-textMuted">
-                References (Telegram / X of founders who can vouch for you)
-              </label>
-              <textarea
-                rows={2}
-                className="w-full bg-surfaceSoft border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-accent/60 text-sm"
-                placeholder="@founder1, @founder2"
-              />
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <p className="text-[11px] text-textMuted max-w-xs">
-                In production, submitting this form will trigger a verification
-                workflow and a payment request in VCC tokens for the review
-                process.
-              </p>
-              <button
-                type="submit"
-                className="cursor-paw-pointer inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-accent text-sm font-medium shadow-glow hover:bg-accent/90"
-              >
-                Submit application
-              </button>
-            </div>
-          </form>
-        )}
       </div>
+
+      <form action={formAction} className="space-y-6">
+        {/* Honeypot */}
+        <input name="company" className="hidden" tabIndex={-1} autoComplete="off" />
+
+        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+          <h2 className="text-lg font-semibold text-white">Basics</h2>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="displayName" placeholder="Display name *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="handle" placeholder="Handle (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="role" placeholder="Role * (Dev, Designer, PM...)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="location" placeholder="Location (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+
+          <textarea name="bio" placeholder="Short bio (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white min-h-[110px]" />
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="skillsCsv" placeholder="Skills (comma-separated)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="tagsCsv" placeholder="Tags (comma-separated)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+          <h2 className="text-lg font-semibold text-white">Contact</h2>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="email" placeholder="Email *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="telegram" placeholder="Telegram (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="xHandle" placeholder="X handle (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="github" placeholder="GitHub (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="linkedin" placeholder="LinkedIn (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+          <h2 className="text-lg font-semibold text-white">Web3</h2>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="chain" defaultValue="solana" placeholder="Chain (default: solana)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="wallet" placeholder="Wallet address *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-5">
+          <h2 className="text-lg font-semibold text-white">References (up to 3)</h2>
+
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="rounded-2xl border border-vampBorder/60 bg-black/30 p-4 space-y-3">
+              <div className="text-sm font-semibold text-white">Reference {i + 1}</div>
+              <div className="grid gap-3 md:grid-cols-2">
+                <input name={`ref_${i}_name`} placeholder="Name" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                <input name={`ref_${i}_relationship`} placeholder="Relationship (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+              </div>
+              <div className="grid gap-3 md:grid-cols-2">
+                <input name={`ref_${i}_contact`} placeholder="Contact (email/telegram) (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                <input name={`ref_${i}_link`} placeholder="Link (project/tweet/github) (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+              </div>
+              <textarea name={`ref_${i}_notes`} placeholder="Notes (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white min-h-[90px]" />
+            </div>
+          ))}
+        </section>
+
+        <div className="flex items-center gap-3">
+          <button className="rounded-full bg-vampAccent px-6 py-2.5 text-white shadow-vampGlow">
+            Submit application
+          </button>
+
+          {state?.ok && (
+            <span className="text-emerald-300">Submitted. Pending review.</span>
+          )}
+          {state?.ok === false && state?.error && (
+            <span className="text-red-300">{state.error}</span>
+          )}
+        </div>
+      </form>
     </div>
   );
 }
-

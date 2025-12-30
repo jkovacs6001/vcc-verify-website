@@ -1,144 +1,85 @@
+import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { MOCK_PROFESSIONALS } from "../../../lib/mockData";
-import Link from "next/link";
 
-interface Props {
-  params: { id: string };
-}
+export default async function DirectoryProfilePage({ params }: { params: { id: string } }) {
+  const profile = await prisma.profile.findFirst({
+    where: { id: params.id, status: "APPROVED" },
+    include: { references: true },
+  });
 
-export default function ProfilePage({ params }: Props) {
-  const prof = MOCK_PROFESSIONALS.find((p) => p.id === params.id);
-  if (!prof) return notFound();
+  if (!profile) return notFound();
 
   return (
-    <div className="space-y-6">
-      <Link
-        href="/directory"
-        className="cursor-paw-pointer text-xs text-textMuted hover:text-textMain"
-      >
-        ← Back to directory
-      </Link>
+    <div className="max-w-4xl space-y-6">
+      <div>
+        <h1 className="text-3xl font-semibold text-white">
+          {profile.displayName}
+          {profile.handle ? <span className="text-vampTextMuted text-base"> · @{profile.handle}</span> : null}
+        </h1>
+        <div className="mt-1 text-vampTextMuted">
+          {profile.role}{profile.location ? ` · ${profile.location}` : ""}
+        </div>
+      </div>
 
-      <section className="grid gap-6 md:grid-cols-[3fr,2fr]">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-semibold">{prof.name}</h1>
-            <p className="text-sm text-textMuted">
-              {prof.role}
-              {prof.alias && ` · @${prof.alias}`}
-              {prof.region && ` · ${prof.region}`}
-            </p>
-          </div>
+      {profile.bio && (
+        <div className="rounded-2xl border border-vampBorder bg-black/40 p-5 text-white/90">
+          {profile.bio}
+        </div>
+      )}
 
-          <div className="flex flex-wrap gap-2 text-xs">
-            {prof.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 rounded-full bg-white/5 text-textMuted"
-              >
-                {tag}
+      {(profile.skills.length > 0 || profile.tags.length > 0) && (
+        <div className="rounded-2xl border border-vampBorder bg-black/40 p-5">
+          <div className="text-sm font-semibold text-white mb-3">Skills & tags</div>
+          <div className="flex flex-wrap gap-2">
+            {profile.skills.map((x) => (
+              <span key={`s-${x}`} className="text-xs rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90">
+                {x}
+              </span>
+            ))}
+            {profile.tags.map((x) => (
+              <span key={`t-${x}`} className="text-xs rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90">
+                {x}
               </span>
             ))}
           </div>
-
-          <div className="space-y-3 text-sm">
-            <div>
-              <h2 className="text-xs font-semibold mb-1 text-textMain/90">
-                Recent projects
-              </h2>
-              <ul className="text-textMuted text-[13px] list-disc list-inside">
-                {prof.projects.map((p) => (
-                  <li key={p.name}>{p.name}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-xs font-semibold mb-1 text-textMain/90">
-                Verification summary
-              </h2>
-              <p className="text-[13px] text-textMuted">
-                This profile is part of the VCC Verification demo. In a live
-                environment, the VCC team reviews references, on-chain history,
-                and prior collaborations before marking a professional as
-                verified.
-              </p>
-              {prof.verifiedAt && (
-                <p className="text-[11px] text-textMuted mt-1">
-                  Marked verified on {prof.verifiedAt}.
-                </p>
-              )}
-            </div>
-          </div>
         </div>
+      )}
 
-        <aside className="space-y-4">
-          <div className="rounded-2xl bg-surface border border-white/10 p-4 space-y-3 text-sm">
-            <h2 className="text-xs font-semibold text-textMain/90">
-              Contact & links
-            </h2>
-            <div className="space-y-2 text-[13px] text-textMuted">
-              {prof.twitter && (
-                <div>
-                  <span className="font-medium text-textMain mr-1">
-                    Twitter:
-                  </span>
-                  <a
-                    className="cursor-paw-pointer text-accentSoft hover:text-accent"
-                    href={prof.twitter}
-                    target="_blank"
-                  >
-                    {prof.twitter}
-                  </a>
+      <div className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-2 text-sm text-white/90">
+        {profile.website && <div>Website: <span className="text-vampTextMuted">{profile.website}</span></div>}
+        {profile.github && <div>GitHub: <span className="text-vampTextMuted">{profile.github}</span></div>}
+        {profile.linkedin && <div>LinkedIn: <span className="text-vampTextMuted">{profile.linkedin}</span></div>}
+        {profile.xHandle && <div>X: <span className="text-vampTextMuted">{profile.xHandle}</span></div>}
+        {profile.telegram && <div>Telegram: <span className="text-vampTextMuted">{profile.telegram}</span></div>}
+        <div>Chain: <span className="text-vampTextMuted">{profile.chain}</span></div>
+        <div>Wallet: <span className="text-vampTextMuted break-all">{profile.wallet}</span></div>
+      </div>
+
+      <div className="rounded-2xl border border-vampBorder bg-black/40 p-5">
+        <div className="text-sm font-semibold text-white mb-3">References</div>
+
+        {profile.references.length === 0 ? (
+          <div className="text-vampTextMuted text-sm">No references provided.</div>
+        ) : (
+          <div className="space-y-3">
+            {profile.references.map((r) => (
+              <div key={r.id} className="rounded-2xl border border-vampBorder/60 bg-black/30 p-4">
+                <div className="text-white font-semibold">{r.name}</div>
+                <div className="text-sm text-vampTextMuted">
+                  {r.relationship ? r.relationship : "Reference"}
                 </div>
-              )}
-              {prof.telegram && (
-                <div>
-                  <span className="font-medium text-textMain mr-1">
-                    Telegram:
-                  </span>
-                  <a
-                    className="cursor-paw-pointer text-accentSoft hover:text-accent"
-                    href={prof.telegram}
-                    target="_blank"
-                  >
-                    {prof.telegram}
-                  </a>
-                </div>
-              )}
-              {prof.website && (
-                <div>
-                  <span className="font-medium text-textMain mr-1">
-                    Website:
-                  </span>
-                  <a
-                    className="cursor-paw-pointer text-accentSoft hover:text-accent"
-                    href={prof.website}
-                    target="_blank"
-                  >
-                    {prof.website}
-                  </a>
-                </div>
-              )}
-              <div>
-                <span className="font-medium text-textMain mr-1">Wallet:</span>
-                <span className="font-mono text-[11px] break-all">
-                  {prof.wallet}
-                </span>
+                {(r.contact || r.link) && (
+                  <div className="mt-2 text-sm text-white/90 space-y-1">
+                    {r.contact && <div>Contact: <span className="text-vampTextMuted">{r.contact}</span></div>}
+                    {r.link && <div>Link: <span className="text-vampTextMuted break-all">{r.link}</span></div>}
+                  </div>
+                )}
+                {r.notes && <div className="mt-2 text-sm text-white/90">{r.notes}</div>}
               </div>
-            </div>
+            ))}
           </div>
-
-          <div className="rounded-2xl bg-surfaceSoft border border-dashed border-accent/40 p-4 text-[12px] text-textMuted">
-            <p>
-              In production, this panel can include risk scores, on-chain
-              analytics, dispute history and client feedback. For now, it
-              illustrates where VCC&apos;s verification insights will live.
-            </p>
-          </div>
-        </aside>
-      </section>
+        )}
+      </div>
     </div>
   );
 }
-
