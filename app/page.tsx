@@ -23,23 +23,18 @@ export default function HomePage() {
           ]
           [mask-image:radial-gradient(circle_at_center,rgba(0,0,0,1),rgba(0,0,0,0.15))]
         "
-      />
+      /> 
       {/* subtle background glow on the right */}
       <div className="pointer-events-none fixed inset-y-0 right-[-120px] w-[380px] bg-gradient-radial from-vampAccent/20 via-transparent to-transparent blur-3xl opacity-70" />
       {/* subtle background glow on the left */}
       <div className="pointer-events-none fixed inset-y-0 left-[-160px] w-[420px] bg-gradient-radial from-vampAccent/15 via-transparent to-transparent blur-3xl opacity-60" />
 
-      {/* VampCat hero accent */}
-      <div className="pointer-events-none absolute top-24 right-[-120px] z-0 hidden lg:block">
-        <Image
-          src="/vampcat_avatar.png"
-          alt="VampCat mascot"
-          width={420}
-          height={420}
-          priority
-          className="opacity-90 drop-shadow-[0_0_40px_rgba(239,68,68,0.25)] mask-image-radial"
-        />
-      </div> 
+      {/* Right: dead space -> trust graph */}
+      {/* <div className="relative hidden lg:block min-h-[420px]"> */}
+      {/* optional veil to reduce noise behind transparent cards */}
+      {/* <div className="absolute inset-0 rounded-3xl bg-slate-950/25" /> */}
+
+    {/* </div> */}
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 pt-16 space-y-12">
         {/* Early preview badge */}

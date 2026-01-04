@@ -21,7 +21,7 @@ export default function RootLayout({
         className={`${inter.className} min-h-screen flex flex-col bg-vampBg text-vampTextMain`}
       >
         {/* STATIC BACKGROUND GRID */}
-        <div className="bg-circuit" />
+        <div className="bg-geo-grid" />
 
         {/* MAIN APP CHROME */}
         <NavBar />
