@@ -1,5 +1,5 @@
-import Image from "next/image";
 import FeaturedProfiles from "../components/FeaturedProfiles";
+import TrustWeb from '@/components/TrustWeb';
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -28,11 +28,6 @@ export default function HomePage() {
       <div className="pointer-events-none fixed inset-y-0 right-[-120px] w-[380px] bg-gradient-radial from-vampAccent/20 via-transparent to-transparent blur-3xl opacity-70" />
       {/* subtle background glow on the left */}
       <div className="pointer-events-none fixed inset-y-0 left-[-160px] w-[420px] bg-gradient-radial from-vampAccent/15 via-transparent to-transparent blur-3xl opacity-60" />
-
-      {/* Right: dead space -> trust graph */}
-      {/* <div className="relative hidden lg:block min-h-[420px]"> */}
-      {/* optional veil to reduce noise behind transparent cards */}
-      {/* <div className="absolute inset-0 rounded-3xl bg-slate-950/25" /> */}
 
     {/* </div> */}
 
@@ -86,6 +81,10 @@ export default function HomePage() {
             <p className="text-[12px] text-vampTextMuted">
               Manual vetting · References required · On-chain history
             </p>
+          </div>
+
+          <div className="hidden md:flex items-center justify-center">
+            <TrustWeb />
           </div>
 
           {/* Right: sample preview card */}
