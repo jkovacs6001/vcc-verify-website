@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write
+  contents: write   # allow committing/pushing and creating PR via action
 
 jobs:
   create-pr:
@@ -15,16 +15,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Prepare directories
+      - name: Make changes (write files)
         run: |
+          set -euo pipefail
+
+          # ensure directories exist
           mkdir -p prisma/migrations/20260122_make_wallet_nullable
           mkdir -p app/apply
           mkdir -p components
           mkdir -p lib
-          mkdir -p app/directory
+          mkdir -p app/directory/$(printf "%s" "id") >/dev/null 2>&1 || true
 
-      - name: Write prisma/schema.prisma
-        run: |
+          # prisma/schema.prisma
           cat > prisma/schema.prisma <<'EOF'
           generator client {
             provider = "prisma-client-js"
@@ -91,15 +93,13 @@ jobs:
           }
           EOF
 
-      - name: Write migration SQL
-        run: |
+          # migration SQL
           cat > prisma/migrations/20260122_make_wallet_nullable/migration.sql <<'EOF'
           -- Make wallet nullable on Profile
           ALTER TABLE "Profile" ALTER COLUMN "wallet" DROP NOT NULL;
           EOF
 
-      - name: Write app/apply/actions.ts
-        run: |
+          # app/apply/actions.ts
           cat > app/apply/actions.ts <<'EOF'
           "use server";
 
@@ -213,8 +213,7 @@ jobs:
           }
           EOF
 
-      - name: Write app/apply/page.tsx
-        run: |
+          # app/apply/page.tsx (only the wallet placeholder change is needed here; we rewrite the whole file for clarity)
           cat > app/apply/page.tsx <<'EOF'
           "use client";
 
@@ -323,8 +322,7 @@ jobs:
           }
           EOF
 
-      - name: Write lib/mockData.ts
-        run: |
+          # lib/mockData.ts
           cat > lib/mockData.ts <<'EOF'
           export type Role =
             | "Developer"
@@ -337,7 +335,7 @@ jobs:
 
           export interface Professional {
             id: string;
-            name: string;
+            name string;
             alias?: string;
             role: Role;
             status: VerificationStatus;
@@ -398,8 +396,7 @@ jobs:
           ];
           EOF
 
-      - name: Write components/DirectoryList.tsx
-        run: |
+          # components/DirectoryList.tsx
           cat > components/DirectoryList.tsx <<'EOF'
           "use client";
 
@@ -460,8 +457,7 @@ jobs:
           };
           EOF
 
-      - name: Write components/ProfessionalCard.tsx
-        run: |
+          # components/ProfessionalCard.tsx
           cat > components/ProfessionalCard.tsx <<'EOF'
           import React from "react";
           import Link from "next/link";
@@ -476,6 +472,7 @@ jobs:
               ? { label: "Verified by VampCatCoin", className: "bg-emerald-500/10 text-emerald-300 border border-emerald-400/30" }
               : { label: "Pending review", className: "bg-amber-500/15 text-amber-300 border border-amber-400/40" };
 
+            // safe wallet preview (handle null and short strings)
             const walletPreview = (() => {
               const w = professional.wallet ?? "";
               if (!w) return "Not provided";
@@ -583,30 +580,26 @@ jobs:
           };
           EOF
 
-      - name: Patch profile & admin pages (safe edits)
-        run: |
-          # patch app/directory/[id]/page.tsx to render fallback for wallet if present
+          # Patch app/directory/[id]/page.tsx wallet rendering in-place (create a .bak first)
           if [ -f app/directory/[id]/page.tsx ]; then
             cp app/directory/[id]/page.tsx app/directory/[id]/page.tsx.bak || true
-            perl -0777 -pe 's/<div>Wallet: <span className="text-vampTextMuted break-all">\\{profile.wallet\\}<\\/span><\\/div>/<%REPLACEMENT%>/s' \
-              -i app/directory/[id]/page.tsx || true
-            # If perl substitution above didn't run, fallback to a conservative manual replacement:
-            sed -i.bak 's/{profile.wallet}/{profile.wallet ?? "Not provided"}/g' app/directory/[id]/page.tsx || true
+            # replace the wallet line with safe conditional rendering (uses perl to make it robust)
+            perl -0777 -pe 's/<div>Wallet: <span className="text-vampTextMuted break-all">\\{profile.wallet\\}<\\/span><\\/div>/\{profile.wallet \? \\(\n          <div>Wallet: <span className="text-vampTextMuted break-all">\\{profile.wallet\\}<\\/span><\\/div>\n        \\) : \\(\n          <div>Wallet: <span className="text-vampTextMuted">Not provided<\\/span><\\/div>\n        \\)\}/s' -i app/directory/[id]/page.tsx || true
           fi
 
-          # patch admin page to show fallback
+          # Patch app/admin/page.tsx to use fallback in the line that shows p.chain:p.wallet
           if [ -f app/admin/page.tsx ]; then
             cp app/admin/page.tsx app/admin/page.tsx.bak || true
-            sed -i.bak 's/{p.chain}:{p.wallet}/{p.chain}:{p.wallet ?? "Not provided"}/g' app/admin/page.tsx || true
+            perl -pi -e 's/\\{p.chain\\}:\\{p.wallet\\}/\\{p.chain\\}:\\{p.wallet ?? "Not provided"\\}/g' app/admin/page.tsx || true
           fi
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Make wallet optional: schema + migration + server & UI guards
+          commit-message: 'Make wallet optional: schema + migration + server & UI guards'
           branch: feature/make-wallet-optional
-          title: Make wallet optional: schema + migration + server & UI guards
+          title: 'Make wallet optional: schema + migration + server & UI guards'
           body: |
             This automated PR makes Profile.wallet nullable in the Prisma schema and updates the application action and UI to accept/save null wallets, plus guards in UI code so the app handles missing wallets safely.
 
