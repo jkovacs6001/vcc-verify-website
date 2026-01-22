@@ -1,0 +1,618 @@
+name: Make wallet optional (auto-PR)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # allow committing/pushing and creating PR via action
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Make changes (write files)
+        run: |
+          set -euo pipefail
+
+          # ensure directories exist
+          mkdir -p prisma/migrations/20260122_make_wallet_nullable
+          mkdir -p app/apply
+          mkdir -p components
+          mkdir -p lib
+          mkdir -p app/directory/$(printf "%s" "id") >/dev/null 2>&1 || true
+
+          # prisma/schema.prisma
+          cat > prisma/schema.prisma <<'EOF'
+          generator client {
+            provider = "prisma-client-js"
+          }
+
+          datasource db {
+            provider  = "postgresql"
+            url       = env("DATABASE_URL")
+            directUrl = env("PRISMA_DATABASE_URL")
+          }
+
+          enum ReviewStatus {
+            PENDING
+            APPROVED
+            REJECTED
+          }
+
+          model Profile {
+            id           String       @id @default(cuid())
+            displayName  String
+            handle       String?
+            role         String
+            location     String?
+            bio          String?
+            skills       String[]     @default([])
+            tags         String[]     @default([])
+
+            // Identity / contact
+            email        String
+            telegram     String?
+            xHandle      String?
+            website      String?
+            github       String?
+            linkedin     String?
+
+            // Web3
+            chain        String       @default("solana")
+            wallet       String?      // changed to nullable
+
+            status       ReviewStatus @default(PENDING)
+            reviewedAt   DateTime?
+            reviewerNote String?
+
+            references   Reference[]
+            createdAt    DateTime     @default(now())
+            updatedAt    DateTime     @updatedAt
+
+            @@index([status])
+            @@index([wallet])
+          }
+
+          model Reference {
+            id          String   @id @default(cuid())
+            profileId   String
+            profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+            name        String
+            relationship String?
+            contact     String? // email/telegram/etc
+            link        String? // project link, tweet, github, etc
+            notes       String?
+
+            createdAt   DateTime @default(now())
+          }
+          EOF
+
+          # migration SQL
+          cat > prisma/migrations/20260122_make_wallet_nullable/migration.sql <<'EOF'
+          -- Make wallet nullable on Profile
+          ALTER TABLE "Profile" ALTER COLUMN "wallet" DROP NOT NULL;
+          EOF
+
+          # app/apply/actions.ts
+          cat > app/apply/actions.ts <<'EOF'
+          "use server";
+
+          import { prisma } from "@/lib/db";
+
+          function s(formData: FormData, key: string): string {
+            const v = formData.get(key);
+            return typeof v === "string" ? v.trim() : "";
+          }
+
+          function opt(formData: FormData, key: string): string | null {
+            const v = s(formData, key);
+            return v ? v : null;
+          }
+
+          function splitCsv(v: string, max = 20): string[] {
+            return v
+              .split(",")
+              .map((x) => x.trim())
+              .filter(Boolean)
+              .slice(0, max);
+          }
+
+          function clampLen(v: string | null, max: number): string | null {
+            if (!v) return null;
+            const t = v.trim();
+            return t.length > max ? t.slice(0, max) : t;
+          }
+
+          type ApplyState =
+            | { ok: false; error: string }
+            | { ok: true; id: string };
+
+          export async function submitApplication(_: any, formData: FormData): Promise<ApplyState> {
+            // Honeypot (spam trap)
+            if (s(formData, "company")) return { ok: true, id: "ok" };
+
+            const displayName = s(formData, "displayName");
+            const role = s(formData, "role");
+            const email = s(formData, "email");
+            // wallet is optional now
+            const wallet = opt(formData, "wallet");
+
+            if (!displayName || !role || !email) {
+              return { ok: false, error: "Missing required fields." };
+            }
+
+            const handle = clampLen(opt(formData, "handle"), 40);
+            const location = clampLen(opt(formData, "location"), 80);
+            const bio = clampLen(opt(formData, "bio"), 800);
+
+            const telegram = clampLen(opt(formData, "telegram"), 80);
+            const xHandle = clampLen(opt(formData, "xHandle"), 80);
+            const website = clampLen(opt(formData, "website"), 200);
+            const github = clampLen(opt(formData, "github"), 200);
+            const linkedin = clampLen(opt(formData, "linkedin"), 200);
+
+            const chain = clampLen(opt(formData, "chain"), 24) ?? "solana";
+
+            const skills = splitCsv(s(formData, "skillsCsv"), 30);
+            const tags = splitCsv(s(formData, "tagsCsv"), 30);
+
+            // Up to 3 references for MVP (easy to extend)
+            const refs = [0, 1, 2]
+              .map((i) => {
+                const name = s(formData, `ref_${i}_name`);
+                if (!name) return null;
+                return {
+                  name: clampLen(name, 80) ?? name,
+                  relationship: clampLen(opt(formData, `ref_${i}_relationship`), 120),
+                  contact: clampLen(opt(formData, `ref_${i}_contact`), 200),
+                  link: clampLen(opt(formData, `ref_${i}_link`), 300),
+                  notes: clampLen(opt(formData, `ref_${i}_notes`), 400),
+                };
+              })
+              .filter(Boolean) as Array<{
+                name: string;
+                relationship: string | null;
+                contact: string | null;
+                link: string | null;
+                notes: string | null;
+              }>;
+
+            // clamp wallet length if present, otherwise null
+            const walletVal = clampLen(wallet, 200); // string | null
+
+            const created = await prisma.profile.create({
+              data: {
+                displayName,
+                handle,
+                role,
+                location,
+                bio,
+                skills,
+                tags,
+                email,
+                telegram,
+                xHandle,
+                website,
+                github,
+                linkedin,
+                chain,
+                wallet: walletVal, // nullable in DB now
+                status: "PENDING",
+                references: refs.length ? { create: refs } : undefined,
+              },
+              select: { id: true },
+            });
+
+            return { ok: true, id: created.id };
+          }
+          EOF
+
+          # app/apply/page.tsx (only the wallet placeholder change is needed here; we rewrite the whole file for clarity)
+          cat > app/apply/page.tsx <<'EOF'
+          "use client";
+
+          import React, { useActionState } from "react";
+          import { submitApplication } from "./actions";
+
+          export default function ApplyPage() {
+            const [state, formAction] = useActionState(submitApplication, { ok: false } as any);
+
+            return (
+              <div className="max-w-3xl space-y-6">
+                <div>
+                  <h1 className="text-3xl font-semibold text-white">Apply to get verified</h1>
+                  <p className="mt-2 text-vampTextMuted">
+                    Submit your info and references. Applications are manually reviewed.
+                  </p>
+                </div>
+
+                <form action={formAction} className="space-y-6">
+                  {/* Honeypot */}
+                  <input name="company" className="hidden" tabIndex={-1} autoComplete="off" />
+
+                  <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+                    <h2 className="text-lg font-semibold text-white">Basics</h2>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="displayName" placeholder="Display name *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="handle" placeholder="Handle (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="role" placeholder="Role * (Dev, Designer, PM...)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="location" placeholder="Location (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+
+                    <textarea name="bio" placeholder="Short bio (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white min-h-[110px]" />
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="skillsCsv" placeholder="Skills (comma-separated)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="tagsCsv" placeholder="Tags (comma-separated)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+                  </section>
+
+                  <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+                    <h2 className="text-lg font-semibold text-white">Contact</h2>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="email" placeholder="Email *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="telegram" placeholder="Telegram (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="xHandle" placeholder="X handle (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="github" placeholder="GitHub (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="linkedin" placeholder="LinkedIn (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+                  </section>
+
+                  <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+                    <h2 className="text-lg font-semibold text-white">Web3</h2>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input name="chain" defaultValue="solana" placeholder="Chain (default: solana)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                      <input name="wallet" placeholder="Wallet address (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                    </div>
+                  </section>
+
+                  <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-5">
+                    <h2 className="text-lg font-semibold text-white">References (up to 3)</h2>
+
+                    {[0, 1, 2].map((i) => (
+                      <div key={i} className="rounded-2xl border border-vampBorder/60 bg-black/30 p-4 space-y-3">
+                        <div className="text-sm font-semibold text-white">Reference {i + 1}</div>
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <input name={`ref_${i}_name`} placeholder="Name" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                          <input name={`ref_${i}_relationship`} placeholder="Relationship (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                        </div>
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <input name={`ref_${i}_contact`} placeholder="Contact (email/telegram) (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                          <input name={`ref_${i}_link`} placeholder="Link (project/tweet/github) (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+                        </div>
+                        <textarea name={`ref_${i}_notes`} placeholder="Notes (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white min-h-[90px]" />
+                      </div>
+                    ))}
+                  </section>
+
+                  <div className="flex items-center gap-3">
+                    <button className="rounded-full bg-vampAccent px-6 py-2.5 text-white shadow-vampGlow">
+                      Submit application
+                    </button>
+
+                    {state?.ok && (
+                      <span className="text-emerald-300">Submitted. Pending review.</span>
+                    )}
+                    {state?.ok === false && state?.error && (
+                      <span className="text-red-300">{state.error}</span>
+                    )}
+                  </div>
+                </form>
+              </div>
+            );
+          }
+          EOF
+
+          # lib/mockData.ts
+          cat > lib/mockData.ts <<'EOF'
+          export type Role =
+            | "Developer"
+            | "Marketer"
+            | "Market Maker"
+            | "Moderator"
+            | "Web3 Worker";
+
+          export type VerificationStatus = "Verified" | "Pending";
+
+          export interface Professional {
+            id: string;
+            name string;
+            alias?: string;
+            role: Role;
+            status: VerificationStatus;
+            twitter?: string;
+            telegram?: string;
+            website?: string;
+            // wallet is now optional / nullable
+            wallet?: string | null;
+            region?: string;
+            tags: string[];
+            projects: { name: string; link?: string }[];
+            verifiedAt?: string;
+          }
+
+          export const MOCK_PROFESSIONALS: Professional[] = [
+            {
+              id: "soldev-001",
+              name: "Astra Labs",
+              alias: "astra_dev",
+              role: "Developer",
+              status: "Verified",
+              twitter: "https://twitter.com/astra_dev",
+              telegram: "https://t.me/astra_dev",
+              website: "https://astra.dev",
+              wallet: "9x5CLPb3SeYSBKvautqpJWPjX9TUCVcWTS12Xawapump",
+              region: "EU",
+              tags: ["Solana", "Token Contracts", "Bots"],
+              projects: [
+                { name: "Solar DEX" },
+                { name: "Nebula NFT Launchpad" },
+              ],
+              verifiedAt: "2025-10-12",
+            },
+            {
+              id: "mm-001",
+              name: "Nova Flow MM",
+              role: "Market Maker",
+              status: "Verified",
+              twitter: "https://twitter.com/novaflowmm",
+              wallet: "8P3CLPb3SeYSBKvautqpJWPjX9TUCVcWTS12Xawa1111",
+              region: "US",
+              tags: ["Market Making", "Liquidity Strategy"],
+              projects: [{ name: "VampCatCoin (VCC)" }, { name: "OrbitFi" }],
+              verifiedAt: "2025-09-03",
+            },
+            {
+              id: "marketer-001",
+              name: "Luna Signal",
+              role: "Marketer",
+              status: "Pending",
+              twitter: "https://twitter.com/lunasignal",
+              telegram: "https://t.me/lunasignal",
+              wallet: "5Z2CLPb3SeYSBKvautqpJWPjX9TUCVcWTS12Xawa2222",
+              region: "Asia",
+              tags: ["Influencer Campaigns", "Spaces Host"],
+              projects: [{ name: "CometCoin" }],
+            },
+          ];
+          EOF
+
+          # components/DirectoryList.tsx
+          cat > components/DirectoryList.tsx <<'EOF'
+          "use client";
+
+          import React, { useMemo, useState } from "react";
+          import { MOCK_PROFESSIONALS, Professional } from "../lib/mockData";
+          import { SearchBar } from "./SearchBar";
+          import { ProfessionalCard } from "./ProfessionalCard";
+
+          export const DirectoryList: React.FC = () => {
+            const [query, setQuery] = useState("");
+            const [roleFilter, setRoleFilter] = useState<string>("All");
+
+            const filtered = useMemo(() => {
+              const lower = query.toLowerCase().trim();
+              return MOCK_PROFESSIONALS.filter((p) => {
+                const roleMatch =
+                  roleFilter === "All" ? true : p.role === roleFilter;
+
+                if (!roleMatch) return false;
+                if (!lower) return true;
+
+                // guard wallet which may now be null
+                const haystack =
+                  `${p.name} ${p.alias ?? ""} ${p.wallet ?? ""} ${p.tags.join(" ")}`
+                    .toLowerCase();
+
+                return haystack.includes(lower);
+              });
+            }, [query, roleFilter]);
+
+            return (
+              <div className="space-y-5">
+                <SearchBar
+                  value={query}
+                  onChange={setQuery}
+                  roleFilter={roleFilter}
+                  onRoleChange={setRoleFilter}
+                />
+
+                <p className="text-xs text-vampTextMuted mt-1">
+                  Showing {filtered.length} of {MOCK_PROFESSIONALS.length} professionals.
+                  This is a demo using mock data.
+                </p>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  {filtered.map((p: Professional) => (
+                    <ProfessionalCard key={p.id} professional={p} />
+                  ))}
+                </div>
+
+                {filtered.length === 0 && (
+                  <div className="mt-6 text-center text-sm text-vampTextMuted border border-dashed border-vampBorder rounded-2xl py-10">
+                    No matches yet. Try another search or role.
+                  </div>
+                )}
+              </div>
+            );
+          };
+          EOF
+
+          # components/ProfessionalCard.tsx
+          cat > components/ProfessionalCard.tsx <<'EOF'
+          import React from "react";
+          import Link from "next/link";
+          import { Professional } from "../lib/mockData";
+
+          interface Props {
+            professional: Professional;
+          }
+
+          export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
+            const status = professional.status === "Verified"
+              ? { label: "Verified by VampCatCoin", className: "bg-emerald-500/10 text-emerald-300 border border-emerald-400/30" }
+              : { label: "Pending review", className: "bg-amber-500/15 text-amber-300 border border-amber-400/40" };
+
+            // safe wallet preview (handle null and short strings)
+            const walletPreview = (() => {
+              const w = professional.wallet ?? "";
+              if (!w) return "Not provided";
+              if (w.length <= 10) return w;
+              return `${w.slice(0, 5)}…${w.slice(-5)}`;
+            })();
+
+            return (
+              <div className="rounded-2xl border border-vampBorder bg-black/40 p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-white">
+                        {professional.name}
+                        {professional.alias && (
+                          <span className="ml-1 text-xs text-vampTextMuted">
+                            · @{professional.alias}
+                          </span>
+                        )}
+                      </h3>
+                    </div>
+                    <p className="text-xs text-vampTextMuted mt-1">
+                      {professional.role}
+                      {professional.region && ` · ${professional.region}`}
+                    </p>
+                  </div>
+                  <span
+                    className={`text-[10px] px-2 py-1 rounded-full ${status.className}`}
+                  >
+                    {status.label}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {professional.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-vampTextMuted"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="text-[11px] text-vampTextMuted mt-3">
+                  <span className="font-medium text-[11px] text-white">
+                    Recent projects:
+                  </span>{" "}
+                  {professional.projects.map((p, idx) => (
+                    <span key={p.name}>
+                      {p.name}
+                      {idx < professional.projects.length - 1 && ", "}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-3 text-xs items-center">
+                  {professional.twitter && (
+                    <a
+                      href={professional.twitter}
+                      target="_blank"
+                      className="cursor-paw-pointer px-2 py-1 rounded-full bg-white/5 hover:bg-vampAccent/20 text-vampTextMuted hover:text-white"
+                    >
+                      Twitter / X
+                    </a>
+                  )}
+                  {professional.telegram && (
+                    <a
+                      href={professional.telegram}
+                      target="_blank"
+                      className="cursor-paw-pointer px-2 py-1 rounded-full bg-white/5 hover:bg-vampAccent/20 text-vampTextMuted hover:text-white"
+                    >
+                      Telegram
+                    </a>
+                  )}
+                  {professional.website && (
+                    <a
+                      href={professional.website}
+                      target="_blank"
+                      className="cursor-paw-pointer px-2 py-1 rounded-full bg-white/5 hover:bg-vampAccent/20 text-vampTextMuted hover:text-white"
+                    >
+                      Website
+                    </a>
+                  )}
+                  <span className="px-2 py-1 rounded-full bg-white/5 text-[10px] text-vampTextMuted truncate max-w-[180px]">
+                    Wallet: {walletPreview}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center mt-3">
+                  <Link
+                    href={`/directory/${professional.id}`}
+                    className="cursor-paw-pointer text-xs text-vampAccent hover:text-vampAccentSoft"
+                  >
+                    View profile →
+                  </Link>
+                  {professional.verifiedAt && (
+                    <span className="text-[10px] text-vampTextMuted">
+                      Verified: {professional.verifiedAt}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          };
+          EOF
+
+          # Patch app/directory/[id]/page.tsx wallet rendering in-place (create a .bak first)
+          if [ -f app/directory/[id]/page.tsx ]; then
+            cp app/directory/[id]/page.tsx app/directory/[id]/page.tsx.bak || true
+            # replace the wallet line with safe conditional rendering (uses perl to make it robust)
+            perl -0777 -pe 's/<div>Wallet: <span className="text-vampTextMuted break-all">\\{profile.wallet\\}<\\/span><\\/div>/\{profile.wallet \? \\(\n          <div>Wallet: <span className="text-vampTextMuted break-all">\\{profile.wallet\\}<\\/span><\\/div>\n        \\) : \\(\n          <div>Wallet: <span className="text-vampTextMuted">Not provided<\\/span><\\/div>\n        \\)\}/s' -i app/directory/[id]/page.tsx || true
+          fi
+
+          # Patch app/admin/page.tsx to use fallback in the line that shows p.chain:p.wallet
+          if [ -f app/admin/page.tsx ]; then
+            cp app/admin/page.tsx app/admin/page.tsx.bak || true
+            perl -pi -e 's/\\{p.chain\\}:\\{p.wallet\\}/\\{p.chain\\}:\\{p.wallet ?? "Not provided"\\}/g' app/admin/page.tsx || true
+          fi
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Make wallet optional: schema + migration + server & UI guards
+          branch: feature/make-wallet-optional
+          title: Make wallet optional: schema + migration + server & UI guards
+          body: |
+            This automated PR makes Profile.wallet nullable in the Prisma schema and updates the application action and UI to accept/save null wallets, plus guards in UI code so the app handles missing wallets safely.
+
+            After merging, run locally:
+            - npx prisma migrate dev --name make-wallet-nullable
+            - npx prisma generate
+
+            Files changed:
+            - prisma/schema.prisma (wallet: String?)
+            - prisma/migrations/20260122_make_wallet_nullable/migration.sql
+            - app/apply/actions.ts
+            - app/apply/page.tsx
+            - lib/mockData.ts
+            - components/DirectoryList.tsx
+            - components/ProfessionalCard.tsx
+            - patched: app/directory/[id]/page.tsx, app/admin/page.tsx
