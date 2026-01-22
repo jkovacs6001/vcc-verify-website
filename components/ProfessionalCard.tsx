@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Professional } from "../lib/mockData";
+import type { Professional } from "../lib/mockData";
 
 interface Props {
   professional: Professional;
