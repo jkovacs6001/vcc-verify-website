@@ -9,7 +9,7 @@ export type VerificationStatus = "Verified" | "Pending";
 
 export interface Professional {
   id: string;
-  name string;
+  name: string;
   alias?: string;
   role: Role;
   status: VerificationStatus;
