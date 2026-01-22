@@ -37,9 +37,10 @@ export async function submitApplication(_: any, formData: FormData): Promise<App
   const displayName = s(formData, "displayName");
   const role = s(formData, "role");
   const email = s(formData, "email");
-  const wallet = s(formData, "wallet");
+  // wallet is optional now
+  const wallet = opt(formData, "wallet");
 
-  if (!displayName || !role || !email || !wallet) {
+  if (!displayName || !role || !email) {
     return { ok: false, error: "Missing required fields." };
   }
 
@@ -79,6 +80,9 @@ export async function submitApplication(_: any, formData: FormData): Promise<App
       notes: string | null;
     }>;
 
+  // clamp wallet length if present, otherwise null
+  const walletVal = clampLen(wallet, 200); // string | null
+
   const created = await prisma.profile.create({
     data: {
       displayName,
@@ -95,7 +99,7 @@ export async function submitApplication(_: any, formData: FormData): Promise<App
       github,
       linkedin,
       chain,
-      wallet,
+      wallet: walletVal, // nullable in DB now
       status: "PENDING",
       references: refs.length ? { create: refs } : undefined,
     },

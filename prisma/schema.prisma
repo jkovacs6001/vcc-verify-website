@@ -34,7 +34,7 @@ model Profile {
 
   // Web3
   chain        String       @default("solana")
-  wallet       String
+  wallet       String?      // changed to nullable
 
   status       ReviewStatus @default(PENDING)
   reviewedAt   DateTime?

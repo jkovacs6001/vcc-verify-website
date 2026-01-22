@@ -9,14 +9,15 @@ export type VerificationStatus = "Verified" | "Pending";
 
 export interface Professional {
   id: string;
-  name: string;
+  name string;
   alias?: string;
   role: Role;
   status: VerificationStatus;
   twitter?: string;
   telegram?: string;
   website?: string;
-  wallet: string;
+  // wallet is now optional / nullable
+  wallet?: string | null;
   region?: string;
   tags: string[];
   projects: { name: string; link?: string }[];
@@ -67,4 +68,3 @@ export const MOCK_PROFESSIONALS: Professional[] = [
     projects: [{ name: "CometCoin" }],
   },
 ];
-

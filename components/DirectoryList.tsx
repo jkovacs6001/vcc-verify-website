@@ -18,8 +18,9 @@ export const DirectoryList: React.FC = () => {
       if (!roleMatch) return false;
       if (!lower) return true;
 
+      // guard wallet which may now be null
       const haystack =
-        `${p.name} ${p.alias ?? ""} ${p.wallet} ${p.tags.join(" ")}`
+        `${p.name} ${p.alias ?? ""} ${p.wallet ?? ""} ${p.tags.join(" ")}`
           .toLowerCase();
 
       return haystack.includes(lower);
@@ -54,4 +55,3 @@ export const DirectoryList: React.FC = () => {
     </div>
   );
 };
-
