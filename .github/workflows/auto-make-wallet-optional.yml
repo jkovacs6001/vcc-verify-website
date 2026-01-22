@@ -4,7 +4,8 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write   # allow committing/pushing and creating PR via action
+  contents: write
+  pull-requests: write
 
 jobs:
   create-pr:
