@@ -39,7 +39,7 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
             </h3>
           </div>
           <p className="text-xs text-vampTextMuted mt-1">
-            {professional.role}
+            {professional.submissionRole}
             {professional.region && ` · ${professional.region}`}
           </p>
         </div>

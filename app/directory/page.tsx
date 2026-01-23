@@ -13,7 +13,7 @@ export default async function DirectoryPage() {
       id: true,
       displayName: true,
       handle: true,
-      role: true,
+      submissionRole: true,
       location: true,
       tags: true,
       skills: true,
@@ -43,7 +43,7 @@ export default async function DirectoryPage() {
                     {p.handle ? <span className="text-vampTextMuted text-sm"> · @{p.handle}</span> : null}
                   </div>
                   <div className="text-sm text-vampTextMuted">
-                    {p.role}{p.location ? ` · ${p.location}` : ""}
+                    {p.submissionRole}{p.location ? ` · ${p.location}` : ""}
                   </div>
                 </div>
               </div>

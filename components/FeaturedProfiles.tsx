@@ -16,7 +16,7 @@ export default async function FeaturedProfiles() {
       id: true,
       displayName: true,
       handle: true,
-      role: true,
+      submissionRole: true,
       location: true,
       skills: true,
       tags: true,
@@ -48,7 +48,7 @@ export default async function FeaturedProfiles() {
                 ) : null}
               </div>
               <div className="text-sm text-vampTextMuted truncate">
-                {p.role}
+                {p.submissionRole}
                 {p.location ? ` · ${p.location}` : ""}
               </div>
               {(p.skills.length > 0 || p.tags.length > 0) && (

@@ -28,7 +28,7 @@ export default async function DirectoryProfilePage({
           {profile.handle ? <span className="text-vampTextMuted text-base"> · @{profile.handle}</span> : null}
         </h1>
         <div className="mt-1 text-vampTextMuted">
-          {profile.role}{profile.location ? ` · ${profile.location}` : ""}
+          {profile.submissionRole}{profile.location ? ` · ${profile.location}` : ""}
         </div>
       </div>
 

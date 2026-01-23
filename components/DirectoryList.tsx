@@ -13,7 +13,7 @@ export const DirectoryList: React.FC = () => {
     const lower = query.toLowerCase().trim();
     return MOCK_PROFESSIONALS.filter((p) => {
       const roleMatch =
-        roleFilter === "All" ? true : p.role === roleFilter;
+        roleFilter === "All" ? true : p.submissionRole === roleFilter;
 
       if (!roleMatch) return false;
       if (!lower) return true;

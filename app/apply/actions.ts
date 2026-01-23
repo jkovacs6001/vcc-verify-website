@@ -50,10 +50,10 @@ export async function submitApplication(
     if (s(formData, "company")) return { ok: true, id: "ok" };
 
     const displayName = s(formData, "displayName");
-    const role = s(formData, "role");
+    const submissionRole = s(formData, "role");
     const email = s(formData, "email");
 
-    if (!displayName || !role || !email) {
+    if (!displayName || !submissionRole || !email) {
       return { ok: false, error: "Missing required fields." };
     }
 
@@ -108,7 +108,7 @@ export async function submitApplication(
       data: {
         displayName,
         handle,
-        role,
+        submissionRole,
         location,
         bio,
         skills,

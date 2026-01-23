@@ -10,15 +10,24 @@ datasource db {
 
 enum ReviewStatus {
   PENDING
+  REVIEWING
+  READY_FOR_APPROVAL
   APPROVED
   REJECTED
+}
+
+enum UserRole {
+  MEMBER
+  REVIEWER
+  APPROVER
+  ADMIN
 }
 
 model Profile {
   id           String       @id @default(cuid())
   displayName  String
   handle       String?
-  role         String
+  submissionRole String       // The role they're applying for (Dev, Designer, etc)
   location     String?
   bio          String?
   skills       String[]     @default([])
@@ -36,6 +45,9 @@ model Profile {
   chain        String       @default("solana")
   wallet       String?
 
+  // Permissions
+  userRole     UserRole     @default(MEMBER)
+
   status       ReviewStatus @default(PENDING)
   reviewedAt   DateTime?
   reviewerNote String?
@@ -46,6 +58,7 @@ model Profile {
 
   @@index([status])
   @@index([wallet])
+  @@index([userRole])
 }
 
 model Reference {

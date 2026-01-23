@@ -11,7 +11,7 @@ export interface Professional {
   id: string;
   name: string;
   alias?: string;
-  role: Role;
+  submissionRole: Role;
   status: VerificationStatus;
   twitter?: string;
   telegram?: string;
@@ -28,7 +28,7 @@ export const MOCK_PROFESSIONALS: Professional[] = [
     id: "soldev-001",
     name: "Astra Labs",
     alias: "astra_dev",
-    role: "Developer",
+    submissionRole: "Developer",
     status: "Verified",
     twitter: "https://twitter.com/astra_dev",
     telegram: "https://t.me/astra_dev",
@@ -45,7 +45,7 @@ export const MOCK_PROFESSIONALS: Professional[] = [
   {
     id: "mm-001",
     name: "Nova Flow MM",
-    role: "Market Maker",
+    submissionRole: "Market Maker",
     status: "Verified",
     twitter: "https://twitter.com/novaflowmm",
     wallet: "8P3CLPb3SeYSBKvautqpJWPjX9TUCVcWTS12Xawa1111",
@@ -57,7 +57,7 @@ export const MOCK_PROFESSIONALS: Professional[] = [
   {
     id: "marketer-001",
     name: "Luna Signal",
-    role: "Marketer",
+    submissionRole: "Marketer",
     status: "Pending",
     twitter: "https://twitter.com/lunasignal",
     telegram: "https://t.me/lunasignal",
