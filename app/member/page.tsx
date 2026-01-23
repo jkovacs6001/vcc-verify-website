@@ -31,6 +31,22 @@ export default function MemberPage() {
         </p>
       </div>
 
+      {/* Role-based quick links */}
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/review"
+          className="inline-flex items-center justify-center rounded-full bg-blue-600/80 px-5 py-2.5 text-white shadow-vampGlow hover:bg-blue-700 transition-colors text-sm"
+        >
+          Review Applications
+        </Link>
+        <Link
+          href="/approve"
+          className="inline-flex items-center justify-center rounded-full bg-emerald-600/80 px-5 py-2.5 text-white shadow-vampGlow hover:bg-emerald-700 transition-colors text-sm"
+        >
+          Approvals
+        </Link>
+      </div>
+
       <form onSubmit={handleSearch} className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
         <div>
           <label className="block text-sm font-medium text-white mb-2">

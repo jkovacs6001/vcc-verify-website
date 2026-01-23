@@ -5,30 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const baseNavItems = [
+const navItems = [
   { href: "/", label: "Home" },
   { href: "/directory", label: "Directory" },
   { href: "/apply", label: "Apply" },
 ];
 
-const roleNavItems = [
-  { href: "/member", label: "My Applications", roles: ["MEMBER", "REVIEWER", "APPROVER", "ADMIN"] },
-  { href: "/review", label: "Review", roles: ["REVIEWER", "APPROVER"] },
-  { href: "/approve", label: "Approve", roles: ["APPROVER"] },
-  { href: "/admin", label: "Admin", roles: ["ADMIN"] },
-];
-
 export const NavBar: React.FC = () => {
   const pathname = usePathname();
-  // TODO: Get user role from authentication context
-  const userRole = null; // Will be set from auth context
-
-  // Filter nav items based on user role
-  const visibleRoleItems = roleNavItems.filter((item) => 
-    !userRole || item.roles.includes(userRole as any)
-  );
-
-  const navItems = [...baseNavItems, ...visibleRoleItems];
 
   return (
     <header className="w-full border-b border-vampBorder bg-black/90 backdrop-blur">
