@@ -31,13 +31,26 @@ export default async function MemberPage() {
               required
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">
+              Password
+            </label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              className="w-full rounded-xl bg-white/5 px-4 py-3 text-white"
+              required
+              minLength={8}
+            />
+          </div>
           <button className="w-full rounded-full bg-vampAccent px-5 py-3 text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors font-medium">
             Sign In
           </button>
         </form>
 
         <p className="text-xs text-vampTextMuted text-center">
-          No verification code needed - we'll look up your profile by email.
+          Use the email and password you provided when you applied.
         </p>
       </div>
     );

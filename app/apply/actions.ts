@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import bcrypt from "bcryptjs";
 
 function s(formData: FormData, key: string): string {
   const v = formData.get(key);
@@ -52,8 +53,9 @@ export async function submitApplication(
     const displayName = s(formData, "displayName");
     const submissionRole = s(formData, "role");
     const email = s(formData, "email");
+    const password = s(formData, "password");
 
-    if (!displayName || !submissionRole || !email) {
+    if (!displayName || !submissionRole || !email || !password) {
       return { ok: false, error: "Missing required fields." };
     }
 
@@ -61,6 +63,13 @@ export async function submitApplication(
     if (!EMAIL_REGEX.test(email)) {
       return { ok: false, error: "Invalid email address" };
     }
+
+    if (password.length < 8) {
+      return { ok: false, error: "Password must be at least 8 characters" };
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const wallet = clampLen(opt(formData, "wallet"), 255);
 
@@ -114,6 +123,7 @@ export async function submitApplication(
         skills,
         tags,
         email,
+        passwordHash,
         telegram,
         xHandle,
         website,

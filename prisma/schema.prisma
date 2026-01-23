@@ -35,6 +35,7 @@ model Profile {
 
   // Identity / contact
   email        String       @unique
+  passwordHash String       // Hashed password for authentication
   telegram     String?
   xHandle      String?
   website      String?

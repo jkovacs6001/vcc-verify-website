@@ -45,12 +45,16 @@ export default function ApplyPage() {
           <h2 className="text-lg font-semibold text-white">Contact</h2>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <input name="email" placeholder="Email *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
-            <input name="telegram" placeholder="Telegram (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="email" type="email" placeholder="Email *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="password" type="password" placeholder="Password *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" minLength={8} />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
+            <input name="telegram" placeholder="Telegram (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
             <input name="xHandle" placeholder="X handle (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
             <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
           </div>
 

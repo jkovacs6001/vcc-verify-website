@@ -3,23 +3,38 @@
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import bcrypt from "bcryptjs";
 
 export async function memberLogin(formData: FormData) {
   const email = (formData.get("email") as string)?.trim().toLowerCase();
+  const password = formData.get("password") as string;
 
-  if (!email) {
-    throw new Error("Email is required");
+  if (!email || !password) {
+    throw new Error("Email and password are required");
   }
 
   try {
     // Find member by email
     const member = await prisma.profile.findUnique({
       where: { email },
-      select: { id: true, email: true, userRole: true, displayName: true },
+      select: { 
+        id: true, 
+        email: true, 
+        userRole: true, 
+        displayName: true,
+        passwordHash: true 
+      },
     });
 
     if (!member) {
-      throw new Error("No profile found with this email");
+      throw new Error("Invalid email or password");
+    }
+
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, member.passwordHash);
+    
+    if (!isValidPassword) {
+      throw new Error("Invalid email or password");
     }
 
     // Set auth cookie
