@@ -64,7 +64,7 @@ export default function ApplyPage() {
 
           <div className="grid gap-4 md:grid-cols-2">
             <input name="chain" defaultValue="solana" placeholder="Chain (default: solana)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
-            <input name="wallet" placeholder="Wallet address *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
+            <input name="wallet" placeholder="Wallet address (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
           </div>
         </section>
 

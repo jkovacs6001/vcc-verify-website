@@ -16,7 +16,7 @@ export interface Professional {
   twitter?: string;
   telegram?: string;
   website?: string;
-  wallet: string;
+  wallet?: string;
   region?: string;
   tags: string[];
   projects: { name: string; link?: string }[];

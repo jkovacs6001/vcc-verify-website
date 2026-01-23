@@ -19,7 +19,7 @@ export const DirectoryList: React.FC = () => {
       if (!lower) return true;
 
       const haystack =
-        `${p.name} ${p.alias ?? ""} ${p.wallet} ${p.tags.join(" ")}`
+        `${p.name} ${p.alias ?? ""} ${p.wallet ?? ""} ${p.tags.join(" ")}`
           .toLowerCase();
 
       return haystack.includes(lower);

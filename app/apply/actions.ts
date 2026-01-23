@@ -37,11 +37,12 @@ export async function submitApplication(_: any, formData: FormData): Promise<App
   const displayName = s(formData, "displayName");
   const role = s(formData, "role");
   const email = s(formData, "email");
-  const wallet = s(formData, "wallet");
 
-  if (!displayName || !role || !email || !wallet) {
+  if (!displayName || !role || !email) {
     return { ok: false, error: "Missing required fields." };
   }
+
+  const wallet = clampLen(opt(formData, "wallet"), 255);
 
   const handle = clampLen(opt(formData, "handle"), 40);
   const location = clampLen(opt(formData, "location"), 80);

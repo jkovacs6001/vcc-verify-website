@@ -101,10 +101,12 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
             Website
           </a>
         )}
-        <span className="px-2 py-1 rounded-full bg-white/5 text-[10px] text-vampTextMuted truncate max-w-[180px]">
-          Wallet: {professional.wallet.slice(0, 5)}…
-          {professional.wallet.slice(-5)}
-        </span>
+        {professional.wallet && (
+          <span className="px-2 py-1 rounded-full bg-white/5 text-[10px] text-vampTextMuted truncate max-w-[180px]">
+            Wallet: {professional.wallet.slice(0, 5)}…
+            {professional.wallet.slice(-5)}
+          </span>
+        )}
       </div>
 
       <div className="flex justify-between items-center mt-1">

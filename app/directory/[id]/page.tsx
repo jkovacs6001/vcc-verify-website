@@ -63,7 +63,7 @@ export default async function DirectoryProfilePage({
         {profile.xHandle && <div>X: <span className="text-vampTextMuted">{profile.xHandle}</span></div>}
         {profile.telegram && <div>Telegram: <span className="text-vampTextMuted">{profile.telegram}</span></div>}
         <div>Chain: <span className="text-vampTextMuted">{profile.chain}</span></div>
-        <div>Wallet: <span className="text-vampTextMuted break-all">{profile.wallet}</span></div>
+        {profile.wallet && <div>Wallet: <span className="text-vampTextMuted break-all">{profile.wallet}</span></div>}
       </div>
 
       <div className="rounded-2xl border border-vampBorder bg-black/40 p-5">

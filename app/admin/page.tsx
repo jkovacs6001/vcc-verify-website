@@ -51,7 +51,7 @@ export default async function AdminPage() {
                     {p.role}{p.location ? ` · ${p.location}` : ""}
                   </div>
                   <div className="mt-2 text-xs text-vampTextMuted break-all">
-                    {p.email} · {p.chain}:{p.wallet}
+                    {p.email} · {p.chain}:{p.wallet ?? "(none)"}
                   </div>
 
                   {p.bio && <div className="mt-3 text-sm text-white/90">{p.bio}</div>}
