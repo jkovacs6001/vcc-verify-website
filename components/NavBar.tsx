@@ -8,6 +8,7 @@ import React from "react";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/directory", label: "Directory" },
+  { href: "/member", label: "My Dashboard" },
   { href: "/apply", label: "Apply" },
 ];
 
