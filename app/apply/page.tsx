@@ -2,9 +2,10 @@
 
 import React, { useActionState } from "react";
 import { submitApplication } from "./actions";
+import type { ApplyState } from "./actions";
 
 export default function ApplyPage() {
-  const [state, formAction] = useActionState(submitApplication, { ok: false } as any);
+  const [state, formAction] = useActionState(submitApplication, { ok: false } as ApplyState);
 
   return (
     <div className="max-w-3xl space-y-6">
