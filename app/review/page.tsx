@@ -1,37 +1,37 @@
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { getMemberSession } from "@/app/member/actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function requireReviewerAccess() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("reviewer_token")?.value;
-  if (!token || token !== process.env.REVIEWER_TOKEN) {
+  const member = await getMemberSession();
+
+  if (!member || (member.userRole !== "REVIEWER" && member.userRole !== "APPROVER")) {
     return null;
   }
-  return token;
+
+  return member;
 }
 
 export default async function ReviewPage() {
-  const isAuthed = await requireReviewerAccess();
+  const member = await requireReviewerAccess();
 
-  if (!isAuthed) {
+  if (!member) {
     return (
       <div className="max-w-lg space-y-4">
         <h1 className="text-3xl font-semibold text-white">Review Applications</h1>
-        <form action="#" className="space-y-3">
-          <input
-            name="token"
-            placeholder="Reviewer token"
-            type="password"
-            className="w-full rounded-xl bg-white/5 px-4 py-3 text-white"
-          />
-          <button className="rounded-full bg-vampAccent px-5 py-2 text-white shadow-vampGlow">
-            Login
-          </button>
-        </form>
+        <p className="mt-2 text-vampTextMuted">
+          You do not have access to this page. Please sign in with a reviewer or approver account.
+        </p>
+        <Link
+          href="/member"
+          className="inline-flex items-center justify-center rounded-full bg-vampAccent px-5 py-2.5 text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors"
+        >
+          Go to Dashboard
+        </Link>
       </div>
     );
   }

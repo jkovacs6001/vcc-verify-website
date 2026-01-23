@@ -34,7 +34,7 @@ model Profile {
   tags         String[]     @default([])
 
   // Identity / contact
-  email        String
+  email        String       @unique
   telegram     String?
   xHandle      String?
   website      String?
