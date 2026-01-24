@@ -1,10 +1,10 @@
-import { cookies } from "next/headers";
 import { NavBar } from "./NavBar";
+import { getMemberSession } from "@/app/member/actions";
 
 export async function NavBarWrapper() {
-  const cookieStore = await cookies();
-  const memberEmail = cookieStore.get("member_email")?.value;
-  const isAuthenticated = !!memberEmail;
+  // Use full session lookup so we only treat real accounts as signed-in
+  const member = await getMemberSession();
+  const isAuthenticated = !!member?.id;
 
   return <NavBar isAuthenticated={isAuthenticated} />;
 }
