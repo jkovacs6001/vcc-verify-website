@@ -13,24 +13,24 @@ export async function registerAccount(
   _prevState: RegisterState,
   formData: FormData
 ): Promise<RegisterState> {
+  const displayName = (formData.get("displayName") as string)?.trim();
+  const email = (formData.get("email") as string)?.trim().toLowerCase();
+  const password = formData.get("password") as string;
+
+  if (!displayName || !email || !password) {
+    return { ok: false, error: "All fields are required" };
+  }
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!EMAIL_REGEX.test(email)) {
+    return { ok: false, error: "Invalid email address" };
+  }
+
+  if (password.length < 8) {
+    return { ok: false, error: "Password must be at least 8 characters" };
+  }
+
   try {
-    const displayName = (formData.get("displayName") as string)?.trim();
-    const email = (formData.get("email") as string)?.trim().toLowerCase();
-    const password = formData.get("password") as string;
-
-    if (!displayName || !email || !password) {
-      return { ok: false, error: "All fields are required" };
-    }
-
-    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!EMAIL_REGEX.test(email)) {
-      return { ok: false, error: "Invalid email address" };
-    }
-
-    if (password.length < 8) {
-      return { ok: false, error: "Password must be at least 8 characters" };
-    }
-
     // Check if email already exists
     const existing = await prisma.profile.findUnique({
       where: { email },
@@ -68,10 +68,11 @@ export async function registerAccount(
       path: "/",
       maxAge: 30 * 24 * 60 * 60, // 30 days
     });
-
-    redirect("/member");
   } catch (error) {
     console.error("Registration error:", error);
     return { ok: false, error: "Failed to create account. Please try again." };
   }
+
+  // Redirect outside try-catch so it doesn't get caught
+  redirect("/member");
 }
