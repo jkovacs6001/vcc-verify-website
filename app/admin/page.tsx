@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
-import { adminLogin } from "./actions";
+import { getMemberSession } from "../member/actions";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -60,25 +60,11 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
 }
 
 export default async function AdminPage() {
-  const cookieStore = await cookies();
-  const isAuthed = cookieStore.get("admin_token")?.value === process.env.ADMIN_TOKEN;
+  const member = await getMemberSession();
 
-  if (!isAuthed) {
-    return (
-      <div className="max-w-lg space-y-4">
-        <h1 className="text-3xl font-semibold text-white">Admin</h1>
-        <form action={adminLogin} className="space-y-3">
-          <input
-            name="token"
-            placeholder="Admin token"
-            className="w-full rounded-xl bg-white/5 px-4 py-3 text-white"
-          />
-          <button className="rounded-full bg-vampAccent px-5 py-2 text-white shadow-vampGlow">
-            Login
-          </button>
-        </form>
-      </div>
-    );
+  // Only ADMIN role can access this page
+  if (!member || member.userRole !== "ADMIN") {
+    redirect("/member");
   }
 
   // Fetch approved members
