@@ -17,7 +17,6 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
     { href: "/directory", label: "Directory" },
     { href: "/member", label: "My Dashboard" },
     { href: "/apply", label: "Apply" },
-    ...(!isAuthenticated ? [{ href: "/register", label: "Register" }] : []),
   ];
 
   return (
@@ -64,6 +63,15 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
             );
           })}
         </nav>
+
+        {!isAuthenticated && (
+          <Link
+            href="/register"
+            className="hidden sm:inline-flex items-center justify-center rounded-full bg-vampAccent px-4 py-2 text-sm font-medium text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors"
+          >
+            Create Account
+          </Link>
+        )}
       </div>
     </header>
   );

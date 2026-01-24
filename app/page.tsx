@@ -65,16 +65,22 @@ export default function HomePage() {
 
             <div className="flex flex-wrap items-center gap-3">
               <a
-                href="/directory"
+                href="/register"
                 className="cursor-paw-pointer inline-flex items-center justify-center rounded-full bg-vampAccent px-5 py-2.5 text-sm font-medium text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors"
+              >
+                Create account
+              </a>
+              <a
+                href="/directory"
+                className="cursor-paw-pointer inline-flex items-center justify-center rounded-full bg-white/5 px-5 py-2.5 text-sm font-medium text-vampTextMain hover:bg-white/10 border border-vampBorder"
               >
                 Browse directory
               </a>
               <a
                 href="/apply"
-                className="cursor-paw-pointer inline-flex items-center justify-center rounded-full bg-white/5 px-5 py-2.5 text-sm font-medium text-vampTextMain hover:bg-white/10 border border-vampBorder"
+                className="cursor-paw-pointer inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium text-vampAccent hover:text-white hover:bg-vampAccent/10 border border-transparent"
               >
-                Apply to get verified
+                Already vetted? Apply for verification
               </a>
             </div>
 
