@@ -27,7 +27,7 @@ model Profile {
   id           String       @id @default(cuid())
   displayName  String
   handle       String?
-  submissionRole String       // The role they're applying for (Dev, Designer, etc)
+  submissionRole String?      // The role they're applying for (Dev, Designer, etc) - null if no application
   location     String?
   bio          String?
   skills       String[]     @default([])
@@ -43,13 +43,14 @@ model Profile {
   linkedin     String?
 
   // Web3
-  chain        String       @default("solana")
+  chain        String?      @default("solana")
   wallet       String?
 
   // Permissions
   userRole     UserRole     @default(MEMBER)
 
-  status       ReviewStatus @default(PENDING)
+  // Verification application status - null means account-only (no verification application)
+  status       ReviewStatus?
   reviewedAt   DateTime?
   reviewerNote String?
 

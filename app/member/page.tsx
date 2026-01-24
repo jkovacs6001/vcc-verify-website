@@ -50,8 +50,15 @@ export default async function MemberPage() {
         </form>
 
         <p className="text-xs text-vampTextMuted text-center">
-          Use the email and password you provided when you applied.
+          Use the email and password from your account.
         </p>
+
+        <div className="text-center text-sm text-vampTextMuted">
+          Don't have an account?{" "}
+          <Link href="/register" className="text-vampAccent hover:underline">
+            Register here
+          </Link>
+        </div>
       </div>
     );
   }
@@ -68,22 +75,44 @@ export default async function MemberPage() {
       {/* Profile Status */}
       <div className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-3">
         <div className="text-sm font-medium text-white">Profile Status</div>
-        <div className="flex items-center justify-between">
-          <span className="text-vampTextMuted">Verification Status:</span>
-          <span
-            className={`px-3 py-1 rounded-full text-sm font-medium ${
-              member.status === "APPROVED"
-                ? "bg-emerald-500/15 text-emerald-300"
-                : member.status === "PENDING"
-                ? "bg-amber-500/15 text-amber-300"
-                : member.status === "REJECTED"
-                ? "bg-red-500/15 text-red-300"
-                : "bg-gray-500/15 text-gray-300"
-            }`}
-          >
-            {member.status}
-          </span>
-        </div>
+        
+        {member.status === null ? (
+          <div className="space-y-3">
+            <div className="text-vampTextMuted text-sm">
+              You have an account but haven't applied for verification yet.
+            </div>
+            <Link
+              href="/apply"
+              className="block w-full rounded-full bg-vampAccent px-5 py-3 text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors font-medium text-center"
+            >
+              Apply for Verification
+            </Link>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between">
+              <span className="text-vampTextMuted">Verification Status:</span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  member.status === "APPROVED"
+                    ? "bg-emerald-500/15 text-emerald-300"
+                    : member.status === "PENDING"
+                    ? "bg-amber-500/15 text-amber-300"
+                    : member.status === "REJECTED"
+                    ? "bg-red-500/15 text-red-300"
+                    : member.status === "REVIEWING"
+                    ? "bg-blue-500/15 text-blue-300"
+                    : member.status === "READY_FOR_APPROVAL"
+                    ? "bg-purple-500/15 text-purple-300"
+                    : "bg-gray-500/15 text-gray-300"
+                }`}
+              >
+                {member.status}
+              </span>
+            </div>
+          </>
+        )}
+        
         <div className="flex items-center justify-between">
           <span className="text-vampTextMuted">Your Role:</span>
           <span className="px-3 py-1 rounded-full text-sm font-medium bg-vampAccent/15 text-vampAccent">

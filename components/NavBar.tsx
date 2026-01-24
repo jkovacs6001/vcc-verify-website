@@ -5,15 +5,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/directory", label: "Directory" },
-  { href: "/member", label: "My Dashboard" },
-  { href: "/apply", label: "Apply" },
-];
+interface NavBarProps {
+  isAuthenticated: boolean;
+}
 
-export const NavBar: React.FC = () => {
+export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
   const pathname = usePathname();
+
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/directory", label: "Directory" },
+    { href: "/member", label: "My Dashboard" },
+    { href: "/apply", label: "Apply" },
+    ...(!isAuthenticated ? [{ href: "/register", label: "Register" }] : []),
+  ];
 
   return (
     <header className="w-full border-b border-vampBorder bg-black/90 backdrop-blur">

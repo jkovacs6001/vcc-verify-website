@@ -87,6 +87,12 @@ export default async function AdminPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  // Fetch accounts without verification applications
+  const accountsOnly = await prisma.profile.findMany({
+    where: { status: null },
+    orderBy: { createdAt: "desc" },
+  });
+
   // Fetch review queue
   const reviewQueue = await prisma.profile.findMany({
     where: { status: "PENDING" },
@@ -109,6 +115,41 @@ export default async function AdminPage() {
           Read-only oversight of all queues and members.
         </p>
       </div>
+
+      {/* Accounts Only Section */}
+      <section className="space-y-4">
+        <div className="border-b border-vampBorder pb-3">
+          <h2 className="text-xl font-semibold text-white">
+            Account-Only Users
+            {accountsOnly.length > 0 && (
+              <span className="ml-2 text-sm font-normal text-vampAccent">
+                ({accountsOnly.length})
+              </span>
+            )}
+          </h2>
+          <p className="mt-1 text-sm text-vampTextMuted">
+            Registered users who haven't applied for verification
+          </p>
+        </div>
+
+        {accountsOnly.length === 0 ? (
+          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+            No account-only users.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {accountsOnly.map((p) => (
+              <div key={p.id} className="rounded-2xl border border-vampBorder bg-black/40 p-4">
+                <div className="text-lg font-semibold text-white">{p.displayName}</div>
+                <div className="text-sm text-vampTextMuted break-all">{p.email}</div>
+                <div className="mt-2 text-xs text-white/60">
+                  Role: {p.userRole} · Joined: {new Date(p.createdAt).toLocaleDateString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Members Section */}
       <section className="space-y-4">

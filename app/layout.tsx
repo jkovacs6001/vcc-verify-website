@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NavBar } from "../components/NavBar";
+import { NavBarWrapper } from "../components/NavBarWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +24,7 @@ export default function RootLayout({
         <div className="bg-geo-grid" />
 
         {/* MAIN APP CHROME */}
-        <NavBar />
+        <NavBarWrapper />
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 pt-8 pb-14">
           {children}
         </main>

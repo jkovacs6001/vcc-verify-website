@@ -113,6 +113,46 @@ export async function submitApplication(
       return { ok: false, error: "Invalid website URL" };
     }
 
+    // Check if email already exists
+    const existing = await prisma.profile.findUnique({
+      where: { email },
+      select: { id: true, status: true },
+    });
+
+    if (existing) {
+      // If they already have a verification application pending/approved
+      if (existing.status !== null) {
+        return { ok: false, error: "You have already applied for verification with this email" };
+      }
+
+      // They have an account but no application - update their profile with application data
+      const updated = await prisma.profile.update({
+        where: { id: existing.id },
+        data: {
+          displayName,
+          handle,
+          submissionRole,
+          location,
+          bio,
+          skills,
+          tags,
+          telegram,
+          xHandle,
+          website,
+          github,
+          linkedin,
+          chain,
+          wallet,
+          status: "PENDING", // Now applying for verification
+          references: refs.length ? { create: refs } : undefined,
+        },
+        select: { id: true },
+      });
+
+      return { ok: true, id: updated.id };
+    }
+
+    // New user - create profile with application
     const created = await prisma.profile.create({
       data: {
         displayName,
