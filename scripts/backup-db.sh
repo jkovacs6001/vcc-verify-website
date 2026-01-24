@@ -10,7 +10,7 @@ if [ -f .env ]; then
   export $(grep DATABASE_URL .env | xargs)
 fi
 
-if [ -z "$PRISMA_DATABASE_URL" ]; then
+if [ -z "$DATABASE_URL" ]; then
   echo "Error: DATABASE_URL not set"
   exit 1
 fi
