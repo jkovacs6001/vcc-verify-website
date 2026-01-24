@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VCC Verify
 
-## Getting Started
+A Next.js directory and verification platform for a vetted community of professionals. Features secure authentication, role-based access, verification applications, and admin dashboards.
 
-First, run the development server:
+## 🚀 Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment
+cp .env.example .env.local
+# Edit .env.local with your DATABASE_URL
+
+# Run migrations
+npx prisma migrate dev
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📋 Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Account Creation**: Register for a free account at `/register`
+- **Verification Applications**: Apply to be a verified member at `/apply` with bio, skills, references
+- **Public Directory**: Browse verified community members at `/directory`
+- **Member Dashboard**: View your verification status and account details at `/member`
+- **Admin Review**: Multi-step workflow (REVIEWER → APPROVER → final decision)
+- **Role-Based Access**: MEMBER, REVIEWER, APPROVER, ADMIN with flexible multi-role support
+- **Secure Auth**: bcryptjs password hashing, server-side sessions, rate limiting
+- **Rate Limiting**: Distributed via Upstash Redis (or in-memory fallback for dev)
 
-## Learn More
+## 📁 Documentation
 
-To learn more about Next.js, take a look at the following resources:
+- **[DEVELOPMENT.md](DEVELOPMENT.md)**: Architecture, setup, common tasks, troubleshooting
+- **[SECURITY.md](SECURITY.md)**: Authentication, sessions, rate limiting, access control, checklist
+- **[API.md](API.md)**: Server Actions reference (memberLogin, registerAccount, submitApplication, admin actions)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏗️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Next.js 16 (App Router, Server Actions)
+- **Database**: PostgreSQL + Prisma ORM
+- **Auth**: bcryptjs + server-side sessions
+- **Rate Limiting**: Upstash Redis (with in-memory fallback)
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript (strict mode)
 
-## Deploy on Vercel
+## 📦 Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Required**:
+- `DATABASE_URL`: PostgreSQL connection string
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Optional (production)**:
+- `UPSTASH_REDIS_REST_URL`: Upstash Redis endpoint
+- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis API token
+
+Without Upstash, rate limiting uses in-memory storage (dev-only, not cluster-safe).
+
+## 🔄 User Flows
+
+### Registration → Application → Approval
+
+1. **Register** (`/register`): Create account with email + password
+2. **Apply** (`/apply`): Submit verification application (bio, skills, references)
+3. **Review** (`/review`): Reviewers assess and move to approval queue
+4. **Approve** (`/approve`): Approvers make final decision
+5. **Directory** (`/directory`): Approved members appear in public directory
+
+### Member Dashboard
+
+- View account status (account-only, pending, approved, rejected)
+- See your roles (MEMBER, REVIEWER, APPROVER, ADMIN)
+- Quick links to apply or manage your profile
+
+## 🔐 Security
+
+- Passwords hashed with bcryptjs (10 rounds; ~100ms/hash)
+- Server-side sessions; cookies httpOnly, secure, sameSite=lax
+- Rate limiting on auth endpoints (5/15min login, 3/1hr register, 3/24hr apply)
+- Role-based access control on all sensitive pages
+- Honeypot fields in forms to trap bots
+- Inputs validated with length clamping and URL validation
+
+**See [SECURITY.md](SECURITY.md) for details and deployment checklist.**
+
+## 🚢 Deployment
+
+### Environment Setup
+
+```bash
+# Set in your hosting platform (Vercel, AWS, etc.)
+DATABASE_URL=postgresql://...
+UPSTASH_REDIS_REST_URL=https://...
+UPSTASH_REDIS_REST_TOKEN=...
+```
+
+### Build & Run
+
+```bash
+npm run build
+npm start
+```
+
+### Database Backups
+
+```bash
+# Manual backup
+./scripts/backup-db.sh
+
+# Set up daily backups via cron
+0 2 * * * /path/to/scripts/backup-db.sh
+```
+
+**See [DEVELOPMENT.md](DEVELOPMENT.md#backups) for details.**
+
+## 📚 Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [Upstash Rate Limit](https://upstash.com/docs/redis/features/ratelimiting)
+
+## 📝 License
+
+[License info here]
+
+## 🤝 Contributing
+
+[Contributing guidelines here]

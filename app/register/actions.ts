@@ -1,9 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
+import { checkUpstashLimit } from "@/lib/upstashRateLimit";
 
 export type RegisterState =
   | { ok: false; error: string }
@@ -19,6 +20,16 @@ export async function registerAccount(
 
   if (!displayName || !email || !password) {
     return { ok: false, error: "All fields are required" };
+  }
+
+  // Rate limit per IP and per email
+  const hdrs = await headers();
+  const ipHeader = hdrs.get("x-forwarded-for") || hdrs.get("x-real-ip") || "unknown";
+  const ip = ipHeader.split(",")[0].trim() || "unknown";
+  const ipLimit = await checkUpstashLimit({ key: `register:${ip}`, limit: 3, window: "1 h" });
+  const emailLimit = await checkUpstashLimit({ key: `register-email:${email}`, limit: 3, window: "1 h" });
+  if (!ipLimit.allowed || !emailLimit.allowed) {
+    return { ok: false, error: "Too many registration attempts. Please wait a while." };
   }
 
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

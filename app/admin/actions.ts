@@ -1,29 +1,14 @@
 "use server";
 
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { getMemberSession } from "@/app/member/actions";
 
 async function requireAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_token")?.value;
-  if (!token || token !== process.env.ADMIN_TOKEN) {
+  const member = await getMemberSession();
+  if (!member || !member.userRoles.includes("ADMIN")) {
     throw new Error("Unauthorized");
   }
-}
-
-export async function adminLogin(formData: FormData) {
-  const token = (formData.get("token") as string | null)?.trim() ?? "";
-  if (token && token === process.env.ADMIN_TOKEN) {
-    const cookieStore = await cookies();
-    cookieStore.set("admin_token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-    });
-    return;
-  }
-  throw new Error("Invalid token");
 }
 
 export async function approveProfile(id: string, note?: string) {

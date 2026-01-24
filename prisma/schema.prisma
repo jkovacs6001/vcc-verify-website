@@ -55,6 +55,7 @@ model Profile {
   reviewerNote String?
 
   references   Reference[]
+  sessions     Session[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
@@ -74,4 +75,14 @@ model Reference {
   notes       String?
 
   createdAt   DateTime @default(now())
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  profileId  String
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime?
+
+  @@index([profileId])
 }

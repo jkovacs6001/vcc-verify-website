@@ -1,7 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
+import { checkUpstashLimit } from "@/lib/upstashRateLimit";
 
 function s(formData: FormData, key: string): string {
   const v = formData.get(key);
@@ -57,6 +59,16 @@ export async function submitApplication(
 
     if (!displayName || !submissionRole || !email || !password) {
       return { ok: false, error: "Missing required fields." };
+    }
+
+    // Rate limit per IP and per email
+    const hdrs = await headers();
+    const ipHeader = hdrs.get("x-forwarded-for") || hdrs.get("x-real-ip") || "unknown";
+    const ip = ipHeader.split(",")[0].trim() || "unknown";
+    const ipLimit = await checkUpstashLimit({ key: `apply:${ip}`, limit: 3, window: "24 h" });
+    const emailLimit = await checkUpstashLimit({ key: `apply-email:${email}`, limit: 3, window: "24 h" });
+    if (!ipLimit.allowed || !emailLimit.allowed) {
+      return { ok: false, error: "Too many application attempts. Please try again later." };
     }
 
     const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
