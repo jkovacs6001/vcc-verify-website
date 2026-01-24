@@ -9,7 +9,7 @@ export const revalidate = 0;
 async function requireApproverAccess() {
   const member = await getMemberSession();
 
-  if (!member || member.userRole !== "APPROVER") {
+  if (!member || (!member.userRoles.includes("APPROVER") && !member.userRoles.includes("ADMIN"))) {
     return null;
   }
 

@@ -62,8 +62,8 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
 export default async function AdminPage() {
   const member = await getMemberSession();
 
-  // Only ADMIN role can access this page
-  if (!member || member.userRole !== "ADMIN") {
+  // Only users with ADMIN role can access this page
+  if (!member || !member.userRoles.includes("ADMIN")) {
     redirect("/member");
   }
 
@@ -129,7 +129,7 @@ export default async function AdminPage() {
                 <div className="text-lg font-semibold text-white">{p.displayName}</div>
                 <div className="text-sm text-vampTextMuted break-all">{p.email}</div>
                 <div className="mt-2 text-xs text-white/60">
-                  Role: {p.userRole} · Joined: {new Date(p.createdAt).toLocaleDateString()}
+                  Roles: {p.userRoles.join(", ")} · Joined: {new Date(p.createdAt).toLocaleDateString()}
                 </div>
               </div>
             ))}

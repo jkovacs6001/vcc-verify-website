@@ -9,7 +9,7 @@ export const revalidate = 0;
 async function requireReviewerAccess() {
   const member = await getMemberSession();
 
-  if (!member || (member.userRole !== "REVIEWER" && member.userRole !== "APPROVER")) {
+  if (!member || (!member.userRoles.includes("REVIEWER") && !member.userRoles.includes("APPROVER") && !member.userRoles.includes("ADMIN"))) {
     return null;
   }
 

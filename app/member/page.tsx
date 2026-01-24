@@ -114,19 +114,23 @@ export default async function MemberPage() {
         )}
         
         <div className="flex items-center justify-between">
-          <span className="text-vampTextMuted">Your Role:</span>
-          <span className="px-3 py-1 rounded-full text-sm font-medium bg-vampAccent/15 text-vampAccent">
-            {member.userRole}
-          </span>
+          <span className="text-vampTextMuted">Your Roles:</span>
+          <div className="flex flex-wrap gap-2 justify-end">
+            {member.userRoles.map((role) => (
+              <span key={role} className="px-3 py-1 rounded-full text-sm font-medium bg-vampAccent/15 text-vampAccent">
+                {role}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Role-based Actions */}
-      {(member.userRole === "REVIEWER" || member.userRole === "APPROVER" || member.userRole === "ADMIN") && (
+      {(member.userRoles.includes("REVIEWER") || member.userRoles.includes("APPROVER") || member.userRoles.includes("ADMIN")) && (
         <div className="space-y-4">
           <div className="text-sm font-medium text-white">Your Tools</div>
           <div className="flex flex-wrap gap-3">
-            {(member.userRole === "REVIEWER" || member.userRole === "APPROVER") && (
+            {(member.userRoles.includes("REVIEWER") || member.userRoles.includes("APPROVER")) && (
               <Link
                 href="/review"
                 className="inline-flex items-center justify-center rounded-full bg-blue-600/80 px-6 py-3 text-white shadow-vampGlow hover:bg-blue-700 transition-colors font-medium"
@@ -134,7 +138,7 @@ export default async function MemberPage() {
                 Review Applications
               </Link>
             )}
-            {member.userRole === "APPROVER" && (
+            {member.userRoles.includes("APPROVER") && (
               <Link
                 href="/approve"
                 className="inline-flex items-center justify-center rounded-full bg-emerald-600/80 px-6 py-3 text-white shadow-vampGlow hover:bg-emerald-700 transition-colors font-medium"

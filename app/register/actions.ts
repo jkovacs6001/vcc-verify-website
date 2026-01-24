@@ -50,7 +50,7 @@ export async function registerAccount(
         displayName,
         email,
         passwordHash,
-        userRole: "MEMBER",
+        userRoles: ["MEMBER"],
         // Application fields are null - this is just an account
         submissionRole: null,
         status: null,

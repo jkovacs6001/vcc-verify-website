@@ -20,7 +20,7 @@ export async function memberLogin(formData: FormData) {
       select: { 
         id: true, 
         email: true, 
-        userRole: true, 
+        userRoles: true, 
         displayName: true,
         passwordHash: true 
       },
@@ -75,7 +75,7 @@ export async function getMemberSession() {
         id: true,
         email: true,
         displayName: true,
-        userRole: true,
+        userRoles: true,
         status: true,
       },
     });

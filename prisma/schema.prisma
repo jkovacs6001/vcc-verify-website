@@ -47,7 +47,7 @@ model Profile {
   wallet       String?
 
   // Permissions
-  userRole     UserRole     @default(MEMBER)
+  userRoles    UserRole[]   @default([MEMBER])
 
   // Verification application status - null means account-only (no verification application)
   status       ReviewStatus?
@@ -60,7 +60,6 @@ model Profile {
 
   @@index([status])
   @@index([wallet])
-  @@index([userRole])
 }
 
 model Reference {
