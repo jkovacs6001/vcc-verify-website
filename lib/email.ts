@@ -87,7 +87,8 @@ export async function emailApplicationSubmittedToReviewers(params: {
   profileId: string;
 }): Promise<void> {
   const to = await reviewerRecipients();
-  await sendEmail({
+  console.log(`[EMAIL] Attempting to send application notification to ${to.length} reviewers:`, to);
+  const result = await sendEmail({
     to,
     subject: `New application: ${params.applicantName} (${params.applicantRole})`,
     text: [
@@ -98,6 +99,11 @@ export async function emailApplicationSubmittedToReviewers(params: {
       "Please review and move to approval or reject as appropriate.",
     ].join("\n"),
   });
+  if (!result.ok) {
+    console.error(`[EMAIL] Failed to send to reviewers. Reason: ${result.reason}`);
+  } else {
+    console.log("[EMAIL] Successfully sent to reviewers");
+  }
 }
 
 export async function emailApplicationSubmittedToApplicant(params: {
@@ -105,7 +111,8 @@ export async function emailApplicationSubmittedToApplicant(params: {
   applicantName: string;
   applicantRole: string;
 }): Promise<void> {
-  await sendEmail({
+  console.log(`[EMAIL] Attempting to send confirmation to applicant: ${params.to}`);
+  const result = await sendEmail({
     to: params.to,
     subject: "We've received your application",
     text: [
@@ -119,6 +126,11 @@ export async function emailApplicationSubmittedToApplicant(params: {
       "– VCC Verification Team",
     ].join("\n"),
   });
+  if (!result.ok) {
+    console.error(`[EMAIL] Failed to send to applicant. Reason: ${result.reason}`);
+  } else {
+    console.log("[EMAIL] Successfully sent to applicant");
+  }
 }
 
 export async function emailReviewApproved(params: {
