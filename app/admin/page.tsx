@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { getMemberSession } from "../member/actions";
 import { redirect } from "next/navigation";
+import { updateUserRoles } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -56,6 +57,50 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
         )}
       </div>
     </div>
+  );
+}
+
+const ROLE_OPTIONS: { value: string; label: string; hint?: string }[] = [
+  { value: "MEMBER", label: "Member", hint: "Baseline access" },
+  { value: "REVIEWER", label: "Reviewer", hint: "Can review applications" },
+  { value: "APPROVER", label: "Approver", hint: "Can approve/reject" },
+  { value: "ADMIN", label: "Admin", hint: "Full access" },
+];
+
+function RoleEditor({ profile }: { profile: { id: string; userRoles: string[] } }) {
+  return (
+    <form
+      action={updateUserRoles}
+      className="rounded-xl border border-vampBorder/60 bg-black/30 p-3 text-sm text-white/80"
+    >
+      <input type="hidden" name="profileId" value={profile.id} />
+      <div className="font-semibold text-white">Roles</div>
+      <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+        {ROLE_OPTIONS.map((opt) => (
+          <label key={`${profile.id}-${opt.value}`} className="flex items-start gap-2 text-xs text-vampTextMuted">
+            <input
+              type="checkbox"
+              name="roles"
+              value={opt.value}
+              defaultChecked={profile.userRoles.includes(opt.value)}
+              className="mt-0.5 h-4 w-4 rounded border-vampBorder bg-black/40"
+            />
+            <span>
+              <span className="text-white">{opt.label}</span>
+              {opt.hint && <span className="block text-[11px] text-vampTextMuted">{opt.hint}</span>}
+            </span>
+          </label>
+        ))}
+      </div>
+      <div className="mt-3 flex justify-end">
+        <button
+          type="submit"
+          className="rounded-lg bg-vampAccent px-3 py-1.5 text-xs font-semibold text-black transition hover:brightness-95"
+        >
+          Save roles
+        </button>
+      </div>
+    </form>
   );
 }
 
@@ -125,12 +170,15 @@ export default async function AdminPage() {
         ) : (
           <div className="space-y-4">
             {accountsOnly.map((p) => (
-              <div key={p.id} className="rounded-2xl border border-vampBorder bg-black/40 p-4">
-                <div className="text-lg font-semibold text-white">{p.displayName}</div>
-                <div className="text-sm text-vampTextMuted break-all">{p.email}</div>
-                <div className="mt-2 text-xs text-white/60">
-                  Roles: {p.userRoles.join(", ")} · Joined: {new Date(p.createdAt).toLocaleDateString()}
+              <div key={p.id} className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-3">
+                <div>
+                  <div className="text-lg font-semibold text-white">{p.displayName}</div>
+                  <div className="text-sm text-vampTextMuted break-all">{p.email}</div>
+                  <div className="mt-2 text-xs text-white/60">
+                    Roles: {p.userRoles.join(", ")} · Joined: {new Date(p.createdAt).toLocaleDateString()}
+                  </div>
                 </div>
+                <RoleEditor profile={p} />
               </div>
             ))}
           </div>
@@ -157,7 +205,10 @@ export default async function AdminPage() {
         ) : (
           <div className="space-y-4">
             {members.map((p) => (
-              <ApplicationCardReadOnly key={p.id} p={p} />
+              <div key={p.id} className="space-y-3">
+                <ApplicationCardReadOnly p={p} />
+                <RoleEditor profile={p} />
+              </div>
             ))}
           </div>
         )}

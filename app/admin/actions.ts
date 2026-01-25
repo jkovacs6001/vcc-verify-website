@@ -12,6 +12,36 @@ async function requireAdmin() {
   }
 }
 
+const ALLOWED_ROLES = ["MEMBER", "REVIEWER", "APPROVER", "ADMIN"] as const;
+
+export async function updateUserRoles(formData: FormData) {
+  await requireAdmin();
+
+  const profileId = (formData.get("profileId") as string)?.trim();
+  if (!profileId) {
+    throw new Error("Missing profile id");
+  }
+
+  const submittedRoles = formData.getAll("roles").map((r) => String(r));
+  const nextRoles = Array.from(
+    new Set(
+      submittedRoles.filter((r) => ALLOWED_ROLES.includes(r as (typeof ALLOWED_ROLES)[number]))
+    )
+  );
+
+  // Always ensure MEMBER is present so the account retains baseline access
+  if (!nextRoles.includes("MEMBER")) {
+    nextRoles.unshift("MEMBER");
+  }
+
+  await prisma.profile.update({
+    where: { id: profileId },
+    data: { userRoles: nextRoles as any },
+  });
+
+  revalidatePath("/admin");
+}
+
 export async function approveProfile(id: string, note?: string) {
   await requireAdmin();
   const updated = await prisma.profile.update({
