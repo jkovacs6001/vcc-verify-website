@@ -12,6 +12,25 @@ async function requireApprover() {
   return member;
 }
 
+export async function addComment(profileId: string, content: string) {
+  const member = await requireApprover();
+  
+  const trimmed = content.trim().slice(0, 1000);
+  if (!trimmed) throw new Error("Comment cannot be empty");
+
+  await prisma.comment.create({
+    data: {
+      profileId,
+      authorId: member.id,
+      content: trimmed,
+    },
+  });
+
+  revalidatePath("/review");
+  revalidatePath("/approve");
+  revalidatePath("/admin");
+}
+
 export async function approveApplication(id: string, note?: string) {
   await requireApprover();
 

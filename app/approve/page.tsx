@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { getMemberSession } from "@/app/member/actions";
+import { CommentSection } from "@/components/CommentSection";
+import { addComment } from "@/app/approve/actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -78,6 +80,11 @@ function ApplicationCard({ p }: { p: any }) {
           </Link>
         </div>
       </div>
+
+      {/* Comment Section */}
+      <div className="mt-4 pt-4 border-t border-vampBorder/50">
+        <CommentSection profileId={p.id} comments={p.comments || []} addCommentAction={addComment} />
+      </div>
     </div>
   );
 }
@@ -106,14 +113,40 @@ export default async function ApprovePage() {
   const reviewQueue = await prisma.profile.findMany({
     where: { status: "PENDING" },
     orderBy: { createdAt: "asc" },
-    include: { references: true },
+    include: { 
+      references: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              displayName: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
   });
 
   // Fetch applications ready for approval
   const approvalQueue = await prisma.profile.findMany({
     where: { status: "READY_FOR_APPROVAL" },
     orderBy: { createdAt: "asc" },
-    include: { references: true },
+    include: { 
+      references: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              displayName: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
   });
 
   return (

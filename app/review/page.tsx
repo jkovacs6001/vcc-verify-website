@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { getMemberSession } from "@/app/member/actions";
+import { CommentSection } from "@/components/CommentSection";
+import { addComment as addReviewComment } from "@/app/review/actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -40,7 +42,20 @@ export default async function ReviewPage() {
   const pending = await prisma.profile.findMany({
     where: { status: "PENDING" },
     orderBy: { createdAt: "asc" },
-    include: { references: true },
+    include: { 
+      references: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              displayName: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
   });
 
   return (
@@ -113,6 +128,11 @@ export default async function ReviewPage() {
                     View Full Profile
                   </Link>
                 </div>
+              </div>
+
+              {/* Comment Section */}
+              <div className="mt-4 pt-4 border-t border-vampBorder/50">
+                <CommentSection profileId={p.id} comments={p.comments} addCommentAction={addReviewComment} />
               </div>
             </div>
           ))}
