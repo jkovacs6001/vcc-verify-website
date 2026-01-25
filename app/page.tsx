@@ -32,17 +32,6 @@ export default function HomePage() {
     {/* </div> */}
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 pt-16 space-y-12">
-        {/* Early preview badge */}
-        <div className="inline-flex items-center gap-2 rounded-full bg-vampSurfaceSoft/80 border border-vampBorder px-3 py-1 text-[11px] text-vampTextMuted">
-          <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/30 text-[9px]">
-            ●
-          </span>
-          <span className="font-medium text-vampTextMain/90">
-            Early preview
-          </span>
-          <span>· Human-verified Web3 professionals</span>
-        </div>
-
         {/* Hero */}
         <section className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-center">
           {/* Left: copy & CTAs */}
