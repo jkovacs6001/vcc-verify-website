@@ -5,21 +5,22 @@ import { revalidatePath } from "next/cache";
 import { getMemberSession } from "@/app/member/actions";
 import { emailFinalApproved, emailFinalRejected } from "@/lib/email";
 
-async function requireAdmin() {
+async function requireApprover() {
   const member = await getMemberSession();
-  if (!member || !member.userRoles.includes("ADMIN")) {
-    throw new Error("Unauthorized");
-  }
+  const allowed = member && (member.userRoles.includes("APPROVER") || member.userRoles.includes("ADMIN"));
+  if (!allowed) throw new Error("Unauthorized");
+  return member;
 }
 
-export async function approveProfile(id: string, note?: string) {
-  await requireAdmin();
+export async function approveApplication(id: string, note?: string) {
+  await requireApprover();
+
   const updated = await prisma.profile.update({
     where: { id },
     data: {
       status: "APPROVED",
-      reviewedAt: new Date(),
       reviewerNote: note?.slice(0, 500) || null,
+      reviewedAt: new Date(),
     },
     select: { displayName: true, submissionRole: true, email: true },
   });
@@ -29,20 +30,23 @@ export async function approveProfile(id: string, note?: string) {
     applicantRole: updated.submissionRole ?? "Applicant",
     applicantEmail: updated.email,
   });
-  
+
+  revalidatePath("/approve");
   revalidatePath("/admin");
+  revalidatePath("/member");
   revalidatePath("/directory");
   revalidatePath("/");
 }
 
-export async function rejectProfile(id: string, note?: string) {
-  await requireAdmin();
+export async function rejectApplication(id: string, note?: string) {
+  await requireApprover();
+
   const updated = await prisma.profile.update({
     where: { id },
     data: {
       status: "REJECTED",
-      reviewedAt: new Date(),
       reviewerNote: note?.slice(0, 500) || null,
+      reviewedAt: new Date(),
     },
     select: { displayName: true, submissionRole: true, email: true },
   });
@@ -52,8 +56,8 @@ export async function rejectProfile(id: string, note?: string) {
     applicantRole: updated.submissionRole ?? "Applicant",
     applicantEmail: updated.email,
   });
-  
+
+  revalidatePath("/approve");
   revalidatePath("/admin");
-  revalidatePath("/directory");
-  revalidatePath("/");
+  revalidatePath("/member");
 }

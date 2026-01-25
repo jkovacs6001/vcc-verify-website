@@ -196,8 +196,70 @@ Visit `http://localhost:3000`
 **Optional (production)**:
 - `UPSTASH_REDIS_REST_URL`: Upstash Redis REST endpoint
 - `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis API token
+- `RESEND_API_KEY`: Resend API key for email notifications
+- `EMAIL_FROM`: Sender email address (e.g., "VCC Verify <no-reply@yourdomain.com>")
+- `APP_BASE_URL` or `NEXT_PUBLIC_SITE_URL`: Full site URL (e.g., https://verify.vcc.com)
 
 **Without Upstash**, rate limiting falls back to in-memory (not cluster-safe).
+
+**Without Resend**, emails are skipped with console warnings (application still works).
+
+## Email Notifications
+
+### Email Flow
+
+The platform sends automated emails at key points:
+
+1. **Application submitted**: Applicant gets confirmation; all users with `REVIEWER` role get alert
+2. **Review approved**: Applicant and all users with `APPROVER` role notified when moved to approval queue
+3. **Review rejected**: Applicant notified of rejection
+4. **Final approval**: Applicant gets approval confirmation
+5. **Final rejection**: Applicant notified with encouragement to re-apply
+
+**Recipients are pulled from the database** based on `userRoles` — no need to configure email lists in environment variables.
+
+### Resend Setup (Recommended)
+
+**Free tier**: 100 emails/day, 3,000/month — perfect for verification workflows.
+
+#### Quick Start (Development)
+
+1. Sign up at [resend.com](https://resend.com)
+2. Get API key from dashboard
+3. Add to `.env.local`:
+   ```env
+   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxx
+   EMAIL_FROM=onboarding@resend.dev
+   APP_BASE_URL=http://localhost:3000
+   ```
+
+#### Production Setup (Custom Domain)
+
+1. In Resend dashboard: Add and verify your domain
+2. Add DNS records (SPF, DKIM, DMARC) provided by Resend
+3. Wait for verification (~5-10 minutes)
+4. Update environment:
+   ```env
+   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxx
+   EMAIL_FROM=VCC Verify <no-reply@verify.vcc.com>
+   APP_BASE_URL=https://verify.vcc.com
+   ```
+
+**Without RESEND_API_KEY**, emails are gracefully skipped (logged to console).
+
+### Testing Emails Locally
+
+```bash
+# Grant yourself REVIEWER role in the database
+psql $DATABASE_URL -c "UPDATE \"Profile\" SET \"userRoles\" = '{MEMBER,REVIEWER}' WHERE email = 'you@example.com';"
+
+# Submit a test application
+# Check your inbox for confirmation + reviewer alert
+```
+
+**Email recipients are determined by database roles**:
+- Users with `REVIEWER` in `userRoles` receive new application alerts
+- Users with `APPROVER` in `userRoles` receive ready-for-approval alerts
 
 ## Common Tasks
 

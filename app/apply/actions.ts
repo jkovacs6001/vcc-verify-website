@@ -4,6 +4,10 @@ import { prisma } from "@/lib/db";
 import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import { checkUpstashLimit } from "@/lib/upstashRateLimit";
+import {
+  emailApplicationSubmittedToApplicant,
+  emailApplicationSubmittedToReviewers,
+} from "@/lib/email";
 
 function s(formData: FormData, key: string): string {
   const v = formData.get(key);
@@ -161,6 +165,19 @@ export async function submitApplication(
         select: { id: true },
       });
 
+      await Promise.all([
+        emailApplicationSubmittedToReviewers({
+          applicantName: displayName,
+          applicantRole: submissionRole,
+          profileId: updated.id,
+        }),
+        emailApplicationSubmittedToApplicant({
+          to: email,
+          applicantName: displayName,
+          applicantRole: submissionRole,
+        }),
+      ]);
+
       return { ok: true, id: updated.id };
     }
 
@@ -188,6 +205,19 @@ export async function submitApplication(
       },
       select: { id: true },
     });
+
+    await Promise.all([
+      emailApplicationSubmittedToReviewers({
+        applicantName: displayName,
+        applicantRole: submissionRole,
+        profileId: created.id,
+      }),
+      emailApplicationSubmittedToApplicant({
+        to: email,
+        applicantName: displayName,
+        applicantRole: submissionRole,
+      }),
+    ]);
 
     return { ok: true, id: created.id };
   } catch (error) {

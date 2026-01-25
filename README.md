@@ -52,11 +52,18 @@ Open [http://localhost:3000](http://localhost:3000)
 **Required**:
 - `DATABASE_URL`: PostgreSQL connection string
 
-**Optional (production)**:
+**Recommended (production)**:
 - `UPSTASH_REDIS_REST_URL`: Upstash Redis endpoint
 - `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis API token
+- `RESEND_API_KEY`: Resend API key (free tier: 100 emails/day)
+- `EMAIL_FROM`: Sender address (e.g., "VCC <no-reply@yourdomain.com>")
+- `APP_BASE_URL`: Site URL for email links
 
-Without Upstash, rate limiting uses in-memory storage (dev-only, not cluster-safe).
+**Note**: Email recipients are automatically pulled from the database based on `userRoles` (REVIEWER, APPROVER).
+
+**Graceful degradation**:
+- Without Upstash → in-memory rate limiting (dev-only)
+- Without Resend → emails skipped (console warnings only)
 
 ## 🔄 User Flows
 

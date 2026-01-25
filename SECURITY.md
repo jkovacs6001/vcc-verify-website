@@ -234,7 +234,11 @@ Before going to production:
 - [ ] Set strong PostgreSQL passwords (not default)
 - [ ] Enable HTTPS on domain (auto with Vercel/major hosts)
 - [ ] Set `UPSTASH_REDIS_REST_URL` and `TOKEN` in production env
+- [ ] Set `RESEND_API_KEY` and verify custom domain (see DEVELOPMENT.md)
+- [ ] Set `APP_BASE_URL` to production URL (for email links)
+- [ ] Grant REVIEWER and APPROVER roles to appropriate team members in database
 - [ ] Test rate limiting is working (`npm run build && npm start`, spam requests)
+- [ ] Send test email (submit dummy application, check inbox)
 - [ ] Backup database before going live
 - [ ] Set up cron for daily backups
 - [ ] Review admin user list—remove test accounts
