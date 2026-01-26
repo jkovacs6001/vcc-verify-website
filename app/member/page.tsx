@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { memberLogin, memberLogout, getMemberSession } from "./actions";
+import { memberLogin, memberLogout, getMemberSession, resendVerificationEmail } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -71,6 +71,27 @@ export default async function MemberPage() {
           Manage your profile and access your role-specific tools.
         </p>
       </div>
+
+      {/* Email Verification Banner */}
+      {!member.emailVerified && (
+        <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-5">
+          <div className="flex items-start gap-3">
+            <div className="text-yellow-400 text-xl">⚠️</div>
+            <div className="flex-1">
+              <div className="text-sm font-semibold text-yellow-200">Email Not Verified</div>
+              <p className="mt-1 text-sm text-yellow-200/80">
+                Please check your email and click the verification link we sent you. 
+                If you didn't receive it, you can request a new one.
+              </p>
+              <form action={resendVerificationEmail} className="mt-3">
+                <button className="text-sm rounded-full bg-yellow-500 px-4 py-2 text-black hover:bg-yellow-400 transition-colors font-medium">
+                  Resend Verification Email
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Profile Status */}
       <div className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-3">

@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { checkUpstashLimit } from "@/lib/upstashRateLimit";
+import { emailVerificationLink } from "@/lib/email";
+import crypto from "crypto";
 
 export async function memberLogin(formData: FormData) {
   const email = (formData.get("email") as string)?.trim().toLowerCase();
@@ -46,6 +48,7 @@ export async function memberLogin(formData: FormData) {
       select: { 
         id: true, 
         email: true, 
+        emailVerified: true,
         userRoles: true, 
         displayName: true,
         passwordHash: true 
@@ -118,6 +121,7 @@ export async function getMemberSession() {
           select: {
             id: true,
             email: true,
+            emailVerified: true,
             displayName: true,
             userRoles: true,
             status: true,
@@ -139,4 +143,46 @@ export async function getMemberSession() {
     console.error("Get member session error:", error);
     return null;
   }
+}
+
+export async function resendVerificationEmail() {
+  const member = await getMemberSession();
+  
+  if (!member) {
+    throw new Error("You must be signed in to resend verification email");
+  }
+
+  if (member.emailVerified) {
+    throw new Error("Your email is already verified");
+  }
+
+  // Rate limit
+  const hdrs = await headers();
+  const ipHeader = hdrs.get("x-forwarded-for") || hdrs.get("x-real-ip") || "unknown";
+  const ip = ipHeader.split(",")[0].trim() || "unknown";
+  const limit = await checkUpstashLimit({ key: `resend-verify:${member.id}`, limit: 3, window: "1 h" });
+  
+  if (!limit.allowed) {
+    throw new Error("Too many requests. Please wait before requesting another verification email.");
+  }
+
+  // Generate new token
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+  const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+  await prisma.profile.update({
+    where: { id: member.id },
+    data: {
+      verificationToken,
+      verificationTokenExpiry,
+    },
+  });
+
+  await emailVerificationLink({
+    to: member.email,
+    applicantName: member.displayName,
+    token: verificationToken,
+  });
+
+  redirect("/member");
 }

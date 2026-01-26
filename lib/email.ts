@@ -28,6 +28,32 @@ export function appUrl(path: string): string {
   return `${appBaseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+export async function emailVerificationLink(params: {
+  to: string;
+  applicantName: string;
+  token: string;
+}): Promise<void> {
+  const verificationUrl = appUrl(`/verify-email/${params.token}`);
+  
+  await sendEmail({
+    to: params.to,
+    subject: "Verify your email address",
+    text: [
+      `Hi ${params.applicantName},`,
+      "",
+      "Thanks for creating an account. Please verify your email address by clicking the link below:",
+      "",
+      verificationUrl,
+      "",
+      "This link will expire in 24 hours.",
+      "",
+      "If you didn't create this account, you can safely ignore this email.",
+      "",
+      "– VCC Verification Team",
+    ].join("\n"),
+  });
+}
+
 async function sendEmail({ to, subject, text }: SendEmailParams): Promise<EmailResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM || "VCC <no-reply@example.com>";

@@ -7,7 +7,9 @@ import { checkUpstashLimit } from "@/lib/upstashRateLimit";
 import {
   emailApplicationSubmittedToApplicant,
   emailApplicationSubmittedToReviewers,
+  emailVerificationLink,
 } from "@/lib/email";
+import crypto from "crypto";
 
 function s(formData: FormData, key: string): string {
   const v = formData.get(key);
@@ -187,6 +189,9 @@ export async function submitApplication(
     }
 
     // New user - create profile with application
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
     const created = await prisma.profile.create({
       data: {
         displayName,
@@ -198,6 +203,9 @@ export async function submitApplication(
         tags,
         email,
         passwordHash,
+        emailVerified: false,
+        verificationToken,
+        verificationTokenExpiry,
         telegram,
         xHandle,
         website,
@@ -212,6 +220,11 @@ export async function submitApplication(
     });
 
     await Promise.all([
+      emailVerificationLink({
+        to: email,
+        applicantName: displayName,
+        token: verificationToken,
+      }),
       emailApplicationSubmittedToReviewers({
         applicantName: displayName,
         applicantRole: submissionRole,

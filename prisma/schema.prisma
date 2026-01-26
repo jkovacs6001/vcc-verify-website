@@ -36,6 +36,9 @@ model Profile {
   // Identity / contact
   email        String       @unique
   passwordHash String       // Hashed password for authentication
+  emailVerified Boolean      @default(false)
+  verificationToken String?  @unique
+  verificationTokenExpiry DateTime?
   telegram     String?
   xHandle      String?
   website      String?
