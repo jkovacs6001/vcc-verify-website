@@ -60,9 +60,14 @@ export async function submitApplication(
     const submissionRole = s(formData, "role");
     const email = s(formData, "email");
     const password = s(formData, "password");
+    const confirmPassword = s(formData, "confirmPassword");
 
-    if (!displayName || !submissionRole || !email || !password) {
+    if (!displayName || !submissionRole || !email || !password || !confirmPassword) {
       return { ok: false, error: "Missing required fields." };
+    }
+
+    if (password !== confirmPassword) {
+      return { ok: false, error: "Passwords do not match." };
     }
 
     // Rate limit per IP and per email

@@ -6,6 +6,21 @@ import type { ApplyState } from "./actions";
 
 export default function ApplyPage() {
   const [state, formAction] = useActionState(submitApplication, { ok: false } as ApplyState);
+  const [passwordError, setPasswordError] = React.useState("");
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const form = e.currentTarget;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)?.value;
+    const confirmPassword = (form.elements.namedItem("confirmPassword") as HTMLInputElement)?.value;
+
+    if (password !== confirmPassword) {
+      e.preventDefault();
+      setPasswordError("Passwords do not match");
+      return;
+    }
+    
+    setPasswordError("");
+  };
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -16,7 +31,7 @@ export default function ApplyPage() {
         </p>
       </div>
 
-      <form action={formAction} className="space-y-6">
+      <form action={formAction} onSubmit={handleFormSubmit} className="space-y-6">
         {/* Honeypot */}
         <input name="company" className="hidden" tabIndex={-1} autoComplete="off" />
 
@@ -44,10 +59,20 @@ export default function ApplyPage() {
         <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
           <h2 className="text-lg font-semibold text-white">Contact</h2>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div>
             <input name="email" type="email" placeholder="Email *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
-            <input name="password" type="password" placeholder="Password *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" minLength={8} />
           </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input name="password" type="password" placeholder="Password * (min 8 characters)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" minLength={8} />
+            <input name="confirmPassword" type="password" placeholder="Confirm password *" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" minLength={8} />
+          </div>
+
+          {passwordError && (
+            <div className="text-sm text-red-400">
+              {passwordError}
+            </div>
+          )}
 
           <div className="grid gap-4 md:grid-cols-2">
             <input name="telegram" placeholder="Telegram (optional)" className="w-full rounded-xl bg-white/5 px-4 py-3 text-white" />
