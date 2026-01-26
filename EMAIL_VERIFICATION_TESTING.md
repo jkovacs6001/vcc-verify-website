@@ -1,10 +1,21 @@
 # Email Verification Testing Guide
 
+## ⚠️ Important: Resend Email Restrictions
+
+**Resend is in testing mode** - you can only send emails to your verified email address (`vampcatcoin@gmail.com`) until you verify a domain.
+
+**To test:**
+- Use `vampcatcoin@gmail.com` when filling out the application form
+
+**For production:**
+- Verify a domain at [resend.com/domains](https://resend.com/domains)
+- Update `EMAIL_FROM` environment variable to use your verified domain (e.g., `noreply@yourdomain.com`)
+
 ## How to Test Email Verification
 
 ### 1. Register a New Account
 - Go to `/apply`
-- Fill out the registration form with a REAL email address you can access
+- Fill out the registration form with `vampcatcoin@gmail.com` (or your verified Resend email)
 - Submit the application
 
 ### 2. Check Your Email

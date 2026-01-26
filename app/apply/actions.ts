@@ -220,11 +220,12 @@ export async function submitApplication(
     });
 
     await Promise.all([
-      emailVerificationLink({
-        to: email,
-        applicantName: displayName,
-        token: verificationToken,
-      }),
+      // Email verification temporarily disabled - coming soon
+      // emailVerificationLink({
+      //   to: email,
+      //   applicantName: displayName,
+      //   token: verificationToken,
+      // }),
       emailApplicationSubmittedToReviewers({
         applicantName: displayName,
         applicantRole: submissionRole,

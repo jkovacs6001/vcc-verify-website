@@ -35,7 +35,8 @@ export async function emailVerificationLink(params: {
 }): Promise<void> {
   const verificationUrl = appUrl(`/verify-email/${params.token}`);
   
-  await sendEmail({
+  console.log(`[EMAIL] Attempting to send verification email to: ${params.to}`);
+  const result = await sendEmail({
     to: params.to,
     subject: "Verify your email address",
     text: [
@@ -52,6 +53,11 @@ export async function emailVerificationLink(params: {
       "– VCC Verification Team",
     ].join("\n"),
   });
+  if (!result.ok) {
+    console.error(`[EMAIL] Failed to send verification email. Reason: ${result.reason}`);
+  } else {
+    console.log("[EMAIL] Successfully sent verification email");
+  }
 }
 
 async function sendEmail({ to, subject, text }: SendEmailParams): Promise<EmailResult> {
@@ -81,6 +87,12 @@ async function sendEmail({ to, subject, text }: SendEmailParams): Promise<EmailR
   if (!res.ok) {
     const body = await res.text();
     console.error("Email send failed", { status: res.status, body });
+    
+    // Special handling for Resend domain verification error
+    if (res.status === 403 && body.includes("verify a domain")) {
+      console.warn("⚠️  RESEND TESTING MODE: Can only send to verified email. Verify a domain at resend.com/domains");
+    }
+    
     return { ok: false, reason: `resend-${res.status}` };
   }
 
