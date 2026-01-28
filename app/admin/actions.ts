@@ -65,6 +65,23 @@ export async function approveProfile(id: string, note?: string) {
   revalidatePath("/");
 }
 
+export async function deleteUser(profileId: string) {
+  await requireAdmin();
+
+  if (!profileId) {
+    throw new Error("Missing profile id");
+  }
+
+  // Delete the user and all related data (comments, references will cascade if configured)
+  await prisma.profile.delete({
+    where: { id: profileId },
+  });
+
+  revalidatePath("/admin");
+  revalidatePath("/directory");
+  revalidatePath("/");
+}
+
 export async function rejectProfile(id: string, note?: string) {
   await requireAdmin();
   const updated = await prisma.profile.update({
