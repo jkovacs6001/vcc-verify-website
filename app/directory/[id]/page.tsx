@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { getMemberSession } from "@/app/member/actions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -18,7 +19,18 @@ export default async function DirectoryProfilePage({
     include: { references: true },
   });
 
-  if (!profile || profile.status !== "APPROVED") return notFound();
+  if (!profile) return notFound();
+
+  // Check if user has permission to view non-approved profiles
+  const member = await getMemberSession();
+  const hasReviewAccess = member && (
+    member.userRoles.includes("REVIEWER") ||
+    member.userRoles.includes("APPROVER") ||
+    member.userRoles.includes("ADMIN")
+  );
+
+  // Only show approved profiles to the public, or any profile to reviewers/approvers/admins
+  if (profile.status !== "APPROVED" && !hasReviewAccess) return notFound();
 
   return (
     <div className="max-w-4xl space-y-6">
