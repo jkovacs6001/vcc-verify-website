@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { getMemberSession } from "@/app/member/actions";
 import { CommentSection } from "@/components/CommentSection";
+import { ApproveActions } from "@/components/ApproveActions";
 import { addComment } from "@/app/approve/actions";
 
 export const dynamic = "force-dynamic";
@@ -79,6 +80,11 @@ function ApplicationCard({ p }: { p: any }) {
             View Profile
           </Link>
         </div>
+      </div>
+
+      {/* Approve Actions */}
+      <div className="mt-4 pt-4 border-t border-vampBorder/50">
+        <ApproveActions profileId={p.id} status={p.status} />
       </div>
 
       {/* Comment Section */}

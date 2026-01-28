@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { getMemberSession } from "@/app/member/actions";
 import { CommentSection } from "@/components/CommentSection";
+import { ReviewActions } from "@/components/ReviewActions";
 import { addComment as addReviewComment } from "@/app/review/actions";
 
 export const dynamic = "force-dynamic";
@@ -128,6 +129,11 @@ export default async function ReviewPage() {
                     View Full Profile
                   </Link>
                 </div>
+              </div>
+
+              {/* Review Actions */}
+              <div className="mt-4 pt-4 border-t border-vampBorder/50">
+                <ReviewActions profileId={p.id} />
               </div>
 
               {/* Comment Section */}
