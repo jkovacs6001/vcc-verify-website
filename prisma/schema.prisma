@@ -130,3 +130,14 @@ model ScamReport {
   @@index([walletAddress])
   @@index([status])
 }
+
+model BlacklistedWallet {
+  id            String   @id @default(cuid())
+  walletAddress String   @unique
+  chain         String   @default("solana")
+  reason        String
+  scamReportId  String?
+  confirmedAt   DateTime @default(now())
+
+  @@index([walletAddress])
+}
