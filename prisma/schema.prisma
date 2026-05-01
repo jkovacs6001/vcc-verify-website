@@ -16,6 +16,12 @@ enum ReviewStatus {
   REJECTED
 }
 
+enum BadgeLevel {
+  BASIC
+  TRUSTED
+  ELITE
+}
+
 enum UserRole {
   MEMBER
   REVIEWER
@@ -56,6 +62,10 @@ model Profile {
   status       ReviewStatus?
   reviewedAt   DateTime?
   reviewerNote String?
+
+  // Trust score and badge
+  trustScore   Int          @default(0)
+  badgeLevel   BadgeLevel?
 
   references   Reference[]
   sessions     Session[]
