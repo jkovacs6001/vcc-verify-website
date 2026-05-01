@@ -96,13 +96,24 @@ model Comment {
   id            String   @id @default(cuid())
   profileId     String
   profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  
+
   authorId      String
   author        Profile  @relation("AuthoredComments", fields: [authorId], references: [id], onDelete: Cascade)
-  
+
   content       String
   createdAt     DateTime @default(now())
 
   @@index([profileId])
   @@index([authorId])
+}
+
+model BlacklistedWallet {
+  id           String   @id @default(cuid())
+  walletAddress String   @unique
+  chain        String   @default("solana")
+  reason       String
+  scamReportId String?
+  confirmedAt  DateTime @default(now())
+
+  @@index([walletAddress])
 }
