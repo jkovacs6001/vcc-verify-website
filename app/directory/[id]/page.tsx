@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { getMemberSession } from "@/app/member/actions";
 import { TrustScorePanel } from "@/components/TrustScorePanel";
+import { Badge } from "@/components/Badge";
+import { getBadgeFromScore } from "@/lib/badge";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -39,10 +41,21 @@ export default async function DirectoryProfilePage({
   return (
     <div className="max-w-4xl space-y-6">
       <div>
-        <h1 className="text-3xl font-semibold text-white">
-          {profile.displayName}
-          {profile.handle ? <span className="text-vampTextMuted text-base"> · @{profile.handle}</span> : null}
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-semibold text-white">
+            {profile.displayName}
+            {profile.handle ? <span className="text-vampTextMuted text-base"> · @{profile.handle}</span> : null}
+          </h1>
+          {profile.status === "APPROVED" && (
+            <Badge
+              level={
+                (profile as any).badgeLevel ??
+                getBadgeFromScore((profile as any).trustScore ?? 0, true)
+              }
+              size="lg"
+            />
+          )}
+        </div>
         <div className="mt-1 text-vampTextMuted">
           {profile.submissionRole}{profile.location ? ` · ${profile.location}` : ""}
         </div>

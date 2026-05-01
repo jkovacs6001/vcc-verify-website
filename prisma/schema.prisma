@@ -23,6 +23,12 @@ enum ScamReportStatus {
   DISMISSED
 }
 
+enum BadgeLevel {
+  BASIC
+  TRUSTED
+  ELITE
+}
+
 enum UserRole {
   MEMBER
   REVIEWER
@@ -64,8 +70,9 @@ model Profile {
   reviewedAt   DateTime?
   reviewerNote String?
 
-  // Trust score (0-100) and audit trail
-  trustScore   Int          @default(0)
+  // Trust score, badge, and audit trail
+  trustScore       Int          @default(0)
+  badgeLevel       BadgeLevel?
   trustScoreAudits TrustScoreAudit[]
 
   references   Reference[]
