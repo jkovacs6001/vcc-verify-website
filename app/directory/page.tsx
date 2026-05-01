@@ -109,15 +109,11 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
                 {(p.skills.length > 0 || p.tags.length > 0) && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {p.skills.slice(0, 6).map((x) => (
-<<<<<<< HEAD
-                      <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90">
-=======
                       <span key={`s-${p.id}-${x}`} className={`text-xs rounded-full px-2 py-1 border ${
                         filterSkills.includes(x)
                           ? "bg-vampAccent/20 border-vampAccent text-white"
                           : "bg-white/5 border-vampBorder text-white/90"
                       }`}>
->>>>>>> feature/advanced-filters
                         {x}
                       </span>
                     ))}
