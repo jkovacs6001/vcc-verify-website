@@ -82,6 +82,27 @@ export async function deleteUser(profileId: string) {
   revalidatePath("/");
 }
 
+export async function adjustTrustScore(profileId: string, delta: number, reason: string) {
+  const member = await getMemberSession();
+  if (!member || !member.userRoles.includes("ADMIN")) throw new Error("Unauthorized");
+
+  const profile = await prisma.profile.findUnique({ where: { id: profileId }, select: { trustScore: true } });
+  if (!profile) throw new Error("Profile not found");
+
+  const newScore = Math.min(100, Math.max(0, profile.trustScore + delta));
+  const actualDelta = newScore - profile.trustScore;
+
+  await prisma.profile.update({ where: { id: profileId }, data: { trustScore: newScore } });
+  if (actualDelta !== 0) {
+    await prisma.trustScoreAudit.create({
+      data: { profileId, delta: actualDelta, reason, adminId: member.id },
+    });
+  }
+
+  revalidatePath("/admin");
+  revalidatePath(`/directory/${profileId}`);
+}
+
 export async function rejectProfile(id: string, note?: string) {
   await requireAdmin();
   const updated = await prisma.profile.update({

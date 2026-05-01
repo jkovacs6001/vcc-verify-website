@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { getMemberSession } from "@/app/member/actions";
+import { TrustScorePanel } from "@/components/TrustScorePanel";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -16,7 +17,10 @@ export default async function DirectoryProfilePage({
 
   const profile = await prisma.profile.findUnique({
     where: { id },
-    include: { references: true },
+    include: {
+      references: true,
+      trustScoreAudits: { orderBy: { createdAt: "desc" }, take: 5 },
+    },
   });
 
   if (!profile) return notFound();
@@ -77,6 +81,13 @@ export default async function DirectoryProfilePage({
         <div>Chain: <span className="text-vampTextMuted">{profile.chain}</span></div>
         {profile.wallet && <div>Wallet: <span className="text-vampTextMuted break-all">{profile.wallet}</span></div>}
       </div>
+
+      {profile.status === "APPROVED" && (
+        <TrustScorePanel
+          score={profile.trustScore}
+          audits={profile.trustScoreAudits}
+        />
+      )}
 
       <div className="rounded-2xl border border-vampBorder bg-black/40 p-5">
         <div className="text-sm font-semibold text-white mb-3">References</div>
