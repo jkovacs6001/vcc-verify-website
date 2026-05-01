@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { Badge } from "@/components/Badge";
+import { getBadgeFromScore } from "@/lib/badge";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -17,6 +19,8 @@ export default async function DirectoryPage() {
       location: true,
       tags: true,
       skills: true,
+      trustScore: true,
+      badgeLevel: true,
     },
   });
 
@@ -30,40 +34,45 @@ export default async function DirectoryPage() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          {profiles.map((p) => (
-            <Link
-              key={p.id}
-              href={`/directory/${p.id}`}
-              className="rounded-2xl border border-vampBorder bg-black/40 p-4 hover:bg-white/5 transition-colors"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-lg font-semibold text-white">
-                    {p.displayName}
-                    {p.handle ? <span className="text-vampTextMuted text-sm"> · @{p.handle}</span> : null}
+          {profiles.map((p) => {
+            const badge = (p.badgeLevel as "BASIC" | "TRUSTED" | "ELITE" | null) ??
+              getBadgeFromScore(p.trustScore, true);
+            return (
+              <Link
+                key={p.id}
+                href={`/directory/${p.id}`}
+                className="rounded-2xl border border-vampBorder bg-black/40 p-4 hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-lg font-semibold text-white">
+                      {p.displayName}
+                      {p.handle ? <span className="text-vampTextMuted text-sm"> · @{p.handle}</span> : null}
+                    </div>
+                    <div className="text-sm text-vampTextMuted">
+                      {p.submissionRole}{p.location ? ` · ${p.location}` : ""}
+                    </div>
                   </div>
-                  <div className="text-sm text-vampTextMuted">
-                    {p.submissionRole}{p.location ? ` · ${p.location}` : ""}
-                  </div>
+                  <Badge level={badge} size="sm" />
                 </div>
-              </div>
 
-              {(p.skills.length > 0 || p.tags.length > 0) && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {p.skills.slice(0, 6).map((x) => (
-                    <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90">
-                      {x}
-                    </span>
-                  ))}
-                  {p.tags.slice(0, 6).map((x) => (
-                    <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90">
-                      {x}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </Link>
-          ))}
+                {(p.skills.length > 0 || p.tags.length > 0) && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {p.skills.slice(0, 6).map((x) => (
+                      <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90">
+                        {x}
+                      </span>
+                    ))}
+                    {p.tags.slice(0, 6).map((x) => (
+                      <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90">
+                        {x}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>
