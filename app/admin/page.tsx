@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { getMemberSession } from "../member/actions";
 import { redirect } from "next/navigation";
 import { MemberRowEditor } from "@/components/MemberRowEditor";
+import { ProjectReviewRow } from "@/components/ProjectReviewRow";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -73,6 +74,12 @@ export default async function AdminPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  // Fetch pending project applications
+  const pendingProjects = await prisma.project.findMany({
+    where: { status: "PENDING" },
+    orderBy: { createdAt: "asc" },
+  });
+
   // Fetch review queue
   const reviewQueue = await prisma.profile.findMany({
     where: { status: "PENDING" },
@@ -95,6 +102,35 @@ export default async function AdminPage() {
           Manage users, roles, and oversee application queues.
         </p>
       </div>
+
+      {/* Project Applications Section */}
+      <section className="space-y-4">
+        <div className="border-b border-vampBorder pb-3">
+          <h2 className="text-xl font-semibold text-white">
+            Project Applications
+            {pendingProjects.length > 0 && (
+              <span className="ml-2 text-sm font-normal text-vampAccent">
+                ({pendingProjects.length} pending)
+              </span>
+            )}
+          </h2>
+          <p className="mt-1 text-sm text-vampTextMuted">
+            Crypto projects applying for VCC verification
+          </p>
+        </div>
+
+        {pendingProjects.length === 0 ? (
+          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+            No pending project applications.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {pendingProjects.map((p) => (
+              <ProjectReviewRow key={p.id} project={p} />
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* All Members Section */}
       <section className="space-y-4">
