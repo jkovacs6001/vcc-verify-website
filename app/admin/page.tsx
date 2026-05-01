@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { getMemberSession } from "../member/actions";
 import { redirect } from "next/navigation";
 import { MemberRowEditor } from "@/components/MemberRowEditor";
+import { ScamReportRow } from "@/components/ScamReportRow";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -73,6 +74,12 @@ export default async function AdminPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  // Fetch scam reports
+  const scamReports = await prisma.scamReport.findMany({
+    where: { status: "PENDING" },
+    orderBy: { createdAt: "asc" },
+  });
+
   // Fetch review queue
   const reviewQueue = await prisma.profile.findMany({
     where: { status: "PENDING" },
@@ -95,6 +102,35 @@ export default async function AdminPage() {
           Manage users, roles, and oversee application queues.
         </p>
       </div>
+
+      {/* Scam Reports Section */}
+      <section className="space-y-4">
+        <div className="border-b border-vampBorder pb-3">
+          <h2 className="text-xl font-semibold text-white">
+            Scam Reports
+            {scamReports.length > 0 && (
+              <span className="ml-2 text-sm font-normal text-red-400">
+                ({scamReports.length} pending)
+              </span>
+            )}
+          </h2>
+          <p className="mt-1 text-sm text-vampTextMuted">
+            Reports submitted by the community for review
+          </p>
+        </div>
+
+        {scamReports.length === 0 ? (
+          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+            No pending scam reports.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {scamReports.map((r) => (
+              <ScamReportRow key={r.id} report={r} />
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* All Members Section */}
       <section className="space-y-4">

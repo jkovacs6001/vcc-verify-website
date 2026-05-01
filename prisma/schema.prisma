@@ -16,6 +16,13 @@ enum ReviewStatus {
   REJECTED
 }
 
+enum ScamReportStatus {
+  PENDING
+  REVIEWED
+  CONFIRMED
+  DISMISSED
+}
+
 enum UserRole {
   MEMBER
   REVIEWER
@@ -96,13 +103,30 @@ model Comment {
   id            String   @id @default(cuid())
   profileId     String
   profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  
+
   authorId      String
   author        Profile  @relation("AuthoredComments", fields: [authorId], references: [id], onDelete: Cascade)
-  
+
   content       String
   createdAt     DateTime @default(now())
 
   @@index([profileId])
   @@index([authorId])
+}
+
+model ScamReport {
+  id            String           @id @default(cuid())
+  walletAddress String
+  chain         String           @default("solana")
+  projectName   String?
+  description   String
+  evidenceLinks String[]         @default([])
+  status        ScamReportStatus @default(PENDING)
+  reporterIp    String?
+  adminNote     String?
+  reviewedAt    DateTime?
+  createdAt     DateTime         @default(now())
+
+  @@index([walletAddress])
+  @@index([status])
 }

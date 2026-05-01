@@ -5,6 +5,22 @@ import { revalidatePath } from "next/cache";
 import { getMemberSession } from "@/app/member/actions";
 import { emailFinalApproved, emailFinalRejected } from "@/lib/email";
 
+export async function reviewScamReport(
+  id: string,
+  status: "REVIEWED" | "CONFIRMED" | "DISMISSED",
+  adminNote?: string
+) {
+  const member = await getMemberSession();
+  if (!member || !member.userRoles.includes("ADMIN")) throw new Error("Unauthorized");
+
+  await prisma.scamReport.update({
+    where: { id },
+    data: { status, adminNote: adminNote ?? null, reviewedAt: new Date() },
+  });
+
+  revalidatePath("/admin");
+}
+
 async function requireAdmin() {
   const member = await getMemberSession();
   if (!member || !member.userRoles.includes("ADMIN")) {
