@@ -15,6 +15,7 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/directory", label: "Directory" },
+    { href: "/projects", label: "Projects" },
     { href: "/blacklist", label: "Blacklist" },
     { href: "/report", label: "Report Scam" },
     { href: "/member", label: isAuthenticated ? "My Dashboard" : "Login" },

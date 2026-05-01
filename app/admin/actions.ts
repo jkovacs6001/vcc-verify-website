@@ -98,6 +98,20 @@ export async function deleteUser(profileId: string) {
   revalidatePath("/");
 }
 
+export async function reviewProject(
+  id: string,
+  status: "APPROVED" | "REJECTED",
+  adminNote?: string
+) {
+  await requireAdmin();
+  await prisma.project.update({
+    where: { id },
+    data: { status, adminNote: adminNote ?? null, reviewedAt: new Date() },
+  });
+  revalidatePath("/admin");
+  revalidatePath("/projects");
+}
+
 export async function rejectProfile(id: string, note?: string) {
   await requireAdmin();
   const updated = await prisma.profile.update({

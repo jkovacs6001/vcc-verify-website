@@ -3,6 +3,7 @@ import { getMemberSession } from "../member/actions";
 import { redirect } from "next/navigation";
 import { MemberRowEditor } from "@/components/MemberRowEditor";
 import { ScamReportRow } from "@/components/ScamReportRow";
+import { ProjectReviewRow } from "@/components/ProjectReviewRow";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -64,30 +65,28 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
 export default async function AdminPage() {
   const member = await getMemberSession();
 
-  // Only users with ADMIN role can access this page
   if (!member || !member.userRoles.includes("ADMIN")) {
     redirect("/member");
   }
 
-  // Fetch all members (with or without verified applications)
-  const allMembers = await prisma.profile.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const allMembers = await prisma.profile.findMany({ orderBy: { createdAt: "desc" } });
 
-  // Fetch scam reports
   const scamReports = await prisma.scamReport.findMany({
     where: { status: "PENDING" },
     orderBy: { createdAt: "asc" },
   });
 
-  // Fetch review queue
+  const pendingProjects = await prisma.project.findMany({
+    where: { status: "PENDING" },
+    orderBy: { createdAt: "asc" },
+  });
+
   const reviewQueue = await prisma.profile.findMany({
     where: { status: "PENDING" },
     orderBy: { createdAt: "asc" },
     include: { references: true },
   });
 
-  // Fetch approval queue
   const approvalQueue = await prisma.profile.findMany({
     where: { status: "READY_FOR_APPROVAL" },
     orderBy: { createdAt: "asc" },
@@ -127,6 +126,35 @@ export default async function AdminPage() {
           <div className="space-y-3">
             {scamReports.map((r) => (
               <ScamReportRow key={r.id} report={r} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Project Applications Section */}
+      <section className="space-y-4">
+        <div className="border-b border-vampBorder pb-3">
+          <h2 className="text-xl font-semibold text-white">
+            Project Applications
+            {pendingProjects.length > 0 && (
+              <span className="ml-2 text-sm font-normal text-vampAccent">
+                ({pendingProjects.length} pending)
+              </span>
+            )}
+          </h2>
+          <p className="mt-1 text-sm text-vampTextMuted">
+            Crypto projects applying for VCC verification
+          </p>
+        </div>
+
+        {pendingProjects.length === 0 ? (
+          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+            No pending project applications.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {pendingProjects.map((p) => (
+              <ProjectReviewRow key={p.id} project={p} />
             ))}
           </div>
         )}
