@@ -64,6 +64,10 @@ model Profile {
   reviewedAt   DateTime?
   reviewerNote String?
 
+  // Trust score (0-100) and audit trail
+  trustScore   Int          @default(0)
+  trustScoreAudits TrustScoreAudit[]
+
   references   Reference[]
   sessions     Session[]
   comments     Comment[]
@@ -168,4 +172,16 @@ model Project {
   updatedAt       DateTime      @updatedAt
 
   @@index([status])
+}
+
+model TrustScoreAudit {
+  id        String   @id @default(cuid())
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  delta     Int
+  reason    String
+  adminId   String?
+  createdAt DateTime @default(now())
+
+  @@index([profileId])
 }
