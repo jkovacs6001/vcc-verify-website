@@ -5,7 +5,9 @@ import { reviewScamReport } from "@/app/admin/actions";
 
 interface ScamReport {
   id: string;
-  walletAddress: string;
+  reportType: string;
+  walletAddress: string | null;
+  contractAddress: string | null;
   chain: string;
   projectName: string | null;
   description: string;
@@ -28,17 +30,29 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
     }
   }
 
+  const isProject = report.reportType === "project";
+  const address = isProject ? report.contractAddress : report.walletAddress;
+
   return (
     <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="font-mono text-sm text-white break-all">
-            {report.walletAddress}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-medium ${
+              isProject
+                ? "text-purple-400 border-purple-400/40 bg-purple-400/10"
+                : "text-blue-400 border-blue-400/40 bg-blue-400/10"
+            }`}>
+              {isProject ? "Project" : "Wallet"}
+            </span>
+            {report.projectName && (
+              <span className="text-sm font-semibold text-white">{report.projectName}</span>
+            )}
+          </div>
+          <div className="mt-1 font-mono text-sm text-white/70 break-all">
+            {isProject ? "CA: " : ""}{address}
             <span className="ml-2 text-xs text-vampTextMuted capitalize">({report.chain})</span>
           </div>
-          {report.projectName && (
-            <div className="mt-0.5 text-sm text-vampTextMuted">Project: {report.projectName}</div>
-          )}
         </div>
         <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 border border-yellow-500/30">
           {report.status}

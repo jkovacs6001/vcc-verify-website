@@ -126,19 +126,20 @@ model Comment {
 }
 
 model ScamReport {
-  id            String           @id @default(cuid())
-  walletAddress String
-  chain         String           @default("solana")
-  projectName   String?
-  description   String
-  evidenceLinks String[]         @default([])
-  status        ScamReportStatus @default(PENDING)
-  reporterIp    String?
-  adminNote     String?
-  reviewedAt    DateTime?
-  createdAt     DateTime         @default(now())
+  id              String           @id @default(cuid())
+  reportType      String           @default("wallet") // "wallet" | "project"
+  walletAddress   String?
+  contractAddress String?
+  chain           String           @default("solana")
+  projectName     String?
+  description     String
+  evidenceLinks   String[]         @default([])
+  status          ScamReportStatus @default(PENDING)
+  reporterIp      String?
+  adminNote       String?
+  reviewedAt      DateTime?
+  createdAt       DateTime         @default(now())
 
-  @@index([walletAddress])
   @@index([status])
 }
 

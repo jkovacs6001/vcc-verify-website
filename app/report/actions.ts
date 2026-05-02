@@ -10,17 +10,14 @@ export async function submitScamReport(formData: FormData) {
   const ip = ipHeader.split(",")[0].trim();
 
   const rl = checkRateLimit({ key: `scam-report:${ip}`, limit: 3, windowMs: 60 * 60 * 1000 });
-  if (!rl.allowed) {
-    throw new Error("Too many reports submitted. Please wait before trying again.");
-  }
+  if (!rl.allowed) throw new Error("Too many reports submitted. Please wait before trying again.");
 
-  const walletAddress = (formData.get("walletAddress") as string)?.trim();
+  const reportType = (formData.get("reportType") as string) === "project" ? "project" : "wallet";
   const chain = (formData.get("chain") as string)?.trim() || "solana";
   const projectName = (formData.get("projectName") as string)?.trim() || null;
   const description = (formData.get("description") as string)?.trim();
   const evidenceRaw = (formData.get("evidenceLinks") as string)?.trim();
 
-  if (!walletAddress) throw new Error("Wallet address is required.");
   if (!description || description.length < 20)
     throw new Error("Please provide a description of at least 20 characters.");
 
@@ -28,22 +25,26 @@ export async function submitScamReport(formData: FormData) {
     ? evidenceRaw.split("\n").map((l) => l.trim()).filter(Boolean)
     : [];
 
-  await prisma.scamReport.create({
-    data: {
-      walletAddress,
-      chain,
-      projectName,
-      description,
-      evidenceLinks,
-      reporterIp: ip,
-    },
-  });
+  if (reportType === "wallet") {
+    const walletAddress = (formData.get("walletAddress") as string)?.trim();
+    if (!walletAddress) throw new Error("Wallet address is required.");
+
+    await prisma.scamReport.create({
+      data: { reportType, walletAddress, chain, projectName, description, evidenceLinks, reporterIp: ip },
+    });
+  } else {
+    const contractAddress = (formData.get("contractAddress") as string)?.trim();
+    if (!contractAddress) throw new Error("Contract address is required.");
+    if (!projectName) throw new Error("Project name is required.");
+
+    await prisma.scamReport.create({
+      data: { reportType, contractAddress, chain, projectName, description, evidenceLinks, reporterIp: ip },
+    });
+  }
 }
 
 export async function getScamReports() {
-  return prisma.scamReport.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  return prisma.scamReport.findMany({ orderBy: { createdAt: "desc" } });
 }
 
 export async function updateScamReportStatus(

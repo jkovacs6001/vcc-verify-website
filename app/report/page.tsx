@@ -4,6 +4,7 @@ import { useState } from "react";
 import { submitScamReport } from "./actions";
 
 export default function ReportPage() {
+  const [reportType, setReportType] = useState<"wallet" | "project">("wallet");
   const [pending, setPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +28,7 @@ export default function ReportPage() {
       <div>
         <h1 className="text-3xl font-semibold text-white">Report a Scam</h1>
         <p className="mt-2 text-vampTextMuted text-sm">
-          Submit suspicious wallets or projects for manual admin review. All reports are
+          Submit a suspicious wallet or project for manual admin review. All reports are
           kept confidential and reviewed before any action is taken.
         </p>
       </div>
@@ -41,18 +42,62 @@ export default function ReportPage() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Type toggle */}
+          <div className="flex rounded-xl border border-vampBorder overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setReportType("wallet")}
+              className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
+                reportType === "wallet"
+                  ? "bg-vampAccent text-white"
+                  : "bg-black/40 text-vampTextMuted hover:text-white"
+              }`}
+            >
+              Wallet
+            </button>
+            <button
+              type="button"
+              onClick={() => setReportType("project")}
+              className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
+                reportType === "project"
+                  ? "bg-vampAccent text-white"
+                  : "bg-black/40 text-vampTextMuted hover:text-white"
+              }`}
+            >
+              Project
+            </button>
+          </div>
+
+          <input type="hidden" name="reportType" value={reportType} />
+
           <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 space-y-4">
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2 space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
-                  Wallet Address *
-                </label>
-                <input
-                  name="walletAddress"
-                  required
-                  placeholder="e.g. 7xKXt..."
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
-                />
+                {reportType === "wallet" ? (
+                  <>
+                    <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                      Wallet Address *
+                    </label>
+                    <input
+                      name="walletAddress"
+                      required
+                      placeholder="e.g. 7xKXt…"
+                      className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                      Contract Address (CA) *
+                    </label>
+                    <input
+                      name="contractAddress"
+                      required
+                      placeholder="e.g. 7xKXt…"
+                      className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                    />
+                  </>
+                )}
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
@@ -72,10 +117,11 @@ export default function ReportPage() {
 
             <div className="space-y-1">
               <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
-                Project Name (optional)
+                {reportType === "project" ? "Project Name *" : "Project Name (optional)"}
               </label>
               <input
                 name="projectName"
+                required={reportType === "project"}
                 placeholder="e.g. FakeSwap Protocol"
                 className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
               />
@@ -90,7 +136,7 @@ export default function ReportPage() {
                 required
                 minLength={20}
                 rows={4}
-                placeholder="Describe the suspicious activity in detail..."
+                placeholder="Describe the suspicious activity in detail…"
                 className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent resize-none"
               />
             </div>
@@ -102,7 +148,7 @@ export default function ReportPage() {
               <textarea
                 name="evidenceLinks"
                 rows={3}
-                placeholder={"https://solscan.io/tx/...\nhttps://twitter.com/..."}
+                placeholder={"https://solscan.io/tx/…\nhttps://twitter.com/…"}
                 className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent resize-none"
               />
             </div>
@@ -119,7 +165,7 @@ export default function ReportPage() {
             disabled={pending}
             className="w-full rounded-full bg-vampAccent px-6 py-2.5 text-sm font-medium text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors disabled:opacity-50"
           >
-            {pending ? "Submitting…" : "Submit Report"}
+            {pending ? "Submitting…" : `Submit ${reportType === "project" ? "Project" : "Wallet"} Report`}
           </button>
         </form>
       )}
