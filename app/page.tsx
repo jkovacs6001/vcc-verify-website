@@ -25,13 +25,13 @@ export default function HomePage() {
         "
       /> 
       {/* subtle background glow on the right */}
-      <div className="pointer-events-none fixed inset-y-0 right-[-120px] w-[380px] bg-gradient-radial from-vampAccent/20 via-transparent to-transparent blur-3xl opacity-70" />
+      <div className="pointer-events-none fixed inset-y-0 right-0 w-[300px] bg-gradient-radial from-vampAccent/20 via-transparent to-transparent blur-3xl opacity-70" />
       {/* subtle background glow on the left */}
-      <div className="pointer-events-none fixed inset-y-0 left-[-160px] w-[420px] bg-gradient-radial from-vampAccent/15 via-transparent to-transparent blur-3xl opacity-60" />
+      <div className="pointer-events-none fixed inset-y-0 left-0 w-[300px] bg-gradient-radial from-vampAccent/15 via-transparent to-transparent blur-3xl opacity-60" />
 
     {/* </div> */}
 
-      <main className="relative z-10 max-w-6xl mx-auto px-4 pt-16 space-y-12">
+      <div className="relative z-10 pt-8 space-y-12">
         {/* Hero */}
         <section className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-center">
           {/* Left: copy & CTAs */}
@@ -166,7 +166,7 @@ export default function HomePage() {
 
           <FeaturedProfiles />
         </section>
-      </main>
+      </div>
     </div>
   );
 }
