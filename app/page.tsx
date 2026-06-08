@@ -6,7 +6,7 @@ export const revalidate = 0;
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen pb-16">
+    <div className="relative w-full overflow-hidden pb-16">
       {/* Warped mesh grid (Option A) */}
       <div
         className="
