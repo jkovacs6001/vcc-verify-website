@@ -1,4 +1,3 @@
-import FeaturedProfiles from "../components/FeaturedProfiles";
 import TrustWeb from '@/components/TrustWeb';
 
 export const dynamic = "force-dynamic";
@@ -151,21 +150,6 @@ export default function HomePage() {
 	  */}
         </section>
 
-        {/* Live directory section */}
-        <section className="space-y-4">
-          <div className="flex flex-wrap items-end justify-between gap-2">
-            <div>
-              <h2 className="text-lg font-semibold text-white">
-                Recently approved profiles
-              </h2>
-              <p className="text-[12px] text-vampTextMuted">
-                Search by name, wallet, role, or tags!
-              </p>
-            </div>
-          </div>
-
-          <FeaturedProfiles />
-        </section>
       </div>
     </div>
   );
