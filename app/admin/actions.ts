@@ -21,6 +21,42 @@ export async function reviewScamReport(
   revalidatePath("/admin");
 }
 
+export async function editScamReport(
+  id: string,
+  fields: {
+    description: string;
+    projectName: string | null;
+    address: string;
+    chain: string;
+    evidenceLinks: string[];
+  }
+) {
+  const member = await getMemberSession();
+  if (!member || !member.userRoles.includes("ADMIN")) throw new Error("Unauthorized");
+
+  const report = await prisma.scamReport.findUnique({ where: { id }, select: { reportType: true } });
+  if (!report) throw new Error("Report not found");
+
+  const update: Record<string, unknown> = {
+    description: fields.description.slice(0, 2000),
+    projectName: fields.projectName?.slice(0, 200) || null,
+    evidenceLinks: fields.evidenceLinks.slice(0, 10),
+  };
+
+  if (report.reportType === "wallet") {
+    update.walletAddress = fields.address;
+    update.chain = fields.chain;
+  } else if (report.reportType === "project") {
+    update.contractAddress = fields.address;
+    update.chain = fields.chain;
+  } else if (report.reportType === "twitter") {
+    update.twitterHandle = fields.address.replace(/^@/, "");
+  }
+
+  await prisma.scamReport.update({ where: { id }, data: update });
+  revalidatePath("/admin");
+}
+
 async function requireAdmin() {
   const member = await getMemberSession();
   if (!member || !member.userRoles.includes("ADMIN")) {

@@ -7,9 +7,10 @@ import React from "react";
 
 interface NavBarProps {
   isAuthenticated: boolean;
+  hasActiveApplication: boolean;
 }
 
-export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
+export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, hasActiveApplication }) => {
   const pathname = usePathname();
 
   const navItems = [
@@ -19,14 +20,15 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
     { href: "/blacklist", label: "Blacklist" },
     { href: "/report", label: "Report Scam" },
     { href: "/member", label: isAuthenticated ? "My Dashboard" : "Login" },
-    { href: "/apply", label: "Apply" },
+    // Hide "Apply" for users who already have an active or completed application
+    ...(!hasActiveApplication ? [{ href: "/apply", label: "Apply" }] : []),
   ];
 
   return (
     <header className="w-full border-b border-vampBorder bg-black/90 backdrop-blur">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 cursor-paw-pointer">
-	  <div className="relative h-8 w-8 overflow-hidden rounded-full shadow-vampGlow ring-1 ring-vampAccent/40">
+          <div className="relative h-8 w-8 overflow-hidden rounded-full shadow-vampGlow ring-1 ring-vampAccent/40">
             <Image
               src="/vampcat_avatar.png"
               alt="VampCat"
@@ -67,6 +69,7 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
           })}
         </nav>
 
+        {/* Hide "Create Account" for already-authenticated users */}
         {!isAuthenticated && (
           <Link
             href="/register"
@@ -79,4 +82,3 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated }) => {
     </header>
   );
 };
-

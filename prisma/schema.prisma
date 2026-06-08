@@ -58,6 +58,9 @@ model Profile {
   github       String?
   linkedin     String?
 
+  // Proof of work / portfolio links
+  portfolioLinks String[]   @default([])
+
   // Web3
   chain        String?      @default("solana")
   wallet       String?
@@ -127,9 +130,10 @@ model Comment {
 
 model ScamReport {
   id              String           @id @default(cuid())
-  reportType      String           @default("wallet") // "wallet" | "project"
+  reportType      String           @default("wallet") // "wallet" | "project" | "twitter"
   walletAddress   String?
   contractAddress String?
+  twitterHandle   String?
   chain           String           @default("solana")
   projectName     String?
   description     String

@@ -7,7 +7,6 @@ import { checkUpstashLimit } from "@/lib/upstashRateLimit";
 import {
   emailApplicationSubmittedToApplicant,
   emailApplicationSubmittedToReviewers,
-  emailVerificationLink,
 } from "@/lib/email";
 import crypto from "crypto";
 
@@ -91,27 +90,54 @@ export async function submitApplication(
       return { ok: false, error: "Password must be at least 8 characters" };
     }
 
-    // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
     const wallet = clampLen(opt(formData, "wallet"), 255);
-
     const handle = clampLen(opt(formData, "handle"), 40);
     const location = clampLen(opt(formData, "location"), 80);
     const bio = clampLen(opt(formData, "bio"), 800);
-
     const telegram = clampLen(opt(formData, "telegram"), 80);
     const xHandle = clampLen(opt(formData, "xHandle"), 80);
     const website = clampLen(opt(formData, "website"), 200);
     const github = clampLen(opt(formData, "github"), 200);
     const linkedin = clampLen(opt(formData, "linkedin"), 200);
-
     const chain = clampLen(opt(formData, "chain"), 24) ?? "solana";
-
     const skills = splitCsv(s(formData, "skillsCsv"), 30);
     const tags = splitCsv(s(formData, "tagsCsv"), 30);
 
-    // Up to 3 references for MVP (easy to extend)
+    // Proof-of-work portfolio links (up to 3)
+    const portfolioLinks = [0, 1, 2]
+      .map((i) => {
+        const link = s(formData, `portfolioLink_${i}`);
+        return link || null;
+      })
+      .filter((l): l is string => l !== null && l.length <= 500);
+
+    // Enforce proof-of-work: at least one portfolio/work link is required
+    if (portfolioLinks.length === 0) {
+      return {
+        ok: false,
+        error:
+          "At least one portfolio or work link is required. Please add a link to a project, repo, screenshot, or other verifiable work.",
+      };
+    }
+
+    // Validate all portfolio links are valid URLs
+    for (const link of portfolioLinks) {
+      if (!isValidUrl(link)) {
+        return { ok: false, error: `Invalid portfolio URL: ${link}` };
+      }
+    }
+
+    // Warn check: neither X nor Telegram provided (we still allow it but note it)
+    const hasSocial = !!(xHandle || telegram || github || linkedin);
+    // We don't block on missing social but flag it via reviewerNote later
+
+    if (website && !isValidUrl(website)) {
+      return { ok: false, error: "Invalid website URL" };
+    }
+
+    // Up to 3 references
     const refs = [0, 1, 2]
       .map((i) => {
         const name = s(formData, `ref_${i}_name`);
@@ -132,9 +158,13 @@ export async function submitApplication(
         notes: string | null;
       }>;
 
-    if (website && !isValidUrl(website)) {
-      return { ok: false, error: "Invalid website URL" };
-    }
+    // Auto-flag applications that lack social profiles for reviewers
+    const missingFlags: string[] = [];
+    if (!xHandle) missingFlags.push("no X/Twitter handle");
+    if (!telegram) missingFlags.push("no Telegram handle");
+
+    const autoNote =
+      missingFlags.length > 0 ? `[Auto-flagged: ${missingFlags.join(", ")}]` : null;
 
     // Check if email already exists
     const existing = await prisma.profile.findUnique({
@@ -143,12 +173,10 @@ export async function submitApplication(
     });
 
     if (existing) {
-      // If they already have a verification application pending/approved
       if (existing.status !== null) {
         return { ok: false, error: "You have already applied for verification with this email" };
       }
 
-      // They have an account but no application - update their profile with application data
       const updated = await prisma.profile.update({
         where: { id: existing.id },
         data: {
@@ -166,7 +194,9 @@ export async function submitApplication(
           linkedin,
           chain,
           wallet,
-          status: "PENDING", // Now applying for verification
+          portfolioLinks,
+          status: "PENDING",
+          reviewerNote: autoNote,
           references: refs.length ? { create: refs } : undefined,
         },
         select: { id: true },
@@ -188,9 +218,9 @@ export async function submitApplication(
       return { ok: true, id: updated.id };
     }
 
-    // New user - create profile with application
+    // New user
     const verificationToken = crypto.randomBytes(32).toString("hex");
-    const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     const created = await prisma.profile.create({
       data: {
@@ -213,19 +243,15 @@ export async function submitApplication(
         linkedin,
         chain,
         wallet,
+        portfolioLinks,
         status: "PENDING",
+        reviewerNote: autoNote,
         references: refs.length ? { create: refs } : undefined,
       },
       select: { id: true },
     });
 
     await Promise.all([
-      // Email verification temporarily disabled - coming soon
-      // emailVerificationLink({
-      //   to: email,
-      //   applicantName: displayName,
-      //   token: verificationToken,
-      // }),
       emailApplicationSubmittedToReviewers({
         applicantName: displayName,
         applicantRole: submissionRole,
