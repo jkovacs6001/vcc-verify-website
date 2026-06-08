@@ -30,13 +30,9 @@ export default function RootLayout({
           {children}
         </main>
         <footer className="w-full border-t border-vampBorder bg-black/60 backdrop-blur">
-          <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-vampTextMuted flex justify-between">
-            <span>
-              © {new Date().getFullYear()} VampCatCoin · VampCatCoin Verification
-            </span>
-            <span className="text-[10px]">
-              Not financial or hiring advice
-            </span>
+          <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-vampTextMuted flex flex-col sm:flex-row sm:justify-between gap-1">
+            <span>© {new Date().getFullYear()} VampCatCoin · VampCatCoin Verification</span>
+            <span className="text-[10px]">Not financial or hiring advice</span>
           </div>
         </footer>
         <Analytics />

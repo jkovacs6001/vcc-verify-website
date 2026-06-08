@@ -67,9 +67,9 @@ export default function HomePage() {
               </a>
               <a
                 href="/apply"
-                className="cursor-paw-pointer inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium text-vampAccent hover:text-white hover:bg-vampAccent/10 border border-transparent"
+                className="cursor-paw-pointer inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium text-vampAccent hover:text-white hover:bg-vampAccent/10 border border-vampAccent/30"
               >
-                Want verification? Apply now
+                Apply for verification
               </a>
             </div>
 

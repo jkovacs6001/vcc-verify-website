@@ -106,8 +106,8 @@ export default async function MemberPage() {
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between">
-              <span className="text-vampTextMuted">Verification Status:</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-vampTextMuted text-sm">Verification Status:</span>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
                   member.status === "APPROVED"
@@ -129,9 +129,9 @@ export default async function MemberPage() {
           </>
         )}
         
-        <div className="flex items-center justify-between">
-          <span className="text-vampTextMuted">Your Roles:</span>
-          <div className="flex flex-wrap gap-2 justify-end">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span className="text-vampTextMuted text-sm">Your Roles:</span>
+          <div className="flex flex-wrap gap-2">
             {member.userRoles.map((role) => (
               <span key={role} className="px-3 py-1 rounded-full text-sm font-medium bg-vampAccent/15 text-vampAccent">
                 {role}
