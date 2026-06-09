@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { getMemberSession } from "@/app/member/actions";
 import { emailFinalApproved, emailFinalRejected } from "@/lib/email";
+import { refreshTrustScore } from "@/lib/trustScore";
 
 export async function reviewScamReport(
   id: string,
@@ -106,12 +107,14 @@ export async function approveProfile(id: string, note?: string) {
     select: { displayName: true, submissionRole: true, email: true },
   });
 
+  await refreshTrustScore(id);
+
   await emailFinalApproved({
     applicantName: updated.displayName,
     applicantRole: updated.submissionRole ?? "Applicant",
     applicantEmail: updated.email,
   });
-  
+
   revalidatePath("/admin");
   revalidatePath("/directory");
   revalidatePath("/");
