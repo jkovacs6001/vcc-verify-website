@@ -172,6 +172,40 @@ export async function adjustTrustScore(profileId: string, delta: number, reason:
   revalidatePath(`/directory/${profileId}`);
 }
 
+export async function editBlacklistedWallet(
+  id: string,
+  fields: { walletAddress: string; chain: string; reason: string }
+) {
+  await requireAdmin();
+  await prisma.blacklistedWallet.update({
+    where: { id },
+    data: {
+      walletAddress: fields.walletAddress.trim().slice(0, 255),
+      chain: fields.chain.trim().slice(0, 32),
+      reason: fields.reason.trim().slice(0, 1000),
+    },
+  });
+  revalidatePath("/admin");
+  revalidatePath("/blacklist");
+}
+
+export async function deleteBlacklistedWallet(id: string) {
+  await requireAdmin();
+  await prisma.blacklistedWallet.delete({ where: { id } });
+  revalidatePath("/admin");
+  revalidatePath("/blacklist");
+}
+
+export async function removeConfirmedReport(id: string) {
+  await requireAdmin();
+  await prisma.scamReport.update({
+    where: { id },
+    data: { status: "DISMISSED" },
+  });
+  revalidatePath("/admin");
+  revalidatePath("/blacklist");
+}
+
 export async function rejectProfile(id: string, note?: string) {
   await requireAdmin();
   const updated = await prisma.profile.update({

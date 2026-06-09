@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { MemberRowEditor } from "@/components/MemberRowEditor";
 import { ScamReportRow } from "@/components/ScamReportRow";
 import { ProjectReviewRow } from "@/components/ProjectReviewRow";
+import { BlacklistedWalletRow, ConfirmedReportRow } from "@/components/BlacklistEntryRow";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -170,6 +171,15 @@ export default async function AdminPage() {
 
   const allMembers = await prisma.profile.findMany({ orderBy: { createdAt: "desc" } });
 
+  const blacklistedWallets = await prisma.blacklistedWallet.findMany({
+    orderBy: { confirmedAt: "desc" },
+  });
+
+  const confirmedReports = await prisma.scamReport.findMany({
+    where: { status: "CONFIRMED" },
+    orderBy: { reviewedAt: "desc" },
+  });
+
   const scamReports = await prisma.scamReport.findMany({
     where: { status: "PENDING" },
     orderBy: { createdAt: "asc" },
@@ -225,6 +235,38 @@ export default async function AdminPage() {
           <div className="space-y-3">
             {scamReports.map((r) => (
               <ScamReportRow key={r.id} report={r} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Blacklist Management Section */}
+      <section className="space-y-4">
+        <div className="border-b border-vampBorder pb-3">
+          <h2 className="text-xl font-semibold text-white">
+            Blacklist Management
+            {(blacklistedWallets.length + confirmedReports.length) > 0 && (
+              <span className="ml-2 text-sm font-normal text-vampAccent">
+                ({blacklistedWallets.length + confirmedReports.length} entries)
+              </span>
+            )}
+          </h2>
+          <p className="mt-1 text-sm text-vampTextMuted">
+            Edit or remove confirmed blacklist entries
+          </p>
+        </div>
+
+        {blacklistedWallets.length === 0 && confirmedReports.length === 0 ? (
+          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+            No blacklisted entries yet.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {blacklistedWallets.map((e) => (
+              <BlacklistedWalletRow key={e.id} entry={e} />
+            ))}
+            {confirmedReports.map((r) => (
+              <ConfirmedReportRow key={r.id} entry={r} />
             ))}
           </div>
         )}
