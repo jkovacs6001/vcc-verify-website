@@ -5,6 +5,7 @@ import { MemberRowEditor } from "@/components/MemberRowEditor";
 import { ScamReportRow } from "@/components/ScamReportRow";
 import { ProjectReviewRow } from "@/components/ProjectReviewRow";
 import { BlacklistedWalletRow, ConfirmedReportRow } from "@/components/BlacklistEntryRow";
+import { RecalculateScoresButton } from "@/components/RecalculateScoresButton";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -204,11 +205,14 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-semibold text-white">Admin Dashboard</h1>
-        <p className="mt-2 text-vampTextMuted">
-          Manage users, roles, and oversee application queues.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold text-white">Admin Dashboard</h1>
+          <p className="mt-2 text-vampTextMuted">
+            Manage users, roles, and oversee application queues.
+          </p>
+        </div>
+        <RecalculateScoresButton />
       </div>
 
       {/* Scam Reports Section */}

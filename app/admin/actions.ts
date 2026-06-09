@@ -206,6 +206,18 @@ export async function removeConfirmedReport(id: string) {
   revalidatePath("/blacklist");
 }
 
+export async function recalculateAllTrustScores() {
+  await requireAdmin();
+  const profiles = await prisma.profile.findMany({
+    where: { status: "APPROVED" },
+    select: { id: true },
+  });
+  await Promise.all(profiles.map((p) => refreshTrustScore(p.id)));
+  revalidatePath("/admin");
+  revalidatePath("/directory");
+  return profiles.length;
+}
+
 export async function rejectProfile(id: string, note?: string) {
   await requireAdmin();
   const updated = await prisma.profile.update({
