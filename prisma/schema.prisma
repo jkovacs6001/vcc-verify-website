@@ -52,6 +52,8 @@ model Profile {
   emailVerified Boolean      @default(false)
   verificationToken String?  @unique
   verificationTokenExpiry DateTime?
+  passwordResetToken String? @unique
+  passwordResetExpiresAt DateTime?
   telegram     String?
   xHandle      String?
   website      String?

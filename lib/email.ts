@@ -246,6 +246,28 @@ export async function emailFinalApproved(params: {
   });
 }
 
+export async function emailPasswordReset(params: {
+  to: string;
+  displayName: string;
+  resetUrl: string;
+}): Promise<void> {
+  await sendEmail({
+    to: params.to,
+    subject: "Reset your password",
+    text: [
+      `Hi ${params.displayName},`,
+      "",
+      "We received a request to reset your password. Click the link below to set a new one:",
+      "",
+      params.resetUrl,
+      "",
+      "This link expires in 1 hour. If you didn't request a password reset, you can safely ignore this email.",
+      "",
+      "– VCC Verification Team",
+    ].join("\n"),
+  });
+}
+
 export async function emailFinalRejected(params: {
   applicantName: string;
   applicantRole: string;

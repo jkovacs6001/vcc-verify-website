@@ -49,9 +49,11 @@ export default async function MemberPage() {
           </button>
         </form>
 
-        <p className="text-xs text-vampTextMuted text-center">
-          Use the email and password from your account.
-        </p>
+        <div className="text-center text-xs text-vampTextMuted">
+          <Link href="/forgot-password" className="text-vampAccent hover:underline">
+            Forgot your password?
+          </Link>
+        </div>
 
         <div className="text-center text-sm text-vampTextMuted">
           Don't have an account?{" "}
