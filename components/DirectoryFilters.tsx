@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useRef } from "react";
 
 interface DirectoryFiltersProps {
   allLocations: string[];
   allRoles: string[];
   allSkills: string[];
   activeCount: number;
+  query: string;
 }
 
 export function DirectoryFilters({
@@ -15,9 +16,11 @@ export function DirectoryFilters({
   allRoles,
   allSkills,
   activeCount,
+  query,
 }: DirectoryFiltersProps) {
   const router = useRouter();
   const sp = useSearchParams();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const location = sp.get("location") ?? "";
   const role = sp.get("role") ?? "";
@@ -50,8 +53,30 @@ export function DirectoryFilters({
     router.replace("/directory");
   }
 
+  function handleSearch(value: string) {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      const params = new URLSearchParams(sp.toString());
+      if (value.trim()) {
+        params.set("q", value.trim());
+      } else {
+        params.delete("q");
+      }
+      router.replace(`/directory?${params.toString()}`);
+    }, 300);
+  }
+
   return (
     <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-4">
+      {/* Search bar */}
+      <input
+        type="search"
+        defaultValue={query}
+        onChange={(e) => handleSearch(e.target.value)}
+        placeholder="Search by name, role, location, or bio…"
+        className="w-full rounded-xl border border-vampBorder bg-black/60 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+      />
+
       <div className="flex items-center justify-between">
         <div className="text-sm font-medium text-white">Filters</div>
         {activeCount > 0 && (

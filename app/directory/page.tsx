@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 interface PageProps {
-  searchParams: Promise<{ location?: string; role?: string; badge?: string; skill?: string | string[] }>;
+  searchParams: Promise<{ location?: string; role?: string; badge?: string; skill?: string | string[]; q?: string }>;
 }
 
 export default async function DirectoryPage({ searchParams }: PageProps) {
@@ -19,6 +19,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
   const filterRole = sp.role ?? null;
   const filterBadge = sp.badge ?? null;
   const filterSkills = sp.skill ? (Array.isArray(sp.skill) ? sp.skill : [sp.skill]) : [];
+  const filterQuery = sp.q?.trim() ?? null;
 
   // Build WHERE clause
   const where: Record<string, unknown> = { status: "APPROVED" };
@@ -28,6 +29,15 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
   if (filterBadge === "ELITE") where.trustScore = { gte: 85 };
   else if (filterBadge === "TRUSTED") where.trustScore = { gte: 50, lt: 85 };
   else if (filterBadge === "BASIC") where.trustScore = { gt: 0, lt: 50 };
+  if (filterQuery) {
+    where.OR = [
+      { displayName: { contains: filterQuery, mode: "insensitive" } },
+      { handle: { contains: filterQuery, mode: "insensitive" } },
+      { submissionRole: { contains: filterQuery, mode: "insensitive" } },
+      { bio: { contains: filterQuery, mode: "insensitive" } },
+      { location: { contains: filterQuery, mode: "insensitive" } },
+    ];
+  }
 
   const [profiles, allApproved] = await Promise.all([
     prisma.profile.findMany({
@@ -57,7 +67,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
   const allRoles = [...new Set(allApproved.map((p) => p.submissionRole).filter(Boolean) as string[])].sort();
   const allSkills = [...new Set(allApproved.flatMap((p) => p.skills))].sort();
 
-  const activeCount = [filterLocation, filterRole, filterBadge, ...filterSkills].filter(Boolean).length;
+  const activeCount = [filterLocation, filterRole, filterBadge, filterQuery, ...filterSkills].filter(Boolean).length;
 
   return (
     <div className="space-y-6">
@@ -69,6 +79,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
           allRoles={allRoles}
           allSkills={allSkills}
           activeCount={activeCount}
+          query={filterQuery ?? ""}
         />
       </Suspense>
 
