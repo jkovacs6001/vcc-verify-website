@@ -27,7 +27,7 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const inputClass =
-    "w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent";
+    "w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent";
 
   async function handleSave() {
     setSaving(true);
@@ -49,14 +49,14 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
   }
 
   return (
-    <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-3">
+    <div className="rounded-2xl border border-blistBorder bg-black/40 p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] px-1.5 py-0.5 rounded-full border font-medium text-blue-400 border-blue-400/40 bg-blue-400/10">
               Wallet
             </span>
-            <span className="text-xs text-vampTextMuted capitalize">{entry.chain}</span>
+            <span className="text-xs text-blistTextMuted capitalize">{entry.chain}</span>
           </div>
           {!editing && (
             <div className="font-mono text-sm text-white/80 break-all">{entry.walletAddress}</div>
@@ -68,7 +68,7 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
           </span>
           <button
             onClick={() => { setEditing((v) => !v); setConfirmDelete(false); }}
-            className="text-xs px-2 py-0.5 rounded-full border border-vampBorder bg-white/5 text-vampTextMuted hover:text-white hover:bg-white/10 transition-colors"
+            className="text-xs px-2 py-0.5 rounded-full border border-blistBorder bg-white/5 text-blistTextMuted hover:text-white hover:bg-white/10 transition-colors"
           >
             {editing ? "Cancel" : "Edit"}
           </button>
@@ -80,11 +80,11 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
       {editing ? (
         <div className="space-y-3">
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Wallet Address</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Wallet Address</label>
             <input value={address} onChange={(e) => setAddress(e.target.value)} className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Chain</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Chain</label>
             <select value={chain} onChange={(e) => setChain(e.target.value)} className={inputClass}>
               <option value="solana">Solana</option>
               <option value="ethereum">Ethereum</option>
@@ -93,7 +93,7 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Reason</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Reason</label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
@@ -106,13 +106,13 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="rounded-full bg-vampAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-vampAccentSoft disabled:opacity-50"
+              className="rounded-full bg-blistAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-blistAccentSoft disabled:opacity-50"
             >
               {saving ? "Saving…" : "Save"}
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
+              className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
             >
               Cancel
             </button>
@@ -129,7 +129,7 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
                   </button>
                   <button
                     onClick={() => setConfirmDelete(false)}
-                    className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs text-white hover:bg-white/10"
+                    className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs text-white hover:bg-white/10"
                   >
                     No
                   </button>
@@ -146,7 +146,7 @@ export function BlacklistedWalletRow({ entry }: { entry: WalletEntry }) {
           </div>
         </div>
       ) : (
-        <div className="text-xs text-vampTextMuted">
+        <div className="text-xs text-blistTextMuted">
           Confirmed {new Date(entry.confirmedAt).toLocaleDateString()}
         </div>
       )}
@@ -189,7 +189,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
   const [confirmRemove, setConfirmRemove] = useState(false);
 
   const inputClass =
-    "w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent";
+    "w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent";
 
   async function handleSave() {
     setSaving(true);
@@ -223,7 +223,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
     : { label: "Wallet", color: "text-blue-400 border-blue-400/40 bg-blue-400/10" };
 
   return (
-    <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-3">
+    <div className="rounded-2xl border border-blistBorder bg-black/40 p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -237,7 +237,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
           {!editing && (
             <div className="font-mono text-sm text-white/70 break-all">
               {isTwitter ? "@" : isProject ? "CA: " : ""}{currentAddress}
-              {!isTwitter && <span className="ml-2 text-xs text-vampTextMuted capitalize">({entry.chain})</span>}
+              {!isTwitter && <span className="ml-2 text-xs text-blistTextMuted capitalize">({entry.chain})</span>}
             </div>
           )}
         </div>
@@ -247,7 +247,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
           </span>
           <button
             onClick={() => { setEditing((v) => !v); setConfirmRemove(false); }}
-            className="text-xs px-2 py-0.5 rounded-full border border-vampBorder bg-white/5 text-vampTextMuted hover:text-white hover:bg-white/10 transition-colors"
+            className="text-xs px-2 py-0.5 rounded-full border border-blistBorder bg-white/5 text-blistTextMuted hover:text-white hover:bg-white/10 transition-colors"
           >
             {editing ? "Cancel" : "Edit"}
           </button>
@@ -260,21 +260,21 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
         <div className="space-y-3">
           {(isProject || isTwitter) && (
             <div>
-              <label className="block text-xs text-vampTextMuted mb-1">
+              <label className="block text-xs text-blistTextMuted mb-1">
                 {isProject ? "Project Name" : "Handle / Name"}
               </label>
               <input value={projectName} onChange={(e) => setProjectName(e.target.value)} className={inputClass} />
             </div>
           )}
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">
+            <label className="block text-xs text-blistTextMuted mb-1">
               {isProject ? "Contract Address" : isTwitter ? "X Handle" : "Wallet Address"}
             </label>
             <input value={address} onChange={(e) => setAddress(e.target.value)} className={inputClass} />
           </div>
           {!isTwitter && (
             <div>
-              <label className="block text-xs text-vampTextMuted mb-1">Chain</label>
+              <label className="block text-xs text-blistTextMuted mb-1">Chain</label>
               <select value={chain} onChange={(e) => setChain(e.target.value)} className={inputClass}>
                 <option value="solana">Solana</option>
                 <option value="ethereum">Ethereum</option>
@@ -284,7 +284,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
             </div>
           )}
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Description</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -293,7 +293,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
             />
           </div>
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Evidence Links (one per line)</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Evidence Links (one per line)</label>
             <textarea
               value={evidence}
               onChange={(e) => setEvidence(e.target.value)}
@@ -306,13 +306,13 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="rounded-full bg-vampAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-vampAccentSoft disabled:opacity-50"
+              className="rounded-full bg-blistAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-blistAccentSoft disabled:opacity-50"
             >
               {saving ? "Saving…" : "Save"}
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
+              className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
             >
               Cancel
             </button>
@@ -329,7 +329,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
                   </button>
                   <button
                     onClick={() => setConfirmRemove(false)}
-                    className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs text-white hover:bg-white/10"
+                    className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs text-white hover:bg-white/10"
                   >
                     No
                   </button>
@@ -346,7 +346,7 @@ export function ConfirmedReportRow({ entry }: { entry: ReportEntry }) {
           </div>
         </div>
       ) : (
-        <div className="text-xs text-vampTextMuted">
+        <div className="text-xs text-blistTextMuted">
           Confirmed {entry.reviewedAt ? new Date(entry.reviewedAt).toLocaleDateString() : "—"}
         </div>
       )}

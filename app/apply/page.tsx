@@ -5,14 +5,14 @@ import { submitApplication } from "./actions";
 import type { ApplyState } from "./actions";
 
 function FieldHint({ children }: { children: React.ReactNode }) {
-  return <p className="mt-1 text-xs text-vampTextMuted">{children}</p>;
+  return <p className="mt-1 text-xs text-blistTextMuted">{children}</p>;
 }
 
 function FieldLabel({ required, children }: { required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block text-xs font-semibold text-white/70 mb-1">
       {children}
-      {required && <span className="ml-1 text-vampAccent">*</span>}
+      {required && <span className="ml-1 text-blistAccent">*</span>}
     </label>
   );
 }
@@ -39,7 +39,7 @@ export default function ApplyPage() {
     <div className="max-w-3xl space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">Apply to get verified</h1>
-        <p className="mt-2 text-vampTextMuted">
+        <p className="mt-2 text-blistTextMuted">
           Submit your info and verifiable proof of your work. Applications are manually reviewed —
           incomplete or unverifiable submissions will not be approved.
         </p>
@@ -56,7 +56,7 @@ export default function ApplyPage() {
         <input name="company" className="hidden" tabIndex={-1} autoComplete="off" />
 
         {/* Basics */}
-        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+        <section className="rounded-2xl border border-blistBorder bg-black/40 p-5 space-y-4">
           <h2 className="text-lg font-semibold text-white">Basics</h2>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -106,7 +106,7 @@ export default function ApplyPage() {
         </section>
 
         {/* Account / Contact */}
-        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+        <section className="rounded-2xl border border-blistBorder bg-black/40 p-5 space-y-4">
           <h2 className="text-lg font-semibold text-white">Account & Contact</h2>
 
           <div>
@@ -168,7 +168,7 @@ export default function ApplyPage() {
         </section>
 
         {/* Web3 */}
-        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-4">
+        <section className="rounded-2xl border border-blistBorder bg-black/40 p-5 space-y-4">
           <h2 className="text-lg font-semibold text-white">Web3</h2>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -186,10 +186,10 @@ export default function ApplyPage() {
         </section>
 
         {/* Proof of Work — important */}
-        <section className="rounded-2xl border border-vampAccent/40 bg-vampAccent/5 p-5 space-y-4">
+        <section className="rounded-2xl border border-blistAccent/40 bg-blistAccent/5 p-5 space-y-4">
           <div>
             <h2 className="text-lg font-semibold text-white">Proof of Work</h2>
-            <p className="mt-1 text-sm text-vampTextMuted">
+            <p className="mt-1 text-sm text-blistTextMuted">
               Provide verifiable links to your prior work. At least one link is required.
               This can be a GitHub repo, a deployed project, a tweet showing your work,
               an Imgur screenshot, a portfolio site, or a link to a project you contributed to.
@@ -202,7 +202,7 @@ export default function ApplyPage() {
               <input
                 name={`portfolioLink_${i}`}
                 placeholder="https://github.com/… or https://imgur.com/… or https://…"
-                className="w-full rounded-xl bg-white/5 px-4 py-3 text-white border border-vampBorder focus:border-vampAccent/60 focus:outline-none"
+                className="w-full rounded-xl bg-white/5 px-4 py-3 text-white border border-blistBorder focus:border-blistAccent/60 focus:outline-none"
               />
               {i === 0 && <FieldHint>Required. A link to a project, repo, portfolio, or screenshot of your work.</FieldHint>}
             </div>
@@ -210,17 +210,17 @@ export default function ApplyPage() {
         </section>
 
         {/* References */}
-        <section className="rounded-2xl border border-vampBorder bg-black/40 p-5 space-y-5">
+        <section className="rounded-2xl border border-blistBorder bg-black/40 p-5 space-y-5">
           <div>
             <h2 className="text-lg font-semibold text-white">References (up to 3)</h2>
-            <p className="mt-1 text-sm text-vampTextMuted">
+            <p className="mt-1 text-sm text-blistTextMuted">
               People who can vouch for your work — former colleagues, project leads, or community members.
               References are not required but significantly improve your chances of approval.
             </p>
           </div>
 
           {[0, 1, 2].map((i) => (
-            <div key={i} className="rounded-2xl border border-vampBorder/60 bg-black/30 p-4 space-y-3">
+            <div key={i} className="rounded-2xl border border-blistBorder/60 bg-black/30 p-4 space-y-3">
               <div className="text-sm font-semibold text-white">Reference {i + 1}</div>
               <div className="grid gap-3 md:grid-cols-2">
                 <div>
@@ -252,7 +252,7 @@ export default function ApplyPage() {
         </section>
 
         <div className="flex items-center gap-3">
-          <button className="rounded-full bg-vampAccent px-6 py-2.5 text-white shadow-vampGlow">
+          <button className="rounded-full bg-blistAccent px-6 py-2.5 text-white shadow-blistGlow">
             Submit application
           </button>
 

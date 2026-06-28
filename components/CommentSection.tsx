@@ -49,11 +49,11 @@ export function CommentSection({ profileId, comments, addCommentAction }: Commen
           {comments.map((comment) => (
             <div
               key={comment.id}
-              className="rounded-xl border border-vampBorder/60 bg-black/30 p-3"
+              className="rounded-xl border border-blistBorder/60 bg-black/30 p-3"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <div className="text-xs text-vampTextMuted mb-1">
+                  <div className="text-xs text-blistTextMuted mb-1">
                     <span className="font-semibold text-white">
                       {comment.author.displayName}
                     </span>
@@ -76,19 +76,19 @@ export function CommentSection({ profileId, comments, addCommentAction }: Commen
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="Add a review note (only visible to reviewers/approvers)..."
-          className="w-full rounded-xl border border-vampBorder bg-black/40 px-4 py-3 text-white placeholder:text-vampTextMuted focus:border-vampAccent focus:outline-none focus:ring-1 focus:ring-vampAccent resize-none"
+          className="w-full rounded-xl border border-blistBorder bg-black/40 px-4 py-3 text-white placeholder:text-blistTextMuted focus:border-blistAccent focus:outline-none focus:ring-1 focus:ring-blistAccent resize-none"
           rows={3}
           maxLength={1000}
           disabled={isSubmitting}
         />
         <div className="flex items-center justify-between">
-          <div className="text-xs text-vampTextMuted">
+          <div className="text-xs text-blistTextMuted">
             {newComment.length}/1000 characters
           </div>
           <button
             type="submit"
             disabled={!newComment.trim() || isSubmitting}
-            className="rounded-full bg-vampAccent px-4 py-2 text-sm text-white hover:bg-vampAccentSoft disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="rounded-full bg-blistAccent px-4 py-2 text-sm text-white hover:bg-blistAccentSoft disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isSubmitting ? "Adding..." : "Add Note"}
           </button>

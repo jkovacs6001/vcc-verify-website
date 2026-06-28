@@ -27,13 +27,13 @@ export const SearchBar: React.FC<Props> = ({
   return (
     <div className="flex flex-col md:flex-row gap-3 md:items-center">
       <div className="flex-1">
-        <div className="rounded-2xl bg-vampSurfaceSoft border border-vampBorder px-4 py-2.5 flex items-center gap-2">
-          <span className="text-vampTextMuted text-sm">🔍</span>
+        <div className="rounded-2xl bg-blistSurfaceSoft border border-blistBorder px-4 py-2.5 flex items-center gap-2">
+          <span className="text-blistTextMuted text-sm">🔍</span>
           <input
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Search by name, alias, wallet, or tag…"
-            className="bg-transparent flex-1 outline-none text-sm placeholder:text-vampTextMuted text-vampTextMain"
+            className="bg-transparent flex-1 outline-none text-sm placeholder:text-blistTextMuted text-blistTextMain"
           />
         </div>
       </div>
@@ -41,7 +41,7 @@ export const SearchBar: React.FC<Props> = ({
         <select
           value={roleFilter}
           onChange={(e) => onRoleChange(e.target.value)}
-          className="w-full bg-vampSurfaceSoft border border-vampBorder rounded-2xl px-3 py-2 text-sm cursor-paw-pointer outline-none text-vampTextMain placeholder:text-vampTextMuted focus:ring-2 focus:ring-vampAccent"
+          className="w-full bg-blistSurfaceSoft border border-blistBorder rounded-2xl px-3 py-2 text-sm outline-none text-blistTextMain placeholder:text-blistTextMuted focus:ring-2 focus:ring-blistAccent"
         >
           {roles.map((role) => (
             <option key={role} value={role}>

@@ -20,7 +20,7 @@ async function requireApproverAccess() {
 
 function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-vampAccent hover:underline break-all">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blistAccent hover:underline break-all">
       {children}
     </a>
   );
@@ -38,28 +38,28 @@ function ApplicationCard({ p }: { p: any }) {
   const flagged = missingX && missingTelegram;
 
   return (
-    <div className={`rounded-2xl border bg-black/40 p-4 space-y-4 ${flagged ? "border-yellow-500/40" : "border-vampBorder"}`}>
+    <div className={`rounded-2xl border bg-black/40 p-4 space-y-4 ${flagged ? "border-yellow-500/40" : "border-blistBorder"}`}>
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
           <div className="text-lg font-semibold text-white">
             {p.displayName}
-            {p.handle ? <span className="text-vampTextMuted text-sm"> · @{p.handle}</span> : null}
+            {p.handle ? <span className="text-blistTextMuted text-sm"> · @{p.handle}</span> : null}
           </div>
-          <div className="text-sm text-vampTextMuted mt-0.5">
+          <div className="text-sm text-blistTextMuted mt-0.5">
             {p.submissionRole}{p.location ? ` · ${p.location}` : ""}
           </div>
-          <div className="mt-1 text-xs text-vampTextMuted break-all">{p.email}</div>
+          <div className="mt-1 text-xs text-blistTextMuted break-all">{p.email}</div>
         </div>
         <div className="flex flex-col items-end gap-2 shrink-0">
           <Link
             href={`/directory/${p.id}`}
-            className="rounded-full bg-white/5 px-4 py-2 text-center text-white text-sm hover:bg-white/10 border border-vampBorder transition-colors whitespace-nowrap"
+            className="rounded-full bg-white/5 px-4 py-2 text-center text-white text-sm hover:bg-white/10 border border-blistBorder transition-colors whitespace-nowrap"
           >
             View Profile
           </Link>
-          <div className="text-xs text-vampTextMuted text-right">
-            Score: <span className="text-vampAccent font-bold">{p.trustScore ?? 0}/100</span>
+          <div className="text-xs text-blistTextMuted text-right">
+            Score: <span className="text-blistAccent font-bold">{p.trustScore ?? 0}/100</span>
           </div>
         </div>
       </div>
@@ -78,10 +78,10 @@ function ApplicationCard({ p }: { p: any }) {
       {(p.skills.length > 0 || p.tags.length > 0) && (
         <div className="flex flex-wrap gap-2">
           {p.skills.slice(0, 12).map((x: string) => (
-            <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90">{x}</span>
+            <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-blistBorder px-2 py-1 text-white/90">{x}</span>
           ))}
           {p.tags.slice(0, 12).map((x: string) => (
-            <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90">{x}</span>
+            <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-blistAccent/15 border border-blistAccent/30 px-2 py-1 text-white/90">{x}</span>
           ))}
         </div>
       )}
@@ -90,7 +90,7 @@ function ApplicationCard({ p }: { p: any }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-xs">
         {p.xHandle ? (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">X:</span>
+            <span className="text-blistTextMuted shrink-0">X:</span>
             <ExternalLink href={`https://twitter.com/${p.xHandle.replace(/^@/, "")}`}>{p.xHandle}</ExternalLink>
           </div>
         ) : (
@@ -100,7 +100,7 @@ function ApplicationCard({ p }: { p: any }) {
         )}
         {p.telegram ? (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">Telegram:</span>
+            <span className="text-blistTextMuted shrink-0">Telegram:</span>
             <span className="text-white/80">{p.telegram}</span>
           </div>
         ) : (
@@ -110,26 +110,26 @@ function ApplicationCard({ p }: { p: any }) {
         )}
         {p.github && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">GitHub:</span>
+            <span className="text-blistTextMuted shrink-0">GitHub:</span>
             <ExternalLink href={p.github}>{p.github}</ExternalLink>
           </div>
         )}
         {p.linkedin && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">LinkedIn:</span>
+            <span className="text-blistTextMuted shrink-0">LinkedIn:</span>
             <ExternalLink href={p.linkedin}>{p.linkedin}</ExternalLink>
           </div>
         )}
         {p.website && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">Website:</span>
+            <span className="text-blistTextMuted shrink-0">Website:</span>
             <ExternalLink href={p.website}>{p.website}</ExternalLink>
           </div>
         )}
         {p.wallet && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">Wallet:</span>
-            <span className="font-mono text-white/70 break-all">{p.wallet} <span className="text-vampTextMuted">({p.chain})</span></span>
+            <span className="text-blistTextMuted shrink-0">Wallet:</span>
+            <span className="font-mono text-white/70 break-all">{p.wallet} <span className="text-blistTextMuted">({p.chain})</span></span>
           </div>
         )}
       </div>
@@ -151,13 +151,13 @@ function ApplicationCard({ p }: { p: any }) {
         <div className="space-y-2">
           <div className="text-xs font-semibold text-white">References ({p.references.length})</div>
           {p.references.map((r: any) => (
-            <div key={r.id} className="rounded-xl border border-vampBorder/60 bg-black/30 p-3 space-y-1">
+            <div key={r.id} className="rounded-xl border border-blistBorder/60 bg-black/30 p-3 space-y-1">
               <div className="text-sm text-white font-semibold">{r.name}</div>
-              {r.relationship && <div className="text-xs text-vampTextMuted">{r.relationship}</div>}
-              {r.contact && <div className="text-xs text-vampTextMuted">Contact: {r.contact}</div>}
+              {r.relationship && <div className="text-xs text-blistTextMuted">{r.relationship}</div>}
+              {r.contact && <div className="text-xs text-blistTextMuted">Contact: {r.contact}</div>}
               {r.link && (
                 <div className="text-xs">
-                  <span className="text-vampTextMuted">Link: </span>
+                  <span className="text-blistTextMuted">Link: </span>
                   <LinkOrText value={r.link} />
                 </div>
               )}
@@ -168,12 +168,12 @@ function ApplicationCard({ p }: { p: any }) {
       )}
 
       {/* Approve Actions */}
-      <div className="pt-4 border-t border-vampBorder/50">
+      <div className="pt-4 border-t border-blistBorder/50">
         <ApproveActions profileId={p.id} status={p.status} />
       </div>
 
       {/* Comment Section */}
-      <div className="pt-4 border-t border-vampBorder/50">
+      <div className="pt-4 border-t border-blistBorder/50">
         <CommentSection profileId={p.id} comments={p.comments || []} addCommentAction={addComment} />
       </div>
     </div>
@@ -187,12 +187,12 @@ export default async function ApprovePage() {
     return (
       <div className="max-w-lg space-y-4">
         <h1 className="text-3xl font-semibold text-white">Approvals</h1>
-        <p className="mt-2 text-vampTextMuted">
+        <p className="mt-2 text-blistTextMuted">
           You do not have access to this page. Only approvers can access the approval queue.
         </p>
         <Link
           href="/member"
-          className="inline-flex items-center justify-center rounded-full bg-vampAccent px-5 py-2.5 text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors"
+          className="inline-flex items-center justify-center rounded-full bg-blistAccent px-5 py-2.5 text-white shadow-blistGlow hover:bg-blistAccentSoft transition-colors"
         >
           Go to Dashboard
         </Link>
@@ -236,29 +236,29 @@ export default async function ApprovePage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-semibold text-white">Approvals</h1>
-        <p className="mt-2 text-vampTextMuted">
+        <p className="mt-2 text-blistTextMuted">
           Review and approve applications for verification.
         </p>
       </div>
 
       {/* Review Queue Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Review Queue
             {reviewQueue.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({reviewQueue.length})
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             Applications awaiting initial review
           </p>
         </div>
 
         {reviewQueue.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No applications waiting for review.
           </div>
         ) : (
@@ -272,22 +272,22 @@ export default async function ApprovePage() {
 
       {/* Approval Queue Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Approval Queue
             {approvalQueue.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({approvalQueue.length})
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             Applications ready for final approval
           </p>
         </div>
 
         {approvalQueue.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No applications waiting for approval.
           </div>
         ) : (

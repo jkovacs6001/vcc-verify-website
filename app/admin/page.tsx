@@ -13,7 +13,7 @@ export const revalidate = 0;
 
 function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-vampAccent hover:underline break-all">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blistAccent hover:underline break-all">
       {children}
     </a>
   );
@@ -31,28 +31,28 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
   const flagged = missingX && missingTelegram;
 
   return (
-    <div className={`rounded-2xl border bg-black/40 p-4 space-y-4 ${flagged ? "border-yellow-500/40" : "border-vampBorder"}`}>
+    <div className={`rounded-2xl border bg-black/40 p-4 space-y-4 ${flagged ? "border-yellow-500/40" : "border-blistBorder"}`}>
       {/* Header */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <div className="text-lg font-semibold text-white">
             {p.displayName}
-            {p.handle ? <span className="text-vampTextMuted text-sm"> · @{p.handle}</span> : null}
+            {p.handle ? <span className="text-blistTextMuted text-sm"> · @{p.handle}</span> : null}
           </div>
-          <div className="text-sm text-vampTextMuted mt-0.5">
+          <div className="text-sm text-blistTextMuted mt-0.5">
             {p.submissionRole}{p.location ? ` · ${p.location}` : ""}
           </div>
-          <div className="mt-1 text-xs text-vampTextMuted break-all">{p.email}</div>
+          <div className="mt-1 text-xs text-blistTextMuted break-all">{p.email}</div>
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">
           <Link
             href={`/directory/${p.id}`}
-            className="rounded-full bg-white/5 px-3 py-1 text-xs text-white hover:bg-white/10 border border-vampBorder transition-colors"
+            className="rounded-full bg-white/5 px-3 py-1 text-xs text-white hover:bg-white/10 border border-blistBorder transition-colors"
           >
             View Profile
           </Link>
-          <div className="text-xs text-vampTextMuted">
-            Score: <span className="text-vampAccent font-bold">{p.trustScore ?? 0}/100</span>
+          <div className="text-xs text-blistTextMuted">
+            Score: <span className="text-blistAccent font-bold">{p.trustScore ?? 0}/100</span>
           </div>
         </div>
       </div>
@@ -71,10 +71,10 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
       {(p.skills.length > 0 || p.tags.length > 0) && (
         <div className="flex flex-wrap gap-2">
           {p.skills.slice(0, 12).map((x: string) => (
-            <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90">{x}</span>
+            <span key={`s-${p.id}-${x}`} className="text-xs rounded-full bg-white/5 border border-blistBorder px-2 py-1 text-white/90">{x}</span>
           ))}
           {p.tags.slice(0, 12).map((x: string) => (
-            <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90">{x}</span>
+            <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-blistAccent/15 border border-blistAccent/30 px-2 py-1 text-white/90">{x}</span>
           ))}
         </div>
       )}
@@ -83,7 +83,7 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-xs">
         {p.xHandle ? (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">X:</span>
+            <span className="text-blistTextMuted shrink-0">X:</span>
             <ExternalLink href={`https://twitter.com/${p.xHandle.replace(/^@/, "")}`}>{p.xHandle}</ExternalLink>
           </div>
         ) : (
@@ -93,7 +93,7 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
         )}
         {p.telegram ? (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">Telegram:</span>
+            <span className="text-blistTextMuted shrink-0">Telegram:</span>
             <span className="text-white/80">{p.telegram}</span>
           </div>
         ) : (
@@ -103,26 +103,26 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
         )}
         {p.github && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">GitHub:</span>
+            <span className="text-blistTextMuted shrink-0">GitHub:</span>
             <ExternalLink href={p.github}>{p.github}</ExternalLink>
           </div>
         )}
         {p.linkedin && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">LinkedIn:</span>
+            <span className="text-blistTextMuted shrink-0">LinkedIn:</span>
             <ExternalLink href={p.linkedin}>{p.linkedin}</ExternalLink>
           </div>
         )}
         {p.website && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">Website:</span>
+            <span className="text-blistTextMuted shrink-0">Website:</span>
             <ExternalLink href={p.website}>{p.website}</ExternalLink>
           </div>
         )}
         {p.wallet && (
           <div className="flex gap-1.5">
-            <span className="text-vampTextMuted shrink-0">Wallet:</span>
-            <span className="font-mono text-white/70 break-all">{p.wallet} <span className="text-vampTextMuted">({p.chain})</span></span>
+            <span className="text-blistTextMuted shrink-0">Wallet:</span>
+            <span className="font-mono text-white/70 break-all">{p.wallet} <span className="text-blistTextMuted">({p.chain})</span></span>
           </div>
         )}
       </div>
@@ -144,13 +144,13 @@ function ApplicationCardReadOnly({ p, references }: { p: any; references?: any[]
         <div className="space-y-2">
           <div className="text-xs font-semibold text-white">References ({references.length})</div>
           {references.map((r: any) => (
-            <div key={r.id} className="rounded-xl border border-vampBorder/60 bg-black/30 p-3 space-y-1">
+            <div key={r.id} className="rounded-xl border border-blistBorder/60 bg-black/30 p-3 space-y-1">
               <div className="text-sm text-white font-semibold">{r.name}</div>
-              {r.relationship && <div className="text-xs text-vampTextMuted">{r.relationship}</div>}
-              {r.contact && <div className="text-xs text-vampTextMuted">Contact: {r.contact}</div>}
+              {r.relationship && <div className="text-xs text-blistTextMuted">{r.relationship}</div>}
+              {r.contact && <div className="text-xs text-blistTextMuted">Contact: {r.contact}</div>}
               {r.link && (
                 <div className="text-xs">
-                  <span className="text-vampTextMuted">Link: </span>
+                  <span className="text-blistTextMuted">Link: </span>
                   <LinkOrText value={r.link} />
                 </div>
               )}
@@ -208,7 +208,7 @@ export default async function AdminPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-semibold text-white">Admin Dashboard</h1>
-          <p className="mt-2 text-vampTextMuted">
+          <p className="mt-2 text-blistTextMuted">
             Manage users, roles, and oversee application queues.
           </p>
         </div>
@@ -217,7 +217,7 @@ export default async function AdminPage() {
 
       {/* Scam Reports Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Scam Reports
             {scamReports.length > 0 && (
@@ -226,13 +226,13 @@ export default async function AdminPage() {
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             Reports submitted by the community for review
           </p>
         </div>
 
         {scamReports.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No pending scam reports.
           </div>
         ) : (
@@ -246,22 +246,22 @@ export default async function AdminPage() {
 
       {/* Blacklist Management Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Blacklist Management
             {(blacklistedWallets.length + confirmedReports.length) > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({blacklistedWallets.length + confirmedReports.length} entries)
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             Edit or remove confirmed blacklist entries
           </p>
         </div>
 
         {blacklistedWallets.length === 0 && confirmedReports.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No blacklisted entries yet.
           </div>
         ) : (
@@ -278,22 +278,22 @@ export default async function AdminPage() {
 
       {/* Project Applications Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Project Applications
             {pendingProjects.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({pendingProjects.length} pending)
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
-            Crypto projects applying for VCC verification
+          <p className="mt-1 text-sm text-blistTextMuted">
+            Crypto projects applying for Blacklist verification
           </p>
         </div>
 
         {pendingProjects.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No pending project applications.
           </div>
         ) : (
@@ -307,22 +307,22 @@ export default async function AdminPage() {
 
       {/* All Members Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             All Members
             {allMembers.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({allMembers.length})
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             All registered users and their roles
           </p>
         </div>
 
         {allMembers.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No members yet.
           </div>
         ) : (
@@ -336,22 +336,22 @@ export default async function AdminPage() {
 
       {/* Review Queue Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Review Queue
             {reviewQueue.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({reviewQueue.length})
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             Applications awaiting reviewer assessment
           </p>
         </div>
 
         {reviewQueue.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No pending applications.
           </div>
         ) : (
@@ -365,22 +365,22 @@ export default async function AdminPage() {
 
       {/* Approval Queue Section */}
       <section className="space-y-4">
-        <div className="border-b border-vampBorder pb-3">
+        <div className="border-b border-blistBorder pb-3">
           <h2 className="text-xl font-semibold text-white">
             Approval Queue
             {approvalQueue.length > 0 && (
-              <span className="ml-2 text-sm font-normal text-vampAccent">
+              <span className="ml-2 text-sm font-normal text-blistAccent">
                 ({approvalQueue.length})
               </span>
             )}
           </h2>
-          <p className="mt-1 text-sm text-vampTextMuted">
+          <p className="mt-1 text-sm text-blistTextMuted">
             Applications ready for final approval
           </p>
         </div>
 
         {approvalQueue.length === 0 ? (
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
             No applications ready for approval.
           </div>
         ) : (

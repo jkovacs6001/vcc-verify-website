@@ -10,7 +10,7 @@ const statusStyles: Record<
   { label: string; className: string }
 > = {
   Verified: {
-    label: "Verified by VCC",
+    label: "Verified by Blacklist",
     className:
       "bg-emerald-500/10 text-emerald-300 border border-emerald-400/40",
   },
@@ -24,7 +24,7 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
   const status = statusStyles[professional.status];
 
   return (
-    <div className="card-hover bg-vampSurface/90 border border-vampBorder rounded-2xl px-5 py-4 shadow-lg shadow-black/20">
+    <div className="card-hover bg-blistSurface/90 border border-blistBorder rounded-2xl px-5 py-4 shadow-lg shadow-black/20">
 
       <div className="flex items-start justify-between gap-2">
         <div>
@@ -32,13 +32,13 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
             <h3 className="text-sm font-semibold text-white">
               {professional.name}
               {professional.alias && (
-                <span className="ml-1 text-xs text-vampTextMuted">
+                <span className="ml-1 text-xs text-blistTextMuted">
                   · @{professional.alias}
                 </span>
               )}
             </h3>
           </div>
-          <p className="text-xs text-vampTextMuted mt-1">
+          <p className="text-xs text-blistTextMuted mt-1">
             {professional.submissionRole}
             {professional.region && ` · ${professional.region}`}
           </p>
@@ -54,14 +54,14 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
         {professional.tags.map((tag) => (
           <span
             key={tag}
-            className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-vampTextMuted"
+            className="text-[10px] px-2 py-1 rounded-full bg-white/5 text-blistTextMuted"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <div className="text-[11px] text-vampTextMuted">
+      <div className="text-[11px] text-blistTextMuted">
         <span className="font-medium text-[11px] text-white">
           Recent projects:
         </span>{" "}
@@ -78,7 +78,7 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
           <a
             href={professional.twitter}
             target="_blank"
-            className="cursor-paw-pointer px-2 py-1 rounded-full bg-white/5 hover:bg-vampAccent/20 text-vampTextMuted hover:text-white"
+            className="px-2 py-1 rounded-full bg-white/5 hover:bg-blistAccent/20 text-blistTextMuted hover:text-white"
           >
             Twitter / X
           </a>
@@ -87,7 +87,7 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
           <a
             href={professional.telegram}
             target="_blank"
-            className="cursor-paw-pointer px-2 py-1 rounded-full bg-white/5 hover:bg-vampAccent/20 text-vampTextMuted hover:text-white"
+            className="px-2 py-1 rounded-full bg-white/5 hover:bg-blistAccent/20 text-blistTextMuted hover:text-white"
           >
             Telegram
           </a>
@@ -96,13 +96,13 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
           <a
             href={professional.website}
             target="_blank"
-            className="cursor-paw-pointer px-2 py-1 rounded-full bg-white/5 hover:bg-vampAccent/20 text-vampTextMuted hover:text-white"
+            className="px-2 py-1 rounded-full bg-white/5 hover:bg-blistAccent/20 text-blistTextMuted hover:text-white"
           >
             Website
           </a>
         )}
         {professional.wallet && (
-          <span className="px-2 py-1 rounded-full bg-white/5 text-[10px] text-vampTextMuted truncate max-w-[180px]">
+          <span className="px-2 py-1 rounded-full bg-white/5 text-[10px] text-blistTextMuted truncate max-w-[180px]">
             Wallet: {professional.wallet.slice(0, 5)}…
             {professional.wallet.slice(-5)}
           </span>
@@ -112,12 +112,12 @@ export const ProfessionalCard: React.FC<Props> = ({ professional }) => {
       <div className="flex justify-between items-center mt-1">
         <Link
           href={`/directory/${professional.id}`}
-          className="cursor-paw-pointer text-xs text-vampAccent hover:text-vampAccentSoft"
+          className="text-xs text-blistAccent hover:text-blistAccentSoft"
         >
           View profile →
         </Link>
         {professional.verifiedAt && (
-          <span className="text-[10px] text-vampTextMuted">
+          <span className="text-[10px] text-blistTextMuted">
             Verified: {professional.verifiedAt}
           </span>
         )}

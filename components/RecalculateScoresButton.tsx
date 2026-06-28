@@ -22,7 +22,7 @@ export function RecalculateScoresButton() {
     <button
       onClick={handle}
       disabled={state === "running"}
-      className="rounded-full border border-vampAccent/40 bg-vampAccent/10 px-4 py-2 text-sm font-medium text-vampAccent hover:bg-vampAccent/20 transition-colors disabled:opacity-50"
+      className="rounded-full border border-blistAccent/40 bg-blistAccent/10 px-4 py-2 text-sm font-medium text-blistAccent hover:bg-blistAccent/20 transition-colors disabled:opacity-50"
     >
       {state === "running"
         ? "Recalculating…"

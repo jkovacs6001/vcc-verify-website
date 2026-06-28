@@ -30,7 +30,7 @@ export const BADGE_CONFIG = {
   },
   BASIC: {
     label: "Basic",
-    description: "Verified VCC member",
+    description: "Verified Blacklist member",
     minScore: 1,
     color: "text-green-400",
     border: "border-green-400/40",

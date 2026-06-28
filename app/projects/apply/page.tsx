@@ -26,9 +26,9 @@ export default function ProjectApplyPage() {
     <div className="max-w-xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">Apply for Project Verification</h1>
-        <p className="mt-2 text-vampTextMuted text-sm">
-          Get your crypto project reviewed and listed in the VCC verified projects directory.
-          Applications are manually reviewed by the VCC team.
+        <p className="mt-2 text-blistTextMuted text-sm">
+          Get your crypto project reviewed and listed in the Blacklist verified projects directory.
+          Applications are manually reviewed by the Blacklist team.
         </p>
       </div>
 
@@ -41,37 +41,37 @@ export default function ProjectApplyPage() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 space-y-4">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 space-y-4">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 Project Name *
               </label>
               <input
                 name="name"
                 required
                 placeholder="e.g. VampCatSwap"
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
               />
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2 space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                   Contract Address
                 </label>
                 <input
                   name="contractAddress"
                   placeholder="e.g. 7xKXt…"
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                  className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                   Chain
                 </label>
                 <select
                   name="chain"
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                  className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blistAccent"
                 >
                   <option value="solana">Solana</option>
                   <option value="ethereum">Ethereum</option>
@@ -82,19 +82,19 @@ export default function ProjectApplyPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 Website
               </label>
               <input
                 name="website"
                 type="url"
                 placeholder="https://yourproject.xyz"
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 Description *
               </label>
               <textarea
@@ -103,53 +103,53 @@ export default function ProjectApplyPage() {
                 minLength={30}
                 rows={4}
                 placeholder="What does your project do? What problem does it solve?"
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent resize-none"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent resize-none"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 Team Contact (email / telegram) *
               </label>
               <input
                 name="teamContact"
                 required
                 placeholder="email@example.com or @handle"
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                   Twitter / X
                 </label>
                 <input
                   name="twitterHandle"
                   placeholder="@handle"
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                  className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                   Telegram
                 </label>
                 <input
                   name="telegramHandle"
                   placeholder="@handle or t.me/..."
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                  className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 GitHub
               </label>
               <input
                 name="githubUrl"
                 placeholder="https://github.com/yourorg/repo"
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
               />
             </div>
           </div>
@@ -163,7 +163,7 @@ export default function ProjectApplyPage() {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-full bg-vampAccent px-6 py-2.5 text-sm font-medium text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors disabled:opacity-50"
+            className="w-full rounded-full bg-blistAccent px-6 py-2.5 text-sm font-medium text-white shadow-blistGlow hover:bg-blistAccentSoft transition-colors disabled:opacity-50"
           >
             {pending ? "Submitting…" : "Submit Application"}
           </button>

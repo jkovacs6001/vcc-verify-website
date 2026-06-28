@@ -44,7 +44,7 @@ export function ReviewActions({ profileId }: { profileId: string }) {
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="Add an optional note (max 500 chars)..."
-            className="w-full rounded-xl border border-vampBorder bg-black/40 px-3 py-2 text-sm text-white placeholder-vampTextMuted focus:outline-none focus:ring-2 focus:ring-vampAccent"
+            className="w-full rounded-xl border border-blistBorder bg-black/40 px-3 py-2 text-sm text-white placeholder-blistTextMuted focus:outline-none focus:ring-2 focus:ring-blistAccent"
             rows={3}
             maxLength={500}
           />
@@ -53,7 +53,7 @@ export function ReviewActions({ profileId }: { profileId: string }) {
               <button
                 onClick={handleMarkReady}
                 disabled={loading}
-                className="rounded-full bg-vampAccent px-4 py-2 text-sm text-white hover:bg-vampAccentSoft transition-colors disabled:opacity-50"
+                className="rounded-full bg-blistAccent px-4 py-2 text-sm text-white hover:bg-blistAccentSoft transition-colors disabled:opacity-50"
               >
                 {loading ? "Processing..." : "Confirm Ready for Approval"}
               </button>
@@ -72,7 +72,7 @@ export function ReviewActions({ profileId }: { profileId: string }) {
                 setNote("");
               }}
               disabled={loading}
-              className="rounded-full bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10 border border-vampBorder transition-colors disabled:opacity-50"
+              className="rounded-full bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10 border border-blistBorder transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
@@ -83,7 +83,7 @@ export function ReviewActions({ profileId }: { profileId: string }) {
           <button
             onClick={() => setShowNoteInput("approve")}
             disabled={loading}
-            className="rounded-full bg-vampAccent px-4 py-2 text-sm text-white hover:bg-vampAccentSoft transition-colors disabled:opacity-50"
+            className="rounded-full bg-blistAccent px-4 py-2 text-sm text-white hover:bg-blistAccentSoft transition-colors disabled:opacity-50"
           >
             Ready for Approval
           </button>

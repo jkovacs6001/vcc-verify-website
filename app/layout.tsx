@@ -7,8 +7,8 @@ import { Analytics } from "@vercel/analytics/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "VampCatCoin Verification",
-  description: "Trusted Web3 professionals.",
+  title: "Blacklist",
+  description: "Verified. Trusted. Protected.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} min-h-screen flex flex-col bg-vampBg text-vampTextMain`}
+        className={`${inter.className} min-h-screen flex flex-col bg-blistBg text-blistTextMain`}
       >
         {/* STATIC BACKGROUND GRID */}
         <div className="bg-geo-grid" />
@@ -29,9 +29,9 @@ export default function RootLayout({
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 pt-8 pb-14">
           {children}
         </main>
-        <footer className="w-full border-t border-vampBorder bg-black/60 backdrop-blur">
-          <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-vampTextMuted flex flex-col sm:flex-row sm:justify-between gap-1">
-            <span>© {new Date().getFullYear()} VampCatCoin · VampCatCoin Verification</span>
+        <footer className="w-full border-t border-blistBorder bg-black/60 backdrop-blur">
+          <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-blistTextMuted flex flex-col sm:flex-row sm:justify-between gap-1">
+            <span>© {new Date().getFullYear()} Blacklist</span>
             <span className="text-[10px]">Not financial or hiring advice</span>
           </div>
         </footer>

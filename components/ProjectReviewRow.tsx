@@ -32,11 +32,11 @@ export function ProjectReviewRow({ project }: { project: Project }) {
   }
 
   return (
-    <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-3">
+    <div className="rounded-2xl border border-blistBorder bg-black/40 p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="font-semibold text-white text-lg">{project.name}</div>
-          <div className="text-xs text-vampTextMuted capitalize mt-0.5">
+          <div className="text-xs text-blistTextMuted capitalize mt-0.5">
             {project.chain}
             {project.contractAddress && (
               <span className="ml-2 font-mono">{project.contractAddress.slice(0, 10)}…</span>
@@ -50,16 +50,16 @@ export function ProjectReviewRow({ project }: { project: Project }) {
 
       <p className="text-sm text-white/80">{project.description}</p>
 
-      <div className="flex flex-wrap gap-3 text-xs text-vampTextMuted">
+      <div className="flex flex-wrap gap-3 text-xs text-blistTextMuted">
         <span>Contact: {project.teamContact}</span>
         {project.website && (
-          <a href={project.website} target="_blank" rel="noopener noreferrer" className="text-vampAccent hover:underline">
+          <a href={project.website} target="_blank" rel="noopener noreferrer" className="text-blistAccent hover:underline">
             Website ↗
           </a>
         )}
         {project.twitterHandle && <span>@{project.twitterHandle}</span>}
         {project.githubUrl && (
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-vampAccent hover:underline">
+          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blistAccent hover:underline">
             GitHub ↗
           </a>
         )}
@@ -70,19 +70,19 @@ export function ProjectReviewRow({ project }: { project: Project }) {
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="Admin note (optional)"
-          className="flex-1 rounded-xl border border-vampBorder bg-black/60 px-3 py-1.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+          className="flex-1 rounded-xl border border-blistBorder bg-black/60 px-3 py-1.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
         />
         <button
           onClick={() => handle("APPROVED")}
           disabled={pending}
-          className="rounded-full bg-vampAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-vampAccentSoft disabled:opacity-50"
+          className="rounded-full bg-blistAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-blistAccentSoft disabled:opacity-50"
         >
           Approve
         </button>
         <button
           onClick={() => handle("REJECTED")}
           disabled={pending}
-          className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-50"
+          className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-50"
         >
           Reject
         </button>

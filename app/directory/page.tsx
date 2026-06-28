@@ -84,13 +84,13 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
       </Suspense>
 
       {activeCount > 0 && (
-        <div className="text-sm text-vampTextMuted">
+        <div className="text-sm text-blistTextMuted">
           {profiles.length} result{profiles.length !== 1 ? "s" : ""} for active filters
         </div>
       )}
 
       {profiles.length === 0 ? (
-        <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted">
+        <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted">
           {activeCount > 0 ? "No members match your filters." : "No approved profiles yet."}
         </div>
       ) : (
@@ -102,15 +102,15 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
               <Link
                 key={p.id}
                 href={`/directory/${p.id}`}
-                className="rounded-2xl border border-vampBorder bg-black/40 p-4 hover:bg-white/5 transition-colors"
+                className="rounded-2xl border border-blistBorder bg-black/40 p-4 hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="text-lg font-semibold text-white">
                       {p.displayName}
-                      {p.handle ? <span className="text-vampTextMuted text-sm"> · @{p.handle}</span> : null}
+                      {p.handle ? <span className="text-blistTextMuted text-sm"> · @{p.handle}</span> : null}
                     </div>
-                    <div className="text-sm text-vampTextMuted">
+                    <div className="text-sm text-blistTextMuted">
                       {p.submissionRole}{p.location ? ` · ${p.location}` : ""}
                     </div>
                   </div>
@@ -122,14 +122,14 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
                     {p.skills.slice(0, 6).map((x) => (
                       <span key={`s-${p.id}-${x}`} className={`text-xs rounded-full px-2 py-1 border ${
                         filterSkills.includes(x)
-                          ? "bg-vampAccent/20 border-vampAccent text-white"
-                          : "bg-white/5 border-vampBorder text-white/90"
+                          ? "bg-blistAccent/20 border-blistAccent text-white"
+                          : "bg-white/5 border-blistBorder text-white/90"
                       }`}>
                         {x}
                       </span>
                     ))}
                     {p.tags.slice(0, 6).map((x) => (
-                      <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90">
+                      <span key={`t-${p.id}-${x}`} className="text-xs rounded-full bg-blistAccent/15 border border-blistAccent/30 px-2 py-1 text-white/90">
                         {x}
                       </span>
                     ))}

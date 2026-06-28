@@ -35,7 +35,7 @@ export const DirectoryList: React.FC = () => {
         onRoleChange={setRoleFilter}
       />
 
-      <p className="text-xs text-vampTextMuted mt-1">
+      <p className="text-xs text-blistTextMuted mt-1">
         Showing {filtered.length} of {MOCK_PROFESSIONALS.length} professionals.
         This is a demo using mock data.
       </p>
@@ -47,7 +47,7 @@ export const DirectoryList: React.FC = () => {
       </div>
 
       {filtered.length === 0 && (
-        <div className="mt-6 text-center text-sm text-vampTextMuted border border-dashed border-vampBorder rounded-2xl py-10">
+        <div className="mt-6 text-center text-sm text-blistTextMuted border border-dashed border-blistBorder rounded-2xl py-10">
           No matches yet. Try another search or role.
         </div>
       )}

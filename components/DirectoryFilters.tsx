@@ -67,14 +67,14 @@ export function DirectoryFilters({
   }
 
   return (
-    <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-4">
+    <div className="rounded-2xl border border-blistBorder bg-black/40 p-4 space-y-4">
       {/* Search bar */}
       <input
         type="search"
         defaultValue={query}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder="Search by name, role, location, or bio…"
-        className="w-full rounded-xl border border-vampBorder bg-black/60 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+        className="w-full rounded-xl border border-blistBorder bg-black/60 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
       />
 
       <div className="flex items-center justify-between">
@@ -82,7 +82,7 @@ export function DirectoryFilters({
         {activeCount > 0 && (
           <button
             onClick={clearAll}
-            className="text-xs text-vampTextMuted hover:text-white transition-colors"
+            className="text-xs text-blistTextMuted hover:text-white transition-colors"
           >
             Clear all ({activeCount})
           </button>
@@ -92,13 +92,13 @@ export function DirectoryFilters({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Location */}
         <div className="space-y-1">
-          <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+          <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
             Location
           </label>
           <select
             value={location}
             onChange={(e) => update("location", e.target.value || null)}
-            className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-vampAccent"
+            className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blistAccent"
           >
             <option value="">All locations</option>
             {allLocations.map((l) => (
@@ -111,13 +111,13 @@ export function DirectoryFilters({
 
         {/* Role */}
         <div className="space-y-1">
-          <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+          <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
             Role
           </label>
           <select
             value={role}
             onChange={(e) => update("role", e.target.value || null)}
-            className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-vampAccent"
+            className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blistAccent"
           >
             <option value="">All roles</option>
             {allRoles.map((r) => (
@@ -130,13 +130,13 @@ export function DirectoryFilters({
 
         {/* Badge */}
         <div className="space-y-1">
-          <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+          <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
             Badge
           </label>
           <select
             value={badge}
             onChange={(e) => update("badge", e.target.value || null)}
-            className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-vampAccent"
+            className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blistAccent"
           >
             <option value="">All badges</option>
             <option value="ELITE">⭐ Elite (85+)</option>
@@ -149,7 +149,7 @@ export function DirectoryFilters({
       {/* Skills multi-select */}
       {allSkills.length > 0 && (
         <div className="space-y-2">
-          <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+          <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
             Skills
           </label>
           <div className="flex flex-wrap gap-1.5">
@@ -161,8 +161,8 @@ export function DirectoryFilters({
                   onClick={() => toggleSkill(s)}
                   className={`text-xs rounded-full px-2.5 py-1 border transition-colors ${
                     active
-                      ? "bg-vampAccent/20 border-vampAccent text-white"
-                      : "bg-white/5 border-vampBorder text-vampTextMuted hover:text-white hover:border-white/30"
+                      ? "bg-blistAccent/20 border-blistAccent text-white"
+                      : "bg-white/5 border-blistBorder text-blistTextMuted hover:text-white hover:border-white/30"
                   }`}
                 >
                   {s}

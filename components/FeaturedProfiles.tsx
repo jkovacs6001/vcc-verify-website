@@ -25,7 +25,7 @@ export default async function FeaturedProfiles() {
 
   if (featured.length === 0) {
     return (
-      <div className="rounded-2xl border border-vampBorder bg-black/40 p-5 text-vampTextMuted">
+      <div className="rounded-2xl border border-blistBorder bg-black/40 p-5 text-blistTextMuted">
         No verified profiles yet.
       </div>
     );
@@ -37,17 +37,17 @@ export default async function FeaturedProfiles() {
         <Link
           key={p.id}
           href={`/directory/${p.id}`}
-          className="rounded-2xl border border-vampBorder bg-black/40 p-4 hover:bg-white/5 transition-colors"
+          className="rounded-2xl border border-blistBorder bg-black/40 p-4 hover:bg-white/5 transition-colors"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <div className="text-white font-semibold truncate">
                 {p.displayName}
                 {p.handle ? (
-                  <span className="text-vampTextMuted font-normal"> · @{p.handle}</span>
+                  <span className="text-blistTextMuted font-normal"> · @{p.handle}</span>
                 ) : null}
               </div>
-              <div className="text-sm text-vampTextMuted truncate">
+              <div className="text-sm text-blistTextMuted truncate">
                 {p.submissionRole}
                 {p.location ? ` · ${p.location}` : ""}
               </div>
@@ -56,7 +56,7 @@ export default async function FeaturedProfiles() {
                   {p.skills.slice(0, 3).map((x) => (
                     <span
                       key={`s-${p.id}-${x}`}
-                      className="text-[11px] rounded-full bg-white/5 border border-vampBorder px-2 py-1 text-white/90"
+                      className="text-[11px] rounded-full bg-white/5 border border-blistBorder px-2 py-1 text-white/90"
                     >
                       {x}
                     </span>
@@ -64,7 +64,7 @@ export default async function FeaturedProfiles() {
                   {p.tags.slice(0, 3).map((x) => (
                     <span
                       key={`t-${p.id}-${x}`}
-                      className="text-[11px] rounded-full bg-vampAccent/15 border border-vampAccent/30 px-2 py-1 text-white/90"
+                      className="text-[11px] rounded-full bg-blistAccent/15 border border-blistAccent/30 px-2 py-1 text-white/90"
                     >
                       {x}
                     </span>

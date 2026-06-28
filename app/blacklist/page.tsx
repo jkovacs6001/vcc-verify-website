@@ -21,8 +21,8 @@ export default async function BlacklistPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">Blacklist</h1>
-        <p className="mt-2 text-vampTextMuted text-sm">
-          Confirmed scam wallets, projects, and X/Twitter accounts verified by the VCC team.
+        <p className="mt-2 text-blistTextMuted text-sm">
+          Confirmed scam wallets, projects, and X/Twitter accounts verified by the Blacklist team.
           Search by address, handle, or project name to check if it has been flagged.
         </p>
       </div>

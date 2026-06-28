@@ -50,7 +50,7 @@ export async function emailVerificationLink(params: {
       "",
       "If you didn't create this account, you can safely ignore this email.",
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
   if (!result.ok) {
@@ -62,7 +62,7 @@ export async function emailVerificationLink(params: {
 
 async function sendEmail({ to, subject, text }: SendEmailParams): Promise<EmailResult> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || "VCC <no-reply@example.com>";
+  const from = process.env.EMAIL_FROM || "Blacklist <no-reply@example.com>";
   const recipients = normalizeList(to);
 
   if (!apiKey) {
@@ -161,7 +161,7 @@ export async function emailApplicationSubmittedToApplicant(params: {
       "You can sign in anytime to check your status.",
       `${appUrl("/member")}`,
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
   if (!result.ok) {
@@ -200,7 +200,7 @@ export async function emailReviewApproved(params: {
       "You can check your status here:",
       `${appUrl("/member")}`,
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
 }
@@ -219,7 +219,7 @@ export async function emailReviewRejected(params: {
       "Thanks for applying. After review, we aren't able to move forward right now.",
       "Feel free to strengthen your profile and re-apply later — we appreciate your interest.",
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
 }
@@ -241,7 +241,7 @@ export async function emailFinalApproved(params: {
       "View your profile:",
       `${appUrl("/member")}`,
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
 }
@@ -263,7 +263,7 @@ export async function emailPasswordReset(params: {
       "",
       "This link expires in 1 hour. If you didn't request a password reset, you can safely ignore this email.",
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
 }
@@ -282,7 +282,7 @@ export async function emailFinalRejected(params: {
       "Thank you for applying. After final review we aren't able to approve this time.",
       "We encourage you to re-apply in the future with new work or references.",
       "",
-      "– VCC Verification Team",
+      "– Blacklist Team",
     ].join("\n"),
   });
 }

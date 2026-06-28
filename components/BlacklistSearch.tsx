@@ -91,12 +91,12 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by wallet, CA, project name, or X handle…"
-          className="w-full rounded-2xl border border-vampBorder bg-black/40 px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+          className="w-full rounded-2xl border border-blistBorder bg-black/40 px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
         />
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-vampTextMuted hover:text-white"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-blistTextMuted hover:text-white"
           >
             ✕
           </button>
@@ -111,8 +111,8 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
             onClick={() => setTab(t.value)}
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
               tab === t.value
-                ? "bg-vampAccent/20 border-vampAccent text-white"
-                : "border-vampBorder text-vampTextMuted hover:text-white bg-black/40"
+                ? "bg-blistAccent/20 border-blistAccent text-white"
+                : "border-blistBorder text-blistTextMuted hover:text-white bg-black/40"
             }`}
           >
             {t.label} ({t.count})
@@ -135,7 +135,7 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
       )}
 
       {totalEntries === 0 ? (
-        <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 text-vampTextMuted text-sm">
+        <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 text-blistTextMuted text-sm">
           No blacklisted entries yet.
         </div>
       ) : (
@@ -150,14 +150,14 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
                     </span>
                   </div>
                   <div className="font-mono text-sm text-white break-all">{e.walletAddress}</div>
-                  <div className="mt-0.5 text-xs text-vampTextMuted capitalize">Chain: {e.chain}</div>
+                  <div className="mt-0.5 text-xs text-blistTextMuted capitalize">Chain: {e.chain}</div>
                 </div>
                 <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-red-500/15 text-red-400 border border-red-500/30">
                   Blacklisted
                 </span>
               </div>
               <p className="mt-2 text-sm text-white/80">{e.reason}</p>
-              <div className="mt-2 text-xs text-vampTextMuted">
+              <div className="mt-2 text-xs text-blistTextMuted">
                 Confirmed {new Date(e.confirmedAt).toLocaleDateString()}
               </div>
             </div>
@@ -178,7 +178,7 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
                   {p.contractAddress && (
                     <div className="font-mono text-sm text-white/70 break-all">CA: {p.contractAddress}</div>
                   )}
-                  <div className="mt-0.5 text-xs text-vampTextMuted capitalize">Chain: {p.chain}</div>
+                  <div className="mt-0.5 text-xs text-blistTextMuted capitalize">Chain: {p.chain}</div>
                 </div>
                 <span className="shrink-0 text-xs px-2 py-0.5 rounded-full bg-red-500/15 text-red-400 border border-red-500/30">
                   Confirmed Scam
@@ -186,7 +186,7 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
               </div>
               <p className="mt-2 text-sm text-white/80">{p.description}</p>
               {p.reviewedAt && (
-                <div className="mt-2 text-xs text-vampTextMuted">
+                <div className="mt-2 text-xs text-blistTextMuted">
                   Confirmed {new Date(p.reviewedAt).toLocaleDateString()}
                 </div>
               )}
@@ -212,7 +212,7 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
                         href={`https://twitter.com/${t.twitterHandle}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-vampAccent hover:underline"
+                        className="text-xs text-blistAccent hover:underline"
                       >
                         ↗
                       </a>
@@ -225,7 +225,7 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
               </div>
               <p className="mt-2 text-sm text-white/80">{t.description}</p>
               {t.reviewedAt && (
-                <div className="mt-2 text-xs text-vampTextMuted">
+                <div className="mt-2 text-xs text-blistTextMuted">
                   Confirmed {new Date(t.reviewedAt).toLocaleDateString()}
                 </div>
               )}
@@ -234,9 +234,9 @@ export function BlacklistSearch({ wallets, projects, twitterAccounts }: Props) {
         </div>
       )}
 
-      <div className="text-xs text-vampTextMuted">
+      <div className="text-xs text-blistTextMuted">
         {totalEntries} entr{totalEntries !== 1 ? "ies" : "y"} on the blacklist ·{" "}
-        <a href="/report" className="text-vampAccent hover:underline">
+        <a href="/report" className="text-blistAccent hover:underline">
           Report a scam
         </a>
       </div>

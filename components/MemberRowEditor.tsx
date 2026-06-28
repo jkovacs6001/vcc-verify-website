@@ -65,17 +65,17 @@ export function MemberRowEditor({ profile }: MemberRowEditorProps) {
 
   if (!isEditing) {
     return (
-      <div className="flex items-center justify-between gap-4 rounded-xl border border-vampBorder bg-black/40 p-3">
+      <div className="flex items-center justify-between gap-4 rounded-xl border border-blistBorder bg-black/40 p-3">
         <div className="min-w-0 flex-1">
           <div className="text-sm font-semibold text-white">
             {profile.displayName}
-            <span className="ml-2 text-xs text-vampTextMuted break-all">({profile.email})</span>
+            <span className="ml-2 text-xs text-blistTextMuted break-all">({profile.email})</span>
           </div>
           <div className="mt-1 flex flex-wrap gap-2">
             {profile.userRoles.map((role) => (
               <span
                 key={role}
-                className="rounded-full bg-vampAccent/20 px-2 py-0.5 text-xs text-white"
+                className="rounded-full bg-blistAccent/20 px-2 py-0.5 text-xs text-white"
               >
                 {role}
               </span>
@@ -106,10 +106,10 @@ export function MemberRowEditor({ profile }: MemberRowEditorProps) {
   }
 
   return (
-    <div className="rounded-xl border border-vampAccent/50 bg-black/40 p-4">
+    <div className="rounded-xl border border-blistAccent/50 bg-black/40 p-4">
       <div className="mb-3">
         <div className="text-sm font-semibold text-white">{profile.displayName}</div>
-        <div className="text-xs text-vampTextMuted break-all">{profile.email}</div>
+        <div className="text-xs text-blistTextMuted break-all">{profile.email}</div>
       </div>
 
       <div className="mb-4">
@@ -118,14 +118,14 @@ export function MemberRowEditor({ profile }: MemberRowEditorProps) {
           {ROLE_OPTIONS.map((opt) => (
             <label
               key={opt.value}
-              className="flex items-center gap-2 text-xs text-vampTextMuted cursor-pointer"
+              className="flex items-center gap-2 text-xs text-blistTextMuted cursor-pointer"
             >
               <input
                 type="checkbox"
                 checked={selectedRoles.includes(opt.value)}
                 onChange={() => handleRoleToggle(opt.value)}
                 disabled={loading}
-                className="h-4 w-4 rounded border-vampBorder bg-black/40 cursor-pointer"
+                className="h-4 w-4 rounded border-blistBorder bg-black/40 cursor-pointer"
               />
               <span className="text-white">{opt.label}</span>
             </label>
@@ -158,7 +158,7 @@ export function MemberRowEditor({ profile }: MemberRowEditorProps) {
           <button
             onClick={handleSave}
             disabled={loading}
-            className="rounded-lg bg-vampAccent px-3 py-1.5 text-xs font-semibold text-black hover:brightness-95 transition disabled:opacity-50"
+            className="rounded-lg bg-blistAccent px-3 py-1.5 text-xs font-semibold text-black hover:brightness-95 transition disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save"}
           </button>

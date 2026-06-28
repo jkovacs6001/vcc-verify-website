@@ -35,7 +35,7 @@ export default function ReportPage() {
     <div className="max-w-xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-white">Report a Scam</h1>
-        <p className="mt-2 text-vampTextMuted text-sm">
+        <p className="mt-2 text-blistTextMuted text-sm">
           Submit a suspicious wallet, project, or X/Twitter account for manual admin review.
           All reports are kept confidential and reviewed before any action is taken.
         </p>
@@ -51,7 +51,7 @@ export default function ReportPage() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Type toggle */}
-          <div className="flex rounded-xl border border-vampBorder overflow-hidden">
+          <div className="flex rounded-xl border border-blistBorder overflow-hidden">
             {tabs.map((tab) => (
               <button
                 key={tab.value}
@@ -59,8 +59,8 @@ export default function ReportPage() {
                 onClick={() => setReportType(tab.value)}
                 className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
                   reportType === tab.value
-                    ? "bg-vampAccent text-white"
-                    : "bg-black/40 text-vampTextMuted hover:text-white"
+                    ? "bg-blistAccent text-white"
+                    : "bg-black/40 text-blistTextMuted hover:text-white"
                 }`}
               >
                 {tab.label}
@@ -70,27 +70,27 @@ export default function ReportPage() {
 
           <input type="hidden" name="reportType" value={reportType} />
 
-          <div className="rounded-2xl border border-vampBorder bg-black/40 p-6 space-y-4">
+          <div className="rounded-2xl border border-blistBorder bg-black/40 p-6 space-y-4">
             {reportType === "wallet" && (
               <div className="grid grid-cols-3 gap-3">
                 <div className="col-span-2 space-y-1">
-                  <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                  <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                     Wallet Address *
                   </label>
                   <input
                     name="walletAddress"
                     required
                     placeholder="e.g. 7xKXt…"
-                    className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                    className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                  <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                     Chain
                   </label>
                   <select
                     name="chain"
-                    className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                    className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blistAccent"
                   >
                     <option value="solana">Solana</option>
                     <option value="ethereum">Ethereum</option>
@@ -105,23 +105,23 @@ export default function ReportPage() {
               <>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="col-span-2 space-y-1">
-                    <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                    <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                       Contract Address (CA) *
                     </label>
                     <input
                       name="contractAddress"
                       required
                       placeholder="e.g. 7xKXt…"
-                      className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                      className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                    <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                       Chain
                     </label>
                     <select
                       name="chain"
-                      className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                      className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blistAccent"
                     >
                       <option value="solana">Solana</option>
                       <option value="ethereum">Ethereum</option>
@@ -131,14 +131,14 @@ export default function ReportPage() {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                  <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                     Project Name *
                   </label>
                   <input
                     name="projectName"
                     required
                     placeholder="e.g. FakeSwap Protocol"
-                    className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                    className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                   />
                 </div>
               </>
@@ -146,16 +146,16 @@ export default function ReportPage() {
 
             {reportType === "twitter" && (
               <div className="space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                   X (Twitter) Handle *
                 </label>
                 <input
                   name="twitterHandle"
                   required
                   placeholder="@scammer or scammer (without @)"
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                  className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                 />
-                <p className="text-xs text-vampTextMuted mt-1">
+                <p className="text-xs text-blistTextMuted mt-1">
                   The X/Twitter handle of the account engaging in scam activity.
                 </p>
               </div>
@@ -164,19 +164,19 @@ export default function ReportPage() {
             {/* Project name for wallet reports is optional */}
             {reportType === "wallet" && (
               <div className="space-y-1">
-                <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+                <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                   Project Name (optional)
                 </label>
                 <input
                   name="projectName"
                   placeholder="e.g. FakeSwap Protocol"
-                  className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+                  className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
                 />
               </div>
             )}
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 Description *
               </label>
               <textarea
@@ -185,19 +185,19 @@ export default function ReportPage() {
                 minLength={20}
                 rows={4}
                 placeholder="Describe the suspicious activity in detail…"
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent resize-none"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent resize-none"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-medium text-vampTextMuted uppercase tracking-wide">
+              <label className="text-xs font-medium text-blistTextMuted uppercase tracking-wide">
                 Evidence Links (one per line)
               </label>
               <textarea
                 name="evidenceLinks"
                 rows={3}
                 placeholder={"https://solscan.io/tx/…\nhttps://twitter.com/…"}
-                className="w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent resize-none"
+                className="w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent resize-none"
               />
             </div>
           </div>
@@ -211,7 +211,7 @@ export default function ReportPage() {
           <button
             type="submit"
             disabled={pending}
-            className="w-full rounded-full bg-vampAccent px-6 py-2.5 text-sm font-medium text-white shadow-vampGlow hover:bg-vampAccentSoft transition-colors disabled:opacity-50"
+            className="w-full rounded-full bg-blistAccent px-6 py-2.5 text-sm font-medium text-white shadow-blistGlow hover:bg-blistAccentSoft transition-colors disabled:opacity-50"
           >
             {pending
               ? "Submitting…"

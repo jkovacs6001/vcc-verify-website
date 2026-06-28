@@ -72,10 +72,10 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
     ? report.twitterHandle
     : report.walletAddress;
 
-  const inputClass = "w-full rounded-xl border border-vampBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent";
+  const inputClass = "w-full rounded-xl border border-blistBorder bg-black/60 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent";
 
   return (
-    <div className="rounded-2xl border border-vampBorder bg-black/40 p-4 space-y-3">
+    <div className="rounded-2xl border border-blistBorder bg-black/40 p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
@@ -95,7 +95,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
           {!editing && (
             <div className="mt-1 font-mono text-sm text-white/70 break-all">
               {isProject ? "CA: " : isTwitter ? "@" : ""}{currentAddress}
-              {!isTwitter && <span className="ml-2 text-xs text-vampTextMuted capitalize">({report.chain})</span>}
+              {!isTwitter && <span className="ml-2 text-xs text-blistTextMuted capitalize">({report.chain})</span>}
             </div>
           )}
         </div>
@@ -105,7 +105,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
           </span>
           <button
             onClick={() => setEditing((v) => !v)}
-            className="text-xs px-2 py-0.5 rounded-full border border-vampBorder bg-white/5 text-vampTextMuted hover:text-white hover:bg-white/10 transition-colors"
+            className="text-xs px-2 py-0.5 rounded-full border border-blistBorder bg-white/5 text-blistTextMuted hover:text-white hover:bg-white/10 transition-colors"
           >
             {editing ? "Cancel" : "Edit"}
           </button>
@@ -116,7 +116,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
         <div className="space-y-3">
           {(isProject || isTwitter) && (
             <div>
-              <label className="block text-xs text-vampTextMuted mb-1">
+              <label className="block text-xs text-blistTextMuted mb-1">
                 {isProject ? "Project Name" : "Handle / Name"}
               </label>
               <input
@@ -127,7 +127,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
             </div>
           )}
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">
+            <label className="block text-xs text-blistTextMuted mb-1">
               {isProject ? "Contract Address" : isTwitter ? "X/Twitter Handle" : "Wallet Address"}
             </label>
             <input
@@ -138,7 +138,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
           </div>
           {!isTwitter && (
             <div>
-              <label className="block text-xs text-vampTextMuted mb-1">Chain</label>
+              <label className="block text-xs text-blistTextMuted mb-1">Chain</label>
               <select
                 value={editChain}
                 onChange={(e) => setEditChain(e.target.value)}
@@ -152,7 +152,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
             </div>
           )}
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Description</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Description</label>
             <textarea
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
@@ -161,7 +161,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
             />
           </div>
           <div>
-            <label className="block text-xs text-vampTextMuted mb-1">Evidence Links (one per line)</label>
+            <label className="block text-xs text-blistTextMuted mb-1">Evidence Links (one per line)</label>
             <textarea
               value={editEvidence}
               onChange={(e) => setEditEvidence(e.target.value)}
@@ -173,13 +173,13 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
             <button
               onClick={handleSaveEdit}
               disabled={editSaving}
-              className="rounded-full bg-vampAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-vampAccentSoft disabled:opacity-50"
+              className="rounded-full bg-blistAccent px-3 py-1.5 text-xs font-medium text-white hover:bg-blistAccentSoft disabled:opacity-50"
             >
               {editSaving ? "Saving…" : "Save Changes"}
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
+              className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10"
             >
               Cancel
             </button>
@@ -191,14 +191,14 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
 
           {report.evidenceLinks.length > 0 && (
             <div className="space-y-1">
-              <div className="text-xs text-vampTextMuted font-medium">Evidence</div>
+              <div className="text-xs text-blistTextMuted font-medium">Evidence</div>
               {report.evidenceLinks.map((link, i) => (
                 <a
                   key={i}
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-xs text-vampAccent hover:underline break-all"
+                  className="block text-xs text-blistAccent hover:underline break-all"
                 >
                   {link}
                 </a>
@@ -211,7 +211,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Admin note (optional)"
-              className="flex-1 rounded-xl border border-vampBorder bg-black/60 px-3 py-1.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-vampAccent"
+              className="flex-1 rounded-xl border border-blistBorder bg-black/60 px-3 py-1.5 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-blistAccent"
             />
             <button
               onClick={() => handle("CONFIRMED")}
@@ -223,7 +223,7 @@ export function ScamReportRow({ report }: { report: ScamReport }) {
             <button
               onClick={() => handle("DISMISSED")}
               disabled={pending}
-              className="rounded-full border border-vampBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-50"
+              className="rounded-full border border-blistBorder bg-white/5 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-50"
             >
               Dismiss
             </button>

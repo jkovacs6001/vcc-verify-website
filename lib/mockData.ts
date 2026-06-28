@@ -51,7 +51,7 @@ export const MOCK_PROFESSIONALS: Professional[] = [
     wallet: "8P3CLPb3SeYSBKvautqpJWPjX9TUCVcWTS12Xawa1111",
     region: "US",
     tags: ["Market Making", "Liquidity Strategy"],
-    projects: [{ name: "VampCatCoin (VCC)" }, { name: "OrbitFi" }],
+    projects: [{ name: "Blacklist" }, { name: "OrbitFi" }],
     verifiedAt: "2025-09-03",
   },
   {
