@@ -33,19 +33,19 @@ export const NavBar: React.FC<NavBarProps> = ({ isAuthenticated, hasActiveApplic
     <header className="w-full border-b border-blistBorder bg-black/90 backdrop-blur z-50 relative">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="relative h-8 w-8">
+        <Link href="/" className="flex items-center gap-3 shrink-0">
+          <div className="relative h-12 w-12">
             <Image
               src="/blist_logo.png"
               alt="Blacklist"
               fill
-              sizes="32px"
+              sizes="48px"
               priority
               className="object-contain"
             />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold text-white">Blacklist</span>
+            <span className="text-base font-bold text-white tracking-wide">Blacklist</span>
             <span className="text-[11px] text-blistTextMuted hidden sm:block">Verified. Trusted. Protected.</span>
           </div>
         </Link>
